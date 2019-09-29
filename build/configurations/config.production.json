@@ -1,0 +1,34 @@
+{
+  "database": {
+    "mode": "prod",
+    "connection": {
+      "host" : "us-cdbr-iron-east-02.cleardb.net",
+      "user" : "b9a031917568cc",
+      "password" : "d9a194b6",
+      "database" : "heroku_a9324c490914eb4",
+      "dialect": "mysql"
+    }
+  },
+  "server": {
+    "port": 5000,
+    "routePrefix": "/api",
+    "plugins": [
+      "logger",
+      "firebase-auth",
+      "swagger"
+    ],
+    "firebase": {
+      "type": "service_account",
+      "project_id": "intranet-mv",
+      "private_key_id": "05b09c5a77cacd1ad73c317405b1ee7ed2eede55",
+      "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCnQTc8aBT7gHgB\nvT8rUq9daXI2JYbxu53st+koUTFrrI2Qwt/bccKvMWEiANR7bOZjUlL1qo7vTMWt\nVdEBJWBs7ge9qFcLUSyIYCulyBj3VBCbBwon4eDKXmRkA1m4J477nnAF7whxFQED\nq+YnMDlC3LxQ6enz5qj4Eb0MLOCXc5QdKT0HqmimGhAnTRfgmFDUSUzicbHi9O3T\n8z9WjqQY/eG35Th5m6Djctz+GvBHGF+cG4x6tHdsBiWA2PYUhssqN6OnC7pEnVS4\n8mR8k/wMehEEuH/mngyoPdFUH1x67yvEfZCO+6TJmXgmWB5FgngStdAnZihaTOM7\nWj/G+MPxAgMBAAECggEAE17gDPzIR/6E0j1pllS7tFe032TblZ3ojZTD307+qHKc\nwgIdLLb8A2VL02/W1rqcji6SfBr2S0G6zTdDVFzQp50DxCk9zN+TBvJjFmQFJt6T\naRkDdJivplBl/m1Nk/XvlIsGJ1xxP64ykWB0cIp1v0goU+iwwfYvZez2q5/Q8nPu\nA4vhewz4lhVRlhAFF4kXYyrWGp/N1W/JquSPcDWnhrvwta8lZ8Xsx+7JtTgC8dHz\nEV9os9yMzTW5U+XNyHn6FFPJqN8gUwfj3mWQsnIGcFzDKbhMTNKOuoeHiNrAijtP\nO2qZ2FWq2St3tTKzOvZeYaHeIL4m9SCRvD5huUTEnwKBgQDkeqTFxV51TY2hNNJY\nmB9bX+nQkobn/nPmTE8oEliqO8UDiDcvKs9O07wWYcHrX+5zxuU6rRiHoUnounos\ngBWxZ3tk8KTMiToJa7GeRw2gFCgdkCNMynGx31BF/Xk+/Ztl21pyhPfcD0grQPQ2\n3qo1VeO5C0t2Y//Fj8rEJ242ZwKBgQC7ZqpRnvoQ48CSKE44ok/Ke3FS+AIz61GN\nz6osV8aGkEpAOpntCQyNrK5ZsSliYTkI+s7rLVNsA5rvfTF5PHzXdsYBBkbejJVP\ncMx9G/Z/PHuh1DgtdOHe3aaM9hlPg53vrM2+SyYBjbDLLcSH72k+wIW3TVZl37gz\nagA2tk7L5wKBgFyczg+QilJYJlGy/JSGzScXwMoXqvF89fPi+K8QiLowUhK1c1D+\nNFwKfZJA+/7xutFZTO+03F2V5kSc2gsRvDlV7fGjjdmOwmSxL6UtvfsmUIBzPavR\n37YvA/Xq4evDlur5uDb1aRbdZu6JfLSFG09VSmJmjqclr7agK5vJM+Z/AoGAecAf\nk1unt2VgbRSGjUDWegRtAaxjMfwGRg3Oz3RPZIlF1Ci+bENexoST2W3CJ0pm1bCs\n0hnmgtxswn8hr1Re/1UJGw1K6beIIc507CtIoC1ZXTAVN2Mig7qZRCd3FjO6XkZ0\nfNcx3/yACeC4OGCQjdZiiU5TfWg1siGB9gnHc60CgYEAkGdOTr/qzBkzFFWrnINR\nbOzCV2mx6pSVWqMAtuhMj1RxGc8iFhLx3s+uVn3rKFQhSSfTWMRyu9xSvUkX7xm5\nDp0lBwUZEQLXtnjXiHKkYVisBr+wzn54SXMfY/dFHcvCNtuH4s0MaohGeZefIAQb\nPss4CxakwOvOyoOt1rA8Z+I=\n-----END PRIVATE KEY-----\n",
+      "client_email": "firebase-adminsdk-49l24@intranet-mv.iam.gserviceaccount.com",
+      "client_id": "112211435448422403813",
+      "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+      "token_uri": "https://oauth2.googleapis.com/token",
+      "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+      "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-49l24%40intranet-mv.iam.gserviceaccount.com"
+    },
+    "pathFiles": "files/"
+  }
+}

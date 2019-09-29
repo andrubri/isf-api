@@ -1,0 +1,29 @@
+ {
+    "database": {
+        "mode": 'dev',
+        "connectionString": (process.env.DATABASE_URL)
+    },
+    "server": {
+        "port": 5600,
+        "jwtSecret": (process.env.SERVER_JWTSECRET),
+        "jwtExpiration": (process.env.SERVER_JWTEXPIRATION),
+        "routePrefix": (process.env.SERVER_ROUTEPREFIX),
+        "plugins": [
+            "logger",
+            "jwt-auth",
+            "swagger"
+        ],
+        "firebase": {
+          "type": (process.env.FIREBASE_TYPE),
+          "project_id": (process.env.FIREBASE_PROJECT_ID),
+          "private_key_id": (process.env.FIREBASE_PRIVATE_KEY_ID),
+          "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC+7somAFlfV1uV\nhINkXE9FDCHps8c4UIAaoNPcFzlqeU8Lj32tLbXgD/CkIzMRsY0Nh5kyiTIS90ox\nh3odm1obM/b6zw5lvSbvB53D19abiWB2s9JxcrKWB/6R18OvJtTKsIOJUOZ1az8i\nEvgjcb3oW2KOaCAXc46jMY9vlyI+ia8n2sgghvn0AvmWMF1slo52ov7W+HK8DRo5\nAxUpbyNODuz2Fhlw+3aVQ2RubhFtYQwqse3akoBwCB/iAt686Qz2GV0i15O8Kjl/\n6xZyI+M0HERihbORIM6cIRQcPrnm280ATDU91uTt/JWdPlj0lSEnVJTLZNQzs+q4\nYbNidAhfAgMBAAECggEAEs9iofDJ3T81ehr2eNYxRwulcakw+MbRgA4VISs2kFtI\nIsrtpjiJIPxhCEKhft4/l7QirxxeDwlGyW9f4/fQnjp13Aq3D+XdJpJZBBjI/0S+\n+KLJmjyjBG3gMg0QLbrFHvzZ0JbkRXAd5aT5xkAn5fLO2FnAw56yUDiLOYKpsIBj\nPBE2Y0SWX/g+GuCPxe9zwajGCbl3EeK7/HAF/s3hbWaET5AbS3bzJguuOOIyb7yP\nG/9yO7wjRfQFmXcsYL8+iKUibGtzuY8NuQp1saIDLVicv7/D100Uv5DMBf+9fg+h\nudkAzK6zEMpcCrzlD3c31PATwFpQnk5TtyPuKljIgQKBgQDy+WLZRU6yWvdU3JdP\n4AanWtIsGupSaOqgSXVFjqhh9chYgOKtSmS46SUmiiCh408IVg9cjX8dF2BLpR/S\ntQaoGG9EuOlVfrCK5fHjr1oqUUppnOWd/ek4jmP1vBEwg3WBDRu9pD9Ky5RTBNAP\nQfPLdhDPSIN/HnNEeF1EbO3v3wKBgQDJKy381W6TG+K91qeZN1hsw6cfmJulKHWR\nYcPqfn21+VYI91DE4nDPrHEtype6H6FV+6sQNqOTKRqDtZIRcjiAqjZBWajFSZjg\nGcchgm2LJ8eFoRFIBus35iV+YFiJkxf08F12zLN3V4qLT0JiL+m+XLb8oKKHJ/gw\nMY8i/6L3gQKBgQCcqFyqd7xQ1MPpbD0HHAtONgmStFvmfIzigdph2aQJXR4qqhb8\n4h1k97WjTqXRmyym1E4dP4H4sMy+mR2Wjm9XTEHZjlurav7K342BXtsEs9sFk0qc\n/kwz0eLzWqm+nNPTPC9pq4+/WtksWcsIO17EDUCzVS6rdGefevevmYgkAwKBgByP\n5eqk/xsh9XKQvKETa5mduefRih/L+81VfTSZGw4wRZfmTXB22h+SU0t2HU7O2OBV\naDdYGqd1SY9zwzZ46i7Se/uRWFYSmgMPhedrFlSQpFKDyOlaGiGIqsAju85ktR0Q\n16Rbcgu6wTAAY+N+/AgML+r0f78C3Mky8Ci+9QuBAoGBALAyrUhcKRE/uq31KkQP\njz69y/1CSviO11TxSHkCOAG8EoLAUYm71OrsIBmDrUiW5WzNE262MiHBF6hv5t4E\np+z18Vx5IdmJHBfOil7xY+Baz59VLNaiSmH1lOmEzHoLg7TTRJEALbpmQz+XxB9p\nGVY4Llp2/fdAPcY5SQUWjrQ4\n-----END PRIVATE KEY-----\n",
+          "client_email": (process.env.FIREBASE_CLIENT_EMAIL),
+          "client_id": (process.env.FIREBASE_CLIENT_ID),
+          "auth_uri": (process.env.FIREBASE_AUTH_URI),
+          "token_uri": (process.env.FIREBASE_TOKEN_URI),
+          "auth_provider_x509_cert_url": (process.env.FIREBASE_AUTH_PROVIDER),
+          "client_x509_cert_url": (process.env.FIREBASE_CLIENT)
+        }
+    }
+}
