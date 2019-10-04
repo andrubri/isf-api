@@ -43,7 +43,6 @@ export default class UserController {
                 apellido: request.payload.apellido,
                 email: request.payload.email,
                 idPerfil: request.payload.idPerfil,
-                idUsuarioCreador: (await Usuario.findOne({where: {token: request.auth.credentials.uid}})).idUsuario,
                 nombre: request.payload.nombre,
                 token: userFireBase.uid,
             });
@@ -67,7 +66,6 @@ export default class UserController {
                     apellido: request.payload.apellido,
                     email: request.payload.email,
                     idPerfil: request.payload.idPerfil,
-                    idUsuarioUltModi: (await Usuario.findOne({where: {token: request.auth.credentials.uid}})).idUsuario,
                     nombre: request.payload.nombre,
                 }, {where: {token: request.params.id}});
 
@@ -95,8 +93,7 @@ export default class UserController {
         const exist: Usuario = await Usuario.findOne({where: {fechaBaja: null, token: request.params.id}});
         if (exist) {
             const [cont, User] = await Usuario.update({
-                fechaBaja: new Date(),
-                idUsuarioUltModi: (await Usuario.findOne({where: {token: request.auth.credentials.uid}})).idUsuario,
+                fechaBaja: new Date()
             }, {where: {token: request.params.id}});
 
             const fireData: UpdateRequest = {
@@ -119,7 +116,6 @@ export default class UserController {
                 email: request.payload.email,
                 fechaBaja: null,
                 idPerfil: request.payload.idPerfil,
-                idUsuarioUltModi: (await Usuario.findOne({where: {token: request.auth.credentials.uid}})).idUsuario,
                 nombre: request.payload.nombre,
             }, {where: {token: request.params.id}});
 

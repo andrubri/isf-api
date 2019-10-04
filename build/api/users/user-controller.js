@@ -43,7 +43,6 @@ class UserController {
                     apellido: request.payload.apellido,
                     email: request.payload.email,
                     idPerfil: request.payload.idPerfil,
-                    idUsuarioCreador: (yield usuario_1.Usuario.findOne({ where: { token: request.auth.credentials.uid } })).idUsuario,
                     nombre: request.payload.nombre,
                     token: userFireBase.uid,
                 });
@@ -69,7 +68,6 @@ class UserController {
                         apellido: request.payload.apellido,
                         email: request.payload.email,
                         idPerfil: request.payload.idPerfil,
-                        idUsuarioUltModi: (yield usuario_1.Usuario.findOne({ where: { token: request.auth.credentials.uid } })).idUsuario,
                         nombre: request.payload.nombre,
                     }, { where: { token: request.params.id } });
                     const fireData = {
@@ -97,8 +95,7 @@ class UserController {
             const exist = yield usuario_1.Usuario.findOne({ where: { fechaBaja: null, token: request.params.id } });
             if (exist) {
                 const [cont, User] = yield usuario_1.Usuario.update({
-                    fechaBaja: new Date(),
-                    idUsuarioUltModi: (yield usuario_1.Usuario.findOne({ where: { token: request.auth.credentials.uid } })).idUsuario,
+                    fechaBaja: new Date()
                 }, { where: { token: request.params.id } });
                 const fireData = {
                     disabled: true,
@@ -120,7 +117,6 @@ class UserController {
                     email: request.payload.email,
                     fechaBaja: null,
                     idPerfil: request.payload.idPerfil,
-                    idUsuarioUltModi: (yield usuario_1.Usuario.findOne({ where: { token: request.auth.credentials.uid } })).idUsuario,
                     nombre: request.payload.nombre,
                 }, { where: { token: request.params.id } });
                 const fireData = {

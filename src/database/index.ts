@@ -22,10 +22,6 @@ export class DBSquelize {
                 allowNull: false,
                 type: new DataTypes.STRING(255),
             },
-            createdAt: {
-                field: "fechaAlta",
-                type: new DataTypes.DATE(),
-            },
             email: {
                 allowNull: false,
                 type: new DataTypes.STRING(255),
@@ -34,26 +30,15 @@ export class DBSquelize {
                 allowNull: true,
                 type: new DataTypes.DATE(),
             },
-            idEmpresa: {
+            idperfil: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idEstado: {
+            idvoluntario: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idPerfil: {
-                type: DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuario: {
+            idusuario: {
                 autoIncrement: true,
                 primaryKey: true,
-                type: DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuarioCreador: {
-                allowNull: false,
-                type: DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuarioUltModi: {
-                allowNull: true,
                 type: DataTypes.INTEGER.UNSIGNED,
             },
             nombre: {
@@ -64,13 +49,10 @@ export class DBSquelize {
                 allowNull: false,
                 type: new DataTypes.STRING(100),
             },
-            updatedAt: {
-                field: "fechaMod",
-                type: new DataTypes.DATE(),
-            },
         }, {
             sequelize: this.sequelize,
             tableName: "usuarios",
+            timestamps: false
         });
 
     }

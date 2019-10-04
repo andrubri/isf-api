@@ -18,10 +18,6 @@ class DBSquelize {
                 allowNull: false,
                 type: new sequelize_1.DataTypes.STRING(255),
             },
-            createdAt: {
-                field: "fechaAlta",
-                type: new sequelize_1.DataTypes.DATE(),
-            },
             email: {
                 allowNull: false,
                 type: new sequelize_1.DataTypes.STRING(255),
@@ -30,26 +26,15 @@ class DBSquelize {
                 allowNull: true,
                 type: new sequelize_1.DataTypes.DATE(),
             },
-            idEmpresa: {
+            idperfil: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idEstado: {
+            idvoluntario: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idPerfil: {
-                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuario: {
+            idusuario: {
                 autoIncrement: true,
                 primaryKey: true,
-                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuarioCreador: {
-                allowNull: false,
-                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-            },
-            idUsuarioUltModi: {
-                allowNull: true,
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
             nombre: {
@@ -60,13 +45,10 @@ class DBSquelize {
                 allowNull: false,
                 type: new sequelize_1.DataTypes.STRING(100),
             },
-            updatedAt: {
-                field: "fechaMod",
-                type: new sequelize_1.DataTypes.DATE(),
-            },
         }, {
             sequelize: this.sequelize,
             tableName: "usuarios",
+            timestamps: false
         });
     }
 }

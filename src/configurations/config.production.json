@@ -6,7 +6,7 @@
       "user" : "b2b6b332ab1d19",
       "password" : "2a342979",
       "database" : "heroku_40df93b096bd4c4",
-      "dialect": "mysql",
+      "dialect": "mysql"
     }
   },
   "server": {
