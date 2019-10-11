@@ -27,5 +27,13 @@ export interface IReqUser extends IRequest{
     idPerfil: number;
     apellido: string;
   }
+}
 
+export interface IReqActividad extends IRequest {
+  payload: {
+    id: number;
+    nombre: string;
+    direccion: string;
+    idLocalidad: number;
+  }
 }

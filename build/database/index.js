@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const usuario_1 = require("./usuario");
+const actividad_1 = require("./actividad");
 class DBSquelize {
     constructor(config) {
         this.sequelize = new sequelize_1.Sequelize(config.connection.database, config.connection.user, config.connection.password, {
@@ -11,6 +12,35 @@ class DBSquelize {
         });
         // Iinicio las entidades
         this.initUsuario();
+        this.initActividad();
+    }
+    initActividad() {
+        actividad_1.Actividad.init({
+            direccion: {
+                allowNull: false,
+                type: new sequelize_1.DataTypes.STRING(255),
+            },
+            fechaBaja: {
+                allowNull: true,
+                type: new sequelize_1.DataTypes.DATE(),
+            },
+            idLocalidad: {
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            },
+            idActividad: {
+                autoIncrement: true,
+                primaryKey: true,
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            },
+            nombre: {
+                allowNull: false,
+                type: new sequelize_1.DataTypes.STRING(255),
+            },
+        }, {
+            sequelize: this.sequelize,
+            tableName: "actividades",
+            timestamps: false
+        });
     }
     initUsuario() {
         usuario_1.Usuario.init({
