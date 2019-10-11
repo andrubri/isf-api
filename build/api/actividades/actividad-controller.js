@@ -8,8 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const usuario_1 = require("../../database/usuario");
 const firebase_1 = require("../../lib/firebase");
 const actividad_1 = require("../../database/actividad");
+const actividades_voluntarios_1 = require("../../database/actividades_voluntarios");
 class ActividadController {
     constructor(configs, io) {
         this.configs = configs;
@@ -31,13 +33,20 @@ class ActividadController {
     }
     crearActividad(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exist = yield actividad_1.Actividad.findOne({ where: { nombre: request.payload.nombre } });
+            const exist = yield actividad_1.Actividad.findOne({ where: { nombre: request.payload.actividad.nombre } });
             if (!exist) {
                 const act = yield actividad_1.Actividad.create({
-                    nombre: request.payload.nombre,
-                    direccion: request.payload.direccion,
-                    idLocalidad: request.payload.idLocalidad,
+                    nombre: request.payload.actividad.nombre,
+                    direccion: request.payload.actividad.direccion,
+                    idLocalidad: request.payload.actividad.idLocalidad,
                 });
+                for (let item of request.payload.coordinadores) {
+                    actividades_voluntarios_1.ActividadesVoluntarios.create({
+                        idvoluntario: item.idvoluntario,
+                        idactividad: act.idActividad,
+                        idrol: 2
+                    });
+                }
                 return act;
             }
             else {
@@ -51,11 +60,18 @@ class ActividadController {
             if (exist) {
                 try {
                     const [cont, act] = yield actividad_1.Actividad.update({
-                        direccion: request.payload.direccion,
-                        idLocaliad: request.payload.idLocalidad,
-                        nombre: request.payload.nombre,
+                        direccion: request.payload.actividad.direccion,
+                        idLocaliad: request.payload.actividad.idLocalidad,
+                        nombre: request.payload.actividad.nombre,
                     }, { where: { idActividad: request.params.id } });
-                    return act;
+                    for (let item of request.payload.coordinadores) {
+                        yield actividades_voluntarios_1.ActividadesVoluntarios.create({
+                            idvoluntario: item.idvoluntario,
+                            idactividad: exist.idActividad,
+                            idrol: 2
+                        });
+                    }
+                    return "ok";
                 }
                 catch (e) {
                     return e;
@@ -73,7 +89,32 @@ class ActividadController {
                 const [cont, act] = yield actividad_1.Actividad.update({
                     fechaBaja: new Date(),
                 }, { where: { idActividad: request.params.id } });
-                return act;
+                return act[0];
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    obtenerCoordinadoresXId(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield actividad_1.Actividad.findOne({ where: { fechaBaja: null, idActividad: request.params.id } });
+            if (exist) {
+                const coordinadores = [];
+                const asignados = yield actividades_voluntarios_1.ActividadesVoluntarios.findAll({ where: { fechaBaja: null, idRol: 2 } });
+                for (const asign of asignados) {
+                    const user = yield usuario_1.Usuario.findOne({
+                        where: {
+                            fechaBaja: null,
+                            idVoluntario: asign.idVoluntario
+                        }
+                    });
+                    const item = asign;
+                    item.nombre = user.nombre;
+                    item.apellido = user.apellido;
+                    coordinadores.push(item);
+                }
+                return yield coordinadores;
             }
             else {
                 return response.response().code(400);

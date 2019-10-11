@@ -31,6 +31,32 @@ function default_1(server, io, serverConfigs) {
             },
         },
         {
+            method: "POST",
+            path: "/actividad",
+            options: {
+                auth: "firebase",
+                description: "Crear actividad",
+                handler: userController.crearActividad,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Actividad creada.",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "actividad"],
+                validate: {},
+            },
+        },
+        {
             method: "GET",
             path: "/actividad/{id}",
             options: {
@@ -57,17 +83,17 @@ function default_1(server, io, serverConfigs) {
             },
         },
         {
-            method: "POST",
-            path: "/actividad",
+            method: "GET",
+            path: "/actividad/{id}/coordinador",
             options: {
                 auth: "firebase",
-                description: "Crear actividad",
-                handler: userController.crearActividad,
+                description: "Trae los coordinadores de una actividad",
+                handler: userController.obtenerCoordinadoresXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
                             200: {
-                                description: "Actividad creada.",
+                                description: "Trae los datos de los coordinadores",
                             },
                             304: {
                                 description: "No autorizado.",
@@ -78,7 +104,7 @@ function default_1(server, io, serverConfigs) {
                         },
                     },
                 },
-                tags: ["api", "actividad"],
+                tags: ["api", "actividad", "coordinador"],
                 validate: {},
             },
         },

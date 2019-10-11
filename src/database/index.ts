@@ -2,6 +2,7 @@ import {DataType, DataTypes, Sequelize} from "sequelize";
 import {IDataConfiguration} from "../configurations";
 import {Usuario} from "./usuario";
 import {Actividad} from "./actividad";
+import {ActividadesVoluntarios} from "./actividades_voluntarios";
 
 export class DBSquelize {
     private sequelize: Sequelize;
@@ -16,9 +17,37 @@ export class DBSquelize {
         // Iinicio las entidades
         this.initUsuario();
         this.initActividad();
+        this.initActividadVoluntario();
     }
 
-    private initActividad(){
+    private initActividadVoluntario() {
+        ActividadesVoluntarios.init({
+            idActividadVoluntario: {
+                autoIncrement: true,
+                primaryKey: true,
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+            idActividad: {
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+            idVoluntario: {
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+            idRol: {
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+            fechaBaja: {
+                allowNull: true,
+                type: new DataTypes.DATE(),
+            }
+        }, {
+            sequelize: this.sequelize,
+            tableName: "actividades_voluntarios",
+            timestamps: false
+        });
+    }
+
+    private initActividad() {
         Actividad.init({
             direccion: {
                 allowNull: false,
