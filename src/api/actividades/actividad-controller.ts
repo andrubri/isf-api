@@ -105,7 +105,8 @@ export default class ActividadController {
                         idVoluntario: asign.idVoluntario
                     }
                 });
-                const item: any = asign;
+                const item: any = {};
+                item.idActividadVoluntario = asign.idActividadVoluntario;
                 item.nombre = user.nombre;
                 item.apellido = user.apellido;
 
