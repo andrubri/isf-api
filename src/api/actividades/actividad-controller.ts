@@ -66,7 +66,7 @@ export default class ActividadController {
                 for( let item of request.payload.coordinadores){
                     await ActividadesVoluntarios.create({
                         idVoluntario: item.idvoluntario,
-                        idActividad: act.idActividad,
+                        idActividad: exist.idActividad,
                         idRol: 2
                     });
                 }
