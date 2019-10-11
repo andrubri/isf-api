@@ -42,9 +42,9 @@ export default class ActividadController {
 
             for( let item of request.payload.coordinadores){
                 ActividadesVoluntarios.create({
-                    idvoluntario: item.idvoluntario,
-                    idactividad: act.idActividad,
-                    idrol: 2
+                    idVoluntario: item.idvoluntario,
+                    idActividad: act.idActividad,
+                    idRol: 2
                 });
             }
             return act;
@@ -65,9 +65,9 @@ export default class ActividadController {
 
                 for( let item of request.payload.coordinadores){
                     await ActividadesVoluntarios.create({
-                        idvoluntario: item.idvoluntario,
-                        idactividad: exist.idActividad,
-                        idrol: 2
+                        idVoluntario: item.idvoluntario,
+                        idActividad: act.idActividad,
+                        idRol: 2
                     });
                 }
 
