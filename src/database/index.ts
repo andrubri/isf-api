@@ -3,6 +3,8 @@ import {IDataConfiguration} from "../configurations";
 import {Usuario} from "./usuario";
 import {Actividad} from "./actividad";
 import {ActividadesVoluntarios} from "./actividades_voluntarios";
+import { Jornada } from "./jornada";
+
 
 export class DBSquelize {
     private sequelize: Sequelize;
@@ -17,6 +19,7 @@ export class DBSquelize {
         // Iinicio las entidades
         this.initUsuario();
         this.initActividad();
+        this.initJornadas();
         this.initActividadVoluntario();
     }
 
@@ -115,6 +118,37 @@ export class DBSquelize {
             timestamps: false
         });
 
+    }
+
+    private initJornadas() {
+        Jornada.init({idJornadas: {
+            autoIncrement: true,
+            primaryKey: true,
+            type: DataTypes.INTEGER.UNSIGNED,
+            },
+            direccion: {
+                allowNull: false,
+                type: new DataTypes.STRING(255),
+            },
+            descripcion: {
+                allowNull: false,
+                type: new DataTypes.STRING(255),
+            },
+            fecha: {
+                allowNull: true,
+                type: new DataTypes.DATE(),
+            },
+            idActividad: {
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+            idvoluntario: {
+                type: DataTypes.INTEGER.UNSIGNED,
+            },
+        }, {
+            sequelize: this.sequelize,
+            tableName: "jornadas",
+            timestamps: false
+        });
     }
 
 }

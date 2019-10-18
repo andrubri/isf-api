@@ -29,6 +29,16 @@ export interface IReqUser extends IRequest {
     }
 }
 
+export interface IReqJornada extends IRequest {
+    payload: {
+        id: number;
+        descripcion: string;
+        direccion: string;
+        idActividad: number;
+        fecha: Date;
+    }
+}
+
 export interface IReqActividad extends IRequest {
     payload: {
         actividad: {

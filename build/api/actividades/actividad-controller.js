@@ -42,9 +42,9 @@ class ActividadController {
                 });
                 for (let item of request.payload.coordinadores) {
                     actividades_voluntarios_1.ActividadesVoluntarios.create({
-                        idvoluntario: item.idvoluntario,
-                        idactividad: act.idActividad,
-                        idrol: 2
+                        idVoluntario: item.idvoluntario,
+                        idActividad: act.idActividad,
+                        idRol: 2
                     });
                 }
                 return act;
@@ -66,9 +66,9 @@ class ActividadController {
                     }, { where: { idActividad: request.params.id } });
                     for (let item of request.payload.coordinadores) {
                         yield actividades_voluntarios_1.ActividadesVoluntarios.create({
-                            idvoluntario: item.idvoluntario,
-                            idactividad: exist.idActividad,
-                            idrol: 2
+                            idVoluntario: item.idvoluntario,
+                            idActividad: exist.idActividad,
+                            idRol: 2
                         });
                     }
                     return "ok";
@@ -109,7 +109,8 @@ class ActividadController {
                             idVoluntario: asign.idVoluntario
                         }
                     });
-                    const item = asign;
+                    const item = {};
+                    item.idActividadVoluntario = asign.idActividadVoluntario;
                     item.nombre = user.nombre;
                     item.apellido = user.apellido;
                     coordinadores.push(item);

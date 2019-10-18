@@ -6,6 +6,7 @@ import FirebaseAdmin from "./lib/firebase";
 //apis
 import * as Users from './api/users';
 import * as Actividades from './api/actividades';
+import * as Jornadas from './api/jornadas';
 import * as socketio from 'socket.io';
 
 export async function init(
@@ -60,6 +61,7 @@ export async function init(
 
         Users.init(server, io, configs);
         Actividades.init(server, io, configs);
+        Jornadas.init(server, io, configs);
 
         console.log('Routes registered sucessfully.');
         return server;

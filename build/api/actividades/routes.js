@@ -2,15 +2,15 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const actividad_controller_1 = require("./actividad-controller");
 function default_1(server, io, serverConfigs) {
-    const userController = new actividad_controller_1.default(serverConfigs, io);
-    server.bind(userController);
+    const actividadController = new actividad_controller_1.default(serverConfigs, io);
+    server.bind(actividadController);
     server.route([{
             method: "GET",
             path: "/actividad",
             options: {
                 auth: "firebase",
                 description: "Trae todas las actividad",
-                handler: userController.obtenerActividad,
+                handler: actividadController.obtenerActividad,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -36,7 +36,7 @@ function default_1(server, io, serverConfigs) {
             options: {
                 auth: "firebase",
                 description: "Crear actividad",
-                handler: userController.crearActividad,
+                handler: actividadController.crearActividad,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -62,7 +62,7 @@ function default_1(server, io, serverConfigs) {
             options: {
                 auth: "firebase",
                 description: "Trae la informacion de una actividad determinada",
-                handler: userController.obtenerActividadXId,
+                handler: actividadController.obtenerActividadXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -88,7 +88,7 @@ function default_1(server, io, serverConfigs) {
             options: {
                 auth: "firebase",
                 description: "Trae los coordinadores de una actividad",
-                handler: userController.obtenerCoordinadoresXId,
+                handler: actividadController.obtenerCoordinadoresXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -114,7 +114,7 @@ function default_1(server, io, serverConfigs) {
             options: {
                 auth: "firebase",
                 description: "Actualizar actividad",
-                handler: userController.actualizarActividad,
+                handler: actividadController.actualizarActividad,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -140,7 +140,7 @@ function default_1(server, io, serverConfigs) {
             options: {
                 auth: "firebase",
                 description: "Eliminamos actividad",
-                handler: userController.eliminarActividad,
+                handler: actividadController.eliminarActividad,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
