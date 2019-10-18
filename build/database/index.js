@@ -4,6 +4,7 @@ const sequelize_1 = require("sequelize");
 const usuario_1 = require("./usuario");
 const actividad_1 = require("./actividad");
 const actividades_voluntarios_1 = require("./actividades_voluntarios");
+const jornada_1 = require("./jornada");
 class DBSquelize {
     constructor(config) {
         this.sequelize = new sequelize_1.Sequelize(config.connection.database, config.connection.user, config.connection.password, {
@@ -14,6 +15,7 @@ class DBSquelize {
         // Iinicio las entidades
         this.initUsuario();
         this.initActividad();
+        this.initJornadas();
         this.initActividadVoluntario();
     }
     initActividadVoluntario() {
@@ -106,6 +108,36 @@ class DBSquelize {
         }, {
             sequelize: this.sequelize,
             tableName: "usuarios",
+            timestamps: false
+        });
+    }
+    initJornadas() {
+        jornada_1.Jornada.init({ idJornadas: {
+                autoIncrement: true,
+                primaryKey: true,
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            },
+            direccion: {
+                allowNull: false,
+                type: new sequelize_1.DataTypes.STRING(255),
+            },
+            descripcion: {
+                allowNull: false,
+                type: new sequelize_1.DataTypes.STRING(255),
+            },
+            fecha: {
+                allowNull: true,
+                type: new sequelize_1.DataTypes.DATE(),
+            },
+            idActividad: {
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            },
+            idvoluntario: {
+                type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
+            },
+        }, {
+            sequelize: this.sequelize,
+            tableName: "jornadas",
             timestamps: false
         });
     }

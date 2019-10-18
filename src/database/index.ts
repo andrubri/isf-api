@@ -141,9 +141,6 @@ export class DBSquelize {
             idActividad: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idvoluntario: {
-                type: DataTypes.INTEGER.UNSIGNED,
-            },
         }, {
             sequelize: this.sequelize,
             tableName: "jornadas",
