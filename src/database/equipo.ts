@@ -1,7 +1,7 @@
 import {Model} from "sequelize";
 
-export class Actividad extends Model {
-    public idActividad: number;
+export class Equipo extends Model {
+    public idEquipo: number;
     public nombre: string;
     public direccion: string;
     public idLocalidad: number;

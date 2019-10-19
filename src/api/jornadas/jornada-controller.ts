@@ -30,14 +30,14 @@ export default class JornadaController {
                 descripcion: request.payload.descripcion,
                 fecha: request.payload.fecha,
                 direccion: request.payload.direccion,
-                idActividad: request.payload.idActividad,
+                idEquipo: request.payload.idEquipo,
             }); */
 
             const jornada: Jornada = await Jornada.create({
                descripcion: request.payload.descripcion,
                 fecha: request.payload.fecha,
                 direccion: request.payload.direccion,
-                idActividad: request.payload.idActividad,
+                idEquipo: request.payload.idEquipo,
             });
 
             return jornada;
@@ -54,7 +54,7 @@ export default class JornadaController {
                 const [cont, jornada] = await Jornada.update({
                     descripcion: request.payload.descripcion,
                     fecha: request.payload.fecha,
-                    idActividad: request.payload.idActividad,
+                    idEquipo: request.payload.idEquipo,
                     direccion: request.payload.direccion,
                 }, {where: {idJornadas: request.params.id}});
 

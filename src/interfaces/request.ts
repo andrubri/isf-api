@@ -34,21 +34,21 @@ export interface IReqJornada extends IRequest {
         id: number;
         descripcion: string;
         direccion: string;
-        idActividad: number;
+        idEquipo: number;
         fecha: Date;
     }
 }
 
-export interface IReqActividad extends IRequest {
+export interface IReqEquipo extends IRequest {
     payload: {
-        actividad: {
+        equipo: {
             id: number;
             nombre: string;
             direccion: string;
             idLocalidad: number;
         };
         coordinadores: [{
-            idvoluntario: number;
+            idPersona: number;
         }];
     }
 }

@@ -29,13 +29,13 @@ class JornadaController {
                     descripcion: request.payload.descripcion,
                     fecha: request.payload.fecha,
                     direccion: request.payload.direccion,
-                    idActividad: request.payload.idActividad,
+                    idEquipo: request.payload.idEquipo,
                 }); */
                 const jornada = yield jornada_1.Jornada.create({
                     descripcion: request.payload.descripcion,
                     fecha: request.payload.fecha,
                     direccion: request.payload.direccion,
-                    idActividad: request.payload.idActividad,
+                    idEquipo: request.payload.idEquipo,
                 });
                 return jornada;
             }
@@ -52,7 +52,7 @@ class JornadaController {
                     const [cont, jornada] = yield jornada_1.Jornada.update({
                         descripcion: request.payload.descripcion,
                         fecha: request.payload.fecha,
-                        idActividad: request.payload.idActividad,
+                        idEquipo: request.payload.idEquipo,
                         direccion: request.payload.direccion,
                     }, { where: { idJornadas: request.params.id } });
                     return yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });

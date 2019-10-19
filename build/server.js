@@ -12,7 +12,7 @@ const Hapi = require("hapi");
 const firebase_1 = require("./lib/firebase");
 //apis
 const Users = require("./api/users");
-const Actividades = require("./api/actividades");
+const Equipos = require("./api/equipos");
 const Jornadas = require("./api/jornadas");
 const socketio = require("socket.io");
 function init(configs) {
@@ -53,7 +53,7 @@ function init(configs) {
             console.log('All plugins registered successfully.');
             console.log('Register Routes');
             Users.init(server, io, configs);
-            Actividades.init(server, io, configs);
+            Equipos.init(server, io, configs);
             Jornadas.init(server, io, configs);
             console.log('Routes registered sucessfully.');
             return server;

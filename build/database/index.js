@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const sequelize_1 = require("sequelize");
 const usuario_1 = require("./usuario");
-const actividad_1 = require("./actividad");
-const actividades_voluntarios_1 = require("./actividades_voluntarios");
+const equipo_1 = require("./equipo");
+const equipo_persona_1 = require("./equipo_persona");
 const jornada_1 = require("./jornada");
 class DBSquelize {
     constructor(config) {
@@ -14,23 +14,23 @@ class DBSquelize {
         });
         // Iinicio las entidades
         this.initUsuario();
-        this.initActividad();
+        this.initEquipo();
         this.initJornadas();
-        this.initActividadVoluntario();
+        this.initEquipoPersona();
         // Aplicar los cambios a la db
         this.sequelize.sync();
     }
-    initActividadVoluntario() {
-        actividades_voluntarios_1.ActividadesVoluntarios.init({
-            idActividadVoluntario: {
+    initEquipoPersona() {
+        equipo_persona_1.EquipoPersona.init({
+            idEquipoPersona: {
                 autoIncrement: true,
                 primaryKey: true,
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idActividad: {
+            idEquipo: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idVoluntario: {
+            idPersona: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
             idRol: {
@@ -42,12 +42,12 @@ class DBSquelize {
             }
         }, {
             sequelize: this.sequelize,
-            tableName: "actividades_voluntarios",
+            tableName: "equipos_personas",
             timestamps: false
         });
     }
-    initActividad() {
-        actividad_1.Actividad.init({
+    initEquipo() {
+        equipo_1.Equipo.init({
             direccion: {
                 allowNull: false,
                 type: new sequelize_1.DataTypes.STRING(255),
@@ -59,7 +59,7 @@ class DBSquelize {
             idLocalidad: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idActividad: {
+            idEquipo: {
                 autoIncrement: true,
                 primaryKey: true,
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
@@ -70,7 +70,7 @@ class DBSquelize {
             },
         }, {
             sequelize: this.sequelize,
-            tableName: "actividades",
+            tableName: "equipos",
             timestamps: false
         });
     }
@@ -91,7 +91,7 @@ class DBSquelize {
             idperfil: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
-            idvoluntario: {
+            idPersona: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
             idusuario: {
@@ -131,7 +131,7 @@ class DBSquelize {
                 allowNull: true,
                 type: new sequelize_1.DataTypes.DATE(),
             },
-            idActividad: {
+            idEquipo: {
                 type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
             },
         }, {

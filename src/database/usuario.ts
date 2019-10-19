@@ -4,7 +4,7 @@ export class Usuario extends Model {
     public idusuario: number;
     public token: string;
     public idPerfil: number;
-    public idVoluntario: number;
+    public idPersona: number;
     public nombre: string;
     public apellido: string;
     public email: string;

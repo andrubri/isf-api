@@ -1,26 +1,26 @@
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import {IServerConfigurations} from "../../configurations";
-import ActividadController from "./actividad-controller";
-import * as UserValidator from "./actividad-validator";
+import EquipoController from "./equipo-controller";
+import * as UserValidator from "./equipo-validator";
 
 export default function (server: Hapi.Server, io: socketio.Server, serverConfigs: IServerConfigurations) {
 
-    const actividadController = new ActividadController(serverConfigs, io);
-    server.bind(actividadController);
+    const equipoController = new EquipoController(serverConfigs, io);
+    server.bind(equipoController);
 
     server.route([{
         method: "GET",
-        path: "/actividad",
+        path: "/equipo",
         options: {
             auth: "firebase",
-            description: "Trae todas las actividad",
-            handler: actividadController.obtenerActividad,
+            description: "Trae todas las equipo",
+            handler: equipoController.obtenerEquipo,
             plugins: {
                 "hapi-swagger": {
                     responses: {
                         200: {
-                            description: "Devuelve datos de las actividades",
+                            description: "Devuelve datos de las equipoes",
                         },
                         304: {
                             description: "No autorizado.",
@@ -31,22 +31,22 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                     },
                 },
             },
-            tags: ["api", "actividad"],
+            tags: ["api", "equipo"],
             validate: {},
         },
     },
         {
             method: "POST",
-            path: "/actividad",
+            path: "/equipo",
             options: {
                 auth: "firebase",
-                description: "Crear actividad",
-                handler: actividadController.crearActividad,
+                description: "Crear equipo",
+                handler: equipoController.crearEquipo,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
                             200: {
-                                description: "Actividad creada.",
+                                description: "Equipo creada.",
                             },
                             304: {
                                 description: "No autorizado.",
@@ -57,22 +57,22 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "actividad"],
+                tags: ["api", "equipo"],
                 validate: {},
             },
         },
         {
             method: "GET",
-            path: "/actividad/{id}",
+            path: "/equipo/{id}",
             options: {
                 auth: "firebase",
-                description: "Trae la informacion de una actividad determinada",
-                handler: actividadController.obtenerActividadXId,
+                description: "Trae la informacion de una equipo determinada",
+                handler: equipoController.obtenerEquipoXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
                             200: {
-                                description: "Trae los datos de la actividad",
+                                description: "Trae los datos de la equipo",
                             },
                             304: {
                                 description: "No autorizado.",
@@ -83,17 +83,17 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "actividad"],
+                tags: ["api", "equipo"],
                 validate: {},
             },
         },
         {
             method: "GET",
-            path: "/actividad/{id}/coordinador",
+            path: "/equipo/{id}/coordinador",
             options: {
                 auth: "firebase",
-                description: "Trae los coordinadores de una actividad",
-                handler: actividadController.obtenerCoordinadoresXId,
+                description: "Trae los coordinadores de una equipo",
+                handler: equipoController.obtenerCoordinadoresXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -109,7 +109,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "actividad", "coordinador"],
+                tags: ["api", "equipo", "coordinador"],
                 validate: {
 
                 },
@@ -117,16 +117,16 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
         },
         {
             method: "PUT",
-            path: "/actividad/{id}",
+            path: "/equipo/{id}",
             options: {
                 auth: "firebase",
-                description: "Actualizar actividad",
-                handler: actividadController.actualizarActividad,
+                description: "Actualizar equipo",
+                handler: equipoController.actualizarEquipo,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
                             200: {
-                                description: "Actividad actualizada.",
+                                description: "Equipo actualizada.",
                             },
                             304: {
                                 description: "No autorizado.",
@@ -137,22 +137,22 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "actividad"],
+                tags: ["api", "equipo"],
                 validate: {},
             },
         },
         {
             method: "DELETE",
-            path: "/actividad/{id}",
+            path: "/equipo/{id}",
             options: {
                 auth: "firebase",
-                description: "Eliminamos actividad",
-                handler: actividadController.eliminarActividad,
+                description: "Eliminamos equipo",
+                handler: equipoController.eliminarEquipo,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
                             200: {
-                                description: "Actividad eliminada.",
+                                description: "Equipo eliminada.",
                             },
                             304: {
                                 description: "No autorizado.",
@@ -163,7 +163,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "actividad"],
+                tags: ["api", "equipo"],
                 validate: {},
             },
         }]);

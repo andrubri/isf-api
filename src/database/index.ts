@@ -1,8 +1,8 @@
 import {DataType, DataTypes, Sequelize} from "sequelize";
 import {IDataConfiguration} from "../configurations";
 import {Usuario} from "./usuario";
-import {Actividad} from "./actividad";
-import {ActividadesVoluntarios} from "./actividades_voluntarios";
+import {Equipo} from "./equipo";
+import {EquipoPersona} from "./equipo_persona";
 import { Jornada } from "./jornada";
 
 
@@ -18,25 +18,25 @@ export class DBSquelize {
 
         // Iinicio las entidades
         this.initUsuario();
-        this.initActividad();
+        this.initEquipo();
         this.initJornadas();
-        this.initActividadVoluntario();
+        this.initEquipoPersona();
 
         // Aplicar los cambios a la db
         this.sequelize.sync();
     }
 
-    private initActividadVoluntario() {
-        ActividadesVoluntarios.init({
-            idActividadVoluntario: {
+    private initEquipoPersona() {
+        EquipoPersona.init({
+            idEquipoPersona: {
                 autoIncrement: true,
                 primaryKey: true,
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idActividad: {
+            idEquipo: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idVoluntario: {
+            idPersona: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
             idRol: {
@@ -48,13 +48,13 @@ export class DBSquelize {
             }
         }, {
             sequelize: this.sequelize,
-            tableName: "actividades_voluntarios",
+            tableName: "equipos_personas",
             timestamps: false
         });
     }
 
-    private initActividad() {
-        Actividad.init({
+    private initEquipo() {
+        Equipo.init({
             direccion: {
                 allowNull: false,
                 type: new DataTypes.STRING(255),
@@ -66,7 +66,7 @@ export class DBSquelize {
             idLocalidad: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idActividad: {
+            idEquipo: {
                 autoIncrement: true,
                 primaryKey: true,
                 type: DataTypes.INTEGER.UNSIGNED,
@@ -77,7 +77,7 @@ export class DBSquelize {
             },
         }, {
             sequelize: this.sequelize,
-            tableName: "actividades",
+            tableName: "equipos",
             timestamps: false
         });
     }
@@ -99,7 +99,7 @@ export class DBSquelize {
             idperfil: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
-            idvoluntario: {
+            idPersona: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
             idusuario: {
@@ -141,7 +141,7 @@ export class DBSquelize {
                 allowNull: true,
                 type: new DataTypes.DATE(),
             },
-            idActividad: {
+            idEquipo: {
                 type: DataTypes.INTEGER.UNSIGNED,
             },
         }, {
