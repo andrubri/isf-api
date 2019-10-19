@@ -46,16 +46,16 @@ class JornadaController {
     }
     actualizarJornada(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exist = yield jornada_1.Jornada.findOne({ where: { idJornada: request.params.id } });
+            const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
             if (exist) {
                 try {
-                    const [cont, Jornada] = yield Jornada.update({
+                    const [cont, jornada] = yield jornada_1.Jornada.update({
                         descripcion: request.payload.descripcion,
                         fecha: request.payload.fecha,
                         idActividad: request.payload.idActividad,
                         direccion: request.payload.direccion,
-                    }, { where: { idJornada: request.params.id } });
-                    return yield Jornada.findOne({ where: { idJornada: request.params.id } });
+                    }, { where: { idJornadas: request.params.id } });
+                    return yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
                 }
                 catch (e) {
                     return e;
@@ -68,12 +68,15 @@ class JornadaController {
     }
     eliminarJornada(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exist = yield jornada_1.Jornada.findOne({ where: { idJornada: request.params.id } });
+            const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
             if (exist) {
-                const [cont, Jornada] = yield Jornada.update({
-                    fechaBaja: new Date()
-                }, { where: { idJornada: request.params.id } });
-                return yield Jornada.findOne({ where: { idJornada: request.params.id } });
+                /*  const [cont, jornada] = await Jornada.update({
+                     fechaBaja: new Date()
+                 }, {where: {idJornada: request.params.id}});
+      */
+                yield jornada_1.Jornada.destroy({ where: { idJornadas: request.params.id } });
+                return exist;
+                //return await Jornada.findOne({where: {idJornada: request.params.id}});
             }
             else {
                 return response.response().code(400);
