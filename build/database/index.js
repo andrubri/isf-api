@@ -17,6 +17,7 @@ class DBSquelize {
         this.initActividad();
         this.initJornadas();
         this.initActividadVoluntario();
+        this.sequelize.sync();
     }
     initActividadVoluntario() {
         actividades_voluntarios_1.ActividadesVoluntarios.init({

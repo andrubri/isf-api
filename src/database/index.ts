@@ -21,6 +21,8 @@ export class DBSquelize {
         this.initActividad();
         this.initJornadas();
         this.initActividadVoluntario();
+
+        this.sequelize.sync();
     }
 
     private initActividadVoluntario() {
