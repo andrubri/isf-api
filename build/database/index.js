@@ -17,6 +17,7 @@ class DBSquelize {
         this.initActividad();
         this.initJornadas();
         this.initActividadVoluntario();
+        // Aplicar los cambios a la db
         this.sequelize.sync();
     }
     initActividadVoluntario() {
