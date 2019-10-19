@@ -24,23 +24,23 @@ export default class JornadaController {
 
 
     public async crearJornada(request: IReqJornada, response: Hapi.ResponseToolkit) {
-        const exist: Jornada = await Jornada.findOne({where: {idJornada: request.payload.id}});
-        if (!exist) {
-            const jornadaFireBase: any = await this.firebaseAdmin.auth().createJornada({
+        //const exist: Jornada = await Jornada.findOne({where: {idJornada: request.payload.id}});
+        if (true) {
+            /* const jornadaFireBase: any = await this.firebaseAdmin.auth().createJornada({
                 descripcion: request.payload.descripcion,
                 fecha: request.payload.fecha,
                 direccion: request.payload.direccion,
                 idActividad: request.payload.idActividad,
-            });
+            }); */
 
-            const Jornada: Jornada = await Jornada.create({
+            const jornada: Jornada = await Jornada.create({
                descripcion: request.payload.descripcion,
                 fecha: request.payload.fecha,
                 direccion: request.payload.direccion,
                 idActividad: request.payload.idActividad,
             });
 
-            return Jornada;
+            return jornada;
         } else {
                 return response.response("El Jornada ya existe").code(400);
             }

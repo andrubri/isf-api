@@ -23,21 +23,21 @@ class JornadaController {
     }
     crearJornada(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            const exist = yield jornada_1.Jornada.findOne({ where: { idJornada: request.payload.id } });
-            if (!exist) {
-                const jornadaFireBase = yield this.firebaseAdmin.auth().createJornada({
+            //const exist: Jornada = await Jornada.findOne({where: {idJornada: request.payload.id}});
+            if (true) {
+                /* const jornadaFireBase: any = await this.firebaseAdmin.auth().createJornada({
+                    descripcion: request.payload.descripcion,
+                    fecha: request.payload.fecha,
+                    direccion: request.payload.direccion,
+                    idActividad: request.payload.idActividad,
+                }); */
+                const jornada = yield jornada_1.Jornada.create({
                     descripcion: request.payload.descripcion,
                     fecha: request.payload.fecha,
                     direccion: request.payload.direccion,
                     idActividad: request.payload.idActividad,
                 });
-                const Jornada = yield Jornada.create({
-                    descripcion: request.payload.descripcion,
-                    fecha: request.payload.fecha,
-                    direccion: request.payload.direccion,
-                    idActividad: request.payload.idActividad,
-                });
-                return Jornada;
+                return jornada;
             }
             else {
                 return response.response("El Jornada ya existe").code(400);
