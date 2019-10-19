@@ -22,6 +22,7 @@ export class DBSquelize {
         this.initJornadas();
         this.initActividadVoluntario();
 
+        // Aplicar los cambios a la db
         this.sequelize.sync();
     }
 
