@@ -4,6 +4,7 @@ import {initUsuario} from "./usuario";
 import {initEquipo} from "./equipo";
 import {initEquipoPersona} from "./equipo_persona";
 import { initJornada } from "./jornada";
+import { initPersona } from "./persona";
 
 
 export class DBSquelize {
@@ -21,6 +22,7 @@ export class DBSquelize {
         initEquipo(this.sequelize);
         initJornada(this.sequelize);
         initEquipoPersona(this.sequelize);
+        initPersona(this.sequelize);
 
         // Aplicar los cambios a la db
         this.sequelize.sync({alter : true});
