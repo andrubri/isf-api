@@ -1,31 +1,31 @@
 import {Model} from "sequelize";
 import {DataTypes} from "sequelize";
 
-export class ObraSocial extends Model {
-    public idObraSocial: number;
-    public empresa: string;
-    public plan: string;
+export class Perfil extends Model {
+    public idPerfil: number;
+    public codigo: string;
+    public descripcion: string;
     
 }
 
-export function initObraSocial(sequelize) {
-    ObraSocial.init({
-        idObraSocial: {
-            autoIncrement: true,
+export function initPerfil(sequelize) {
+    Perfil.init({
+        idPerfil: {
             primaryKey: true,
+            autoIncrement: true,
             type: DataTypes.INTEGER.UNSIGNED,
         },
-        empresa: {
+        codigo: {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
-        plan: {
+        descripcion: {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
     }, {
         sequelize: sequelize,
-        tableName: "obras_sociales",
+        tableName: "perfiles",
         timestamps: false
     });
 

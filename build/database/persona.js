@@ -86,11 +86,11 @@ function initPersona(sequelize) {
         },
         idOrigenContacto: {
             allowNull: true,
-            type: new sequelize_2.DataTypes.STRING(255),
+            type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
         },
         fechaNacimiento: {
             allowNull: true,
-            type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
+            type: new sequelize_2.DataTypes.DATE(),
         },
     }, {
         sequelize: sequelize,

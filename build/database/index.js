@@ -7,6 +7,11 @@ const equipo_persona_1 = require("./equipo_persona");
 const jornada_1 = require("./jornada");
 const persona_1 = require("./persona");
 const contactoEmergencia_1 = require("./contactoEmergencia");
+const datosSeguro_1 = require("./datosSeguro");
+const obraSocial_1 = require("./obraSocial");
+const perfil_1 = require("./perfil");
+const origenContacto_1 = require("./origenContacto");
+const rol_1 = require("./rol");
 class DBSquelize {
     constructor(config) {
         this.sequelize = new sequelize_1.Sequelize(config.connection.database, config.connection.user, config.connection.password, {
@@ -21,6 +26,11 @@ class DBSquelize {
         equipo_persona_1.initEquipoPersona(this.sequelize);
         persona_1.initPersona(this.sequelize);
         contactoEmergencia_1.initContactoEmergencia(this.sequelize);
+        datosSeguro_1.initDatosSeguro(this.sequelize);
+        obraSocial_1.initObraSocial(this.sequelize);
+        perfil_1.initPerfil(this.sequelize);
+        origenContacto_1.initOrigenContacto(this.sequelize);
+        rol_1.initRol(this.sequelize);
         // Aplicar los cambios a la db
         this.sequelize.sync({ alter: true });
     }

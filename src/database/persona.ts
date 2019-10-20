@@ -8,7 +8,7 @@ export class Persona extends Model {
     public idExterno: number;
     public tipoDocumento: string;
     public idDocumento: number;
-    public paisOrigen: string; // last
+    public paisOrigen: string;
     public paisResidencia: string;
     public provinciaResidencia: string;
     public ciudadResidencia: string;

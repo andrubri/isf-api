@@ -12,6 +12,9 @@ function initContactoEmergencia(sequelize) {
             primaryKey: true,
             type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
         },
+        idPersona: {
+            type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
+        },
         nombre: {
             allowNull: true,
             type: new sequelize_2.DataTypes.STRING(255),

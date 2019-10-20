@@ -8,6 +8,10 @@ import { initPersona } from "./persona";
 import { initContactoEmergencia } from "./contactoEmergencia";
 import { initDatosSeguro } from "./datosSeguro"
 import { initObraSocial } from "./obraSocial";
+import { initPerfil } from "./perfil";
+import { initOrigenContacto } from "./origenContacto";
+import { initRol } from "./rol";
+import { initMedioTransporte } from "./medioTransporte";
 
 
 export class DBSquelize {
@@ -29,6 +33,10 @@ export class DBSquelize {
         initContactoEmergencia(this.sequelize);
         initDatosSeguro(this.sequelize);
         initObraSocial(this.sequelize);
+        initPerfil(this.sequelize);
+        initMedioTransporte(this.sequelize);
+        initOrigenContacto(this.sequelize);
+        initRol(this.sequelize);
 
         // Aplicar los cambios a la db
         this.sequelize.sync({alter : true});
