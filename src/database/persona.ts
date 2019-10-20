@@ -106,11 +106,11 @@ export function initPersona(sequelize) {
         },
         idOrigenContacto: {
             allowNull: true,
-            type: new DataTypes.STRING(255),
+            type: DataTypes.INTEGER.UNSIGNED,
         },
         fechaNacimiento: {
             allowNull: true,
-            type: DataTypes.INTEGER.UNSIGNED,
+            type:  new DataTypes.DATE(),
         },
     }, {
         sequelize: sequelize,
