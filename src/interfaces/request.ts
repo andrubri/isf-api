@@ -44,8 +44,13 @@ export interface IReqEquipo extends IRequest {
         equipo: {
             id: number;
             nombre: string;
-            direccion: string;
-            idLocalidad: number;
+            descripcion: string,
+            categoria: string,
+            estado: string,
+            provincia: string,
+            ciudad:string,
+            fechaInicio: Date,
+            fechaFin : Date
         };
         coordinadores: [{
             idPersona: number;

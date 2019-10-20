@@ -5,7 +5,6 @@ export class EquipoPersona extends Model {
     public idEquipo: number;
     public idPersona: number;
     public idRol: number;
-    public fechaBaja: Date;
 }
 
 
@@ -24,10 +23,6 @@ export function initEquipoPersona(sequelize) {
         },
         idRol: {
             type: DataTypes.INTEGER.UNSIGNED,
-        },
-        fechaBaja: {
-            allowNull: true,
-            type: new DataTypes.DATE(),
         }
     }, {
         sequelize: sequelize,

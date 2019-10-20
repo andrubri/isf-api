@@ -20,14 +20,14 @@ export default class EquipoController {
 
     public async obtenerEquipo(request: IRequest, response: Hapi.ResponseToolkit): Promise<Equipo[]> {
         const result: Equipo[] = await Equipo.findAll({
-            where: {fechaBaja: null},
+            where: {fechaFin: null},
         });
 
         return result || [];
     }
 
     public async obtenerEquipoXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Equipo> {
-        const result: Equipo = await Equipo.findOne({where: {fechaBaja: null, idEquipo: request.params.id}});
+        const result: Equipo = await Equipo.findOne({where: {fechaFin: null, idEquipo: request.params.id}});
         return result;
     }
 
@@ -36,8 +36,13 @@ export default class EquipoController {
         if (!exist) {
             const act: Equipo = await Equipo.create({
                 nombre: request.payload.equipo.nombre,
-                direccion: request.payload.equipo.direccion,
-                idLocalidad: request.payload.equipo.idLocalidad,
+                descripcion: request.payload.equipo.descripcion,
+                categoria: request.payload.equipo.categoria,
+                estado : request.payload.equipo.estado,
+                provincia:request.payload.equipo.provincia,
+                ciudad: request.payload.equipo.ciudad,
+                fechaInicio: request.payload.equipo.fechaInicio,
+                fechaFin:request.payload.equipo.fechaFin
             });
 
             for( let item of request.payload.coordinadores){
@@ -54,13 +59,18 @@ export default class EquipoController {
     }
 
     public async actualizarEquipo(request: IReqEquipo, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({where: {fechaBaja: null, idEquipo: request.params.id}});
+        const exist: Equipo = await Equipo.findOne({where: {fechaFin: null, idEquipo: request.params.id}});
         if (exist) {
             try {
                 const [cont, act] = await Equipo.update({
-                    direccion: request.payload.equipo.direccion,
-                    idLocaliad: request.payload.equipo.idLocalidad,
                     nombre: request.payload.equipo.nombre,
+                    descripcion: request.payload.equipo.descripcion,
+                    categoria: request.payload.equipo.categoria,
+                    estado : request.payload.equipo.estado,
+                    provincia:request.payload.equipo.provincia,
+                    ciudad: request.payload.equipo.ciudad,
+                    fechaInicio: request.payload.equipo.fechaInicio,
+                    fechaFin:request.payload.equipo.fechaFin
                 }, {where: {idEquipo: request.params.id}});
 
                 for( let item of request.payload.coordinadores){
@@ -81,10 +91,10 @@ export default class EquipoController {
     }
 
     public async eliminarEquipo(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({where: {fechaBaja: null, idEquipo: request.params.id}});
+        const exist: Equipo = await Equipo.findOne({where: {fechaFin: null, idEquipo: request.params.id}});
         if (exist) {
             const [cont, act] = await Equipo.update({
-                fechaBaja: new Date(),
+                fechaFin: new Date(),
             }, {where: {idEquipo: request.params.id}});
 
             return act[0];
@@ -94,14 +104,14 @@ export default class EquipoController {
     }
 
     public async obtenerCoordinadoresXId(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({where: {fechaBaja: null, idEquipo: request.params.id}});
+        const exist: Equipo = await Equipo.findOne({where: {fechaFin: null, idEquipo: request.params.id}});
         if (exist) {
             const coordinadores = [];
-            const asignados = await EquipoPersona.findAll({where: {fechaBaja: null, idRol: 2}});
+            const asignados = await EquipoPersona.findAll({where: {fechaFin: null, idRol: 2}});
             for (const asign of asignados) {
                 const user: Usuario = await Usuario.findOne({
                     where: {
-                        fechaBaja: null,
+                        fechaFin: null,
                         idPersona: asign.idPersona
                     }
                 });

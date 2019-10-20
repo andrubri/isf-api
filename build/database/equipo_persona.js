@@ -19,10 +19,6 @@ function initEquipoPersona(sequelize) {
         },
         idRol: {
             type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
-        },
-        fechaBaja: {
-            allowNull: true,
-            type: new sequelize_1.DataTypes.DATE(),
         }
     }, {
         sequelize: sequelize,
