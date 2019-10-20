@@ -81,7 +81,8 @@ export default class EquipoController {
                     });
                 }
 
-                return "ok";
+                const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+                return changedRow;
             } catch (e) {
                 return e;
             }
@@ -97,7 +98,8 @@ export default class EquipoController {
                 fechaFin: new Date(),
             }, {where: {idEquipo: request.params.id}});
 
-            return act[0];
+            const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+            return changedRow;
         } else {
             return response.response().code(400);
         }
@@ -107,19 +109,16 @@ export default class EquipoController {
         const exist: Equipo = await Equipo.findOne({where: {fechaFin: null, idEquipo: request.params.id}});
         if (exist) {
             const coordinadores = [];
-            const asignados = await EquipoPersona.findAll({where: {fechaFin: null, idRol: 2}});
+            const asignados = await EquipoPersona.findAll({where: {idRol: 2}});
             for (const asign of asignados) {
                 const user: Usuario = await Usuario.findOne({
                     where: {
-                        fechaFin: null,
+                        fechaBaja: null,
                         idPersona: asign.idPersona
                     }
                 });
                 const item: any = {};
                 item.idEquipoPersona = asign.idEquipoPersona;
-                item.nombre = user.nombre;
-                item.apellido = user.apellido;
-
                 coordinadores.push(item);
             }
             return await coordinadores;

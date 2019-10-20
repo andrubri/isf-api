@@ -37,6 +37,7 @@ class EquipoController {
             if (!exist) {
                 const act = yield equipo_1.Equipo.create({
                     nombre: request.payload.equipo.nombre,
+                    descripcion: request.payload.equipo.descripcion,
                     categoria: request.payload.equipo.categoria,
                     estado: request.payload.equipo.estado,
                     provincia: request.payload.equipo.provincia,
@@ -64,9 +65,14 @@ class EquipoController {
             if (exist) {
                 try {
                     const [cont, act] = yield equipo_1.Equipo.update({
-                        direccion: request.payload.equipo.direccion,
-                        idLocaliad: request.payload.equipo.idLocalidad,
                         nombre: request.payload.equipo.nombre,
+                        descripcion: request.payload.equipo.descripcion,
+                        categoria: request.payload.equipo.categoria,
+                        estado: request.payload.equipo.estado,
+                        provincia: request.payload.equipo.provincia,
+                        ciudad: request.payload.equipo.ciudad,
+                        fechaInicio: request.payload.equipo.fechaInicio,
+                        fechaFin: request.payload.equipo.fechaFin
                     }, { where: { idEquipo: request.params.id } });
                     for (let item of request.payload.coordinadores) {
                         yield equipo_persona_1.EquipoPersona.create({
@@ -75,7 +81,8 @@ class EquipoController {
                             idRol: 2
                         });
                     }
-                    return "ok";
+                    const changedRow = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+                    return changedRow;
                 }
                 catch (e) {
                     return e;
@@ -93,7 +100,8 @@ class EquipoController {
                 const [cont, act] = yield equipo_1.Equipo.update({
                     fechaFin: new Date(),
                 }, { where: { idEquipo: request.params.id } });
-                return act[0];
+                const changedRow = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+                return changedRow;
             }
             else {
                 return response.response().code(400);
@@ -105,18 +113,16 @@ class EquipoController {
             const exist = yield equipo_1.Equipo.findOne({ where: { fechaFin: null, idEquipo: request.params.id } });
             if (exist) {
                 const coordinadores = [];
-                const asignados = yield equipo_persona_1.EquipoPersona.findAll({ where: { fechaFin: null, idRol: 2 } });
+                const asignados = yield equipo_persona_1.EquipoPersona.findAll({ where: { idRol: 2 } });
                 for (const asign of asignados) {
                     const user = yield usuario_1.Usuario.findOne({
                         where: {
-                            fechaFin: null,
+                            fechaBaja: null,
                             idPersona: asign.idPersona
                         }
                     });
                     const item = {};
                     item.idEquipoPersona = asign.idEquipoPersona;
-                    item.nombre = user.nombre;
-                    item.apellido = user.apellido;
                     coordinadores.push(item);
                 }
                 return yield coordinadores;
