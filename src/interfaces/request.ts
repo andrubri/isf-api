@@ -57,3 +57,54 @@ export interface IReqEquipo extends IRequest {
         }];
     }
 }
+export interface IReqPersona extends IRequest {
+    payload: {
+        persona: {
+            id: number;
+            nombre: string;
+            apellido: string;
+            idExterno: number;
+            tipoDocumento: string;
+            idDocumento: number;
+            paisOrigen: string;
+            paisResidencia: string;
+            provinciaResidencia: string;
+            ciudadResidencia: string;
+            telefono: string;
+            email: string;
+            nivelEstudios: string;
+            carrera: string;
+            universidad: string;
+            ocupacion: string;
+            comentarios: string;
+            estado: string;
+            dieta: string;
+            fechaNacimiento: Date;
+            idOrigenContacto: number;
+        };
+        origenContacto: {
+            idOrigenContacto: number;
+            descripcion: string;
+        };
+        contactoEmergencia: {
+            idContactoEmergencia: number;
+            idPersona: number;
+            nombre: string;
+            apellido: string;
+            telefono: string;
+            relacion: string;
+        };
+        datosSeguro:{
+            idDatosSeguro: number;
+            grupoSanguineo: string;
+            emfermedades: string;
+            medicaciones: string;
+            idObraSocial: number;
+        }
+        obraSocial:{
+            idObraSocial: number;
+            empresa: string;
+            plan: string;
+        }
+    }
+}

@@ -21,6 +21,7 @@ export class Persona extends Model {
     public comentarios: string;
     public estado: string;
     public dieta: string;
+    public fechaNacimiento: Date;
     public idOrigenContacto: number;
     
 }

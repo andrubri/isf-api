@@ -14,6 +14,7 @@ const firebase_1 = require("./lib/firebase");
 const Users = require("./api/users");
 const Equipos = require("./api/equipos");
 const Jornadas = require("./api/jornadas");
+const Personas = require("./api/personas");
 const socketio = require("socket.io");
 function init(configs) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -55,6 +56,7 @@ function init(configs) {
             Users.init(server, io, configs);
             Equipos.init(server, io, configs);
             Jornadas.init(server, io, configs);
+            Personas.init(server, io, configs);
             console.log('Routes registered sucessfully.');
             return server;
         }

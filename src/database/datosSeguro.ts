@@ -6,13 +6,14 @@ export class DatosSeguro extends Model {
     public grupoSanguineo: string;
     public emfermedades: string;
     public medicaciones: string;
-    public idOrigenContacto: number;
+    public idObraSocial: number;
     
 }
 
 export function initDatosSeguro(sequelize) {
     DatosSeguro.init({
         idDatosSeguro: {
+            autoIncrement:  true,
             primaryKey: true,
             type: DataTypes.INTEGER.UNSIGNED,
         },
@@ -25,9 +26,10 @@ export function initDatosSeguro(sequelize) {
             type: new DataTypes.STRING(255),
         },
         medicaciones: {
+            allowNull:true,
             type: new DataTypes.STRING(255),
         },
-        idOrigenContacto: {
+        idObraSocial: {
             allowNull: true,
             type: DataTypes.INTEGER.UNSIGNED,
         },

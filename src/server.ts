@@ -7,6 +7,7 @@ import FirebaseAdmin from "./lib/firebase";
 import * as Users from './api/users';
 import * as Equipos from './api/equipos';
 import * as Jornadas from './api/jornadas';
+import * as Personas from './api/personas';
 import * as socketio from 'socket.io';
 
 export async function init(
@@ -62,7 +63,7 @@ export async function init(
         Users.init(server, io, configs);
         Equipos.init(server, io, configs);
         Jornadas.init(server, io, configs);
-
+        Personas.init(server, io, configs);
         console.log('Routes registered sucessfully.');
         return server;
     } catch (err) {

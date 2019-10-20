@@ -8,6 +8,7 @@ exports.DatosSeguro = DatosSeguro;
 function initDatosSeguro(sequelize) {
     DatosSeguro.init({
         idDatosSeguro: {
+            autoIncrement: true,
             primaryKey: true,
             type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
         },
@@ -20,9 +21,10 @@ function initDatosSeguro(sequelize) {
             type: new sequelize_2.DataTypes.STRING(255),
         },
         medicaciones: {
+            allowNull: true,
             type: new sequelize_2.DataTypes.STRING(255),
         },
-        idOrigenContacto: {
+        idObraSocial: {
             allowNull: true,
             type: sequelize_2.DataTypes.INTEGER.UNSIGNED,
         },
