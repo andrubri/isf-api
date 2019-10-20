@@ -12,6 +12,7 @@ import { initPerfil } from "./perfil";
 import { initOrigenContacto } from "./origenContacto";
 import { initRol } from "./rol";
 import { initMedioTransporte } from "./medioTransporte";
+import { initPersonaJornada } from "./personas_jornada";
 
 
 export class DBSquelize {
@@ -37,6 +38,7 @@ export class DBSquelize {
         initMedioTransporte(this.sequelize);
         initOrigenContacto(this.sequelize);
         initRol(this.sequelize);
+        initPersonaJornada(this.sequelize);
 
         // Aplicar los cambios a la db
         this.sequelize.sync({alter : true});
