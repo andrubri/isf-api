@@ -14,6 +14,7 @@ const contactoEmergencia_1 = require("../../database/contactoEmergencia");
 const datosSeguro_1 = require("../../database/datosSeguro");
 const obraSocial_1 = require("../../database/obraSocial");
 const firebase_1 = require("../../lib/firebase");
+const persona_validator_1 = require("./persona-validator");
 class PersonaController {
     constructor(configs, io) {
         this.configs = configs;
@@ -27,14 +28,9 @@ class PersonaController {
     }
     crearPersona(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            //const exist: Persona = await Persona.findOne({where: {idPersona: request.payload.id}});
-            if (true) {
-                /* const personaFireBase: any = await this.firebaseAdmin.auth().createPersona({
-                    descripcion: request.payload.descripcion,
-                    fecha: request.payload.fecha,
-                    direccion: request.payload.direccion,
-                    idEquipo: request.payload.idEquipo,
-                }); */
+            const { error, value } = persona_validator_1.personaSchema.validate(request.payload);
+            console.log(error);
+            if (!error) {
                 const persona = yield persona_1.Persona.create({
                     nombre: request.payload.persona.nombre,
                     apellido: request.payload.persona.apellido,
@@ -57,35 +53,48 @@ class PersonaController {
                     fechaNacimiento: request.payload.persona.fechaNacimiento,
                     idOrigenContacto: request.payload.persona.idOrigenContacto,
                 });
-                const origenContacto = yield origenContacto_1.OrigenContacto.create({
-                    descripcion: request.payload.origenContacto.descripcion,
-                });
-                const contactoEmergencia = yield contactoEmergencia_1.ContactoEmergencia.create({
-                    idPersona: request.payload.contactoEmergencia.idPersona,
-                    nombre: request.payload.contactoEmergencia.nombre,
-                    apellido: request.payload.contactoEmergencia.apellido,
-                    relacion: request.payload.contactoEmergencia.relacion,
-                    telefono: request.payload.contactoEmergencia.telefono
-                });
-                const datosSeguro = yield datosSeguro_1.DatosSeguro.create({
-                    idObraSocial: request.payload.datosSeguro.idObraSocial,
-                    emfermedades: request.payload.datosSeguro.emfermedades,
-                    grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                    medicaciones: request.payload.datosSeguro.medicaciones
-                });
-                const obraSocial = yield obraSocial_1.ObraSocial.create({
-                    empresa: request.payload.obraSocial.empresa,
-                    plan: request.payload.obraSocial.plan,
-                });
+                let origenContacto;
+                if (request.payload.origenContacto) {
+                    origenContacto = yield origenContacto_1.OrigenContacto.create({
+                        descripcion: request.payload.origenContacto.descripcion,
+                    });
+                }
+                let contactoEmergencia;
+                if (request.payload.contactoEmergencia) {
+                    contactoEmergencia = yield contactoEmergencia_1.ContactoEmergencia.create({
+                        idPersona: persona.idPersona,
+                        nombre: request.payload.contactoEmergencia.nombre,
+                        apellido: request.payload.contactoEmergencia.apellido,
+                        relacion: request.payload.contactoEmergencia.relacion,
+                        telefono: request.payload.contactoEmergencia.telefono
+                    });
+                }
+                let datosSeguro;
+                if (request.payload.datosSeguro) {
+                    datosSeguro = yield datosSeguro_1.DatosSeguro.create({
+                        idObraSocial: request.payload.datosSeguro.idObraSocial,
+                        emfermedades: request.payload.datosSeguro.emfermedades,
+                        grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                        medicaciones: request.payload.datosSeguro.medicaciones
+                    });
+                }
+                let obraSocial;
+                if (request.payload.obraSocial) {
+                    obraSocial = yield obraSocial_1.ObraSocial.create({
+                        empresa: request.payload.obraSocial.empresa,
+                        plan: request.payload.obraSocial.plan,
+                    });
+                }
                 return {
                     persona: persona,
                     datosSeguro: datosSeguro,
                     obraSocial: obraSocial,
-                    origenContacto: origenContacto
+                    origenContacto: origenContacto,
+                    contactoEmergencia: contactoEmergencia
                 };
             }
             else {
-                return response.response("El Persona ya existe").code(400);
+                return response.response("No se encontro request de persona").code(400);
             }
         });
     }
@@ -131,13 +140,8 @@ class PersonaController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield persona_1.Persona.findOne({ where: { idPersona: request.params.id } });
             if (exist) {
-                /*  const [cont, persona] = await Persona.update({
-                     fechaBaja: new Date()
-                 }, {where: {idPersona: request.params.id}});
-      */
                 yield persona_1.Persona.destroy({ where: { idPersona: request.params.id } });
                 return exist;
-                //return await Persona.findOne({where: {idPersona: request.params.id}});
             }
             else {
                 return response.response().code(400);
