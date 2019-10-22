@@ -94,7 +94,7 @@ class PersonaController {
                 };
             }
             else {
-                return response.response("No se encontro request de persona").code(400);
+                return response.response().message("No se encontro request de persona").code(400);
             }
         });
     }
