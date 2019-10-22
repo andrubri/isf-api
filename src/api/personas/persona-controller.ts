@@ -30,8 +30,6 @@ export default class PersonaController {
 
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const { error, value } = personaSchema.validate(request.payload);
-
-        console.log(error);
         if (!error) {
             const persona: Persona = await Persona.create({
                 nombre: request.payload.persona.nombre,
@@ -56,39 +54,28 @@ export default class PersonaController {
                 idOrigenContacto: request.payload.persona.idOrigenContacto,
             });
 
-            let origenContacto: OrigenContacto
-            if (request.payload.origenContacto) {
-                    origenContacto = await OrigenContacto.create({
-                    descripcion: request.payload.origenContacto.descripcion,
-                });
-            }
-            let contactoEmergencia: ContactoEmergencia;
-            if (request.payload.contactoEmergencia) {
-                    contactoEmergencia = await ContactoEmergencia.create({
-                    idPersona: persona.idPersona,
-                    nombre: request.payload.contactoEmergencia.nombre,
-                    apellido: request.payload.contactoEmergencia.apellido,
-                    relacion: request.payload.contactoEmergencia.relacion,
-                    telefono: request.payload.contactoEmergencia.telefono
-                });
-            }
-            let datosSeguro: DatosSeguro;
-            if (request.payload.datosSeguro) {
-                    datosSeguro  = await DatosSeguro.create({
-                    idObraSocial: request.payload.datosSeguro.idObraSocial,
-                    emfermedades: request.payload.datosSeguro.emfermedades,
-                    grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                    medicaciones: request.payload.datosSeguro.medicaciones
-                });
-            }
+            const origenContacto: OrigenContacto = await OrigenContacto.create({
+                descripcion: request.payload.origenContacto.descripcion,
+            });
+            const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.create({
+                idPersona: persona.idPersona,
+                nombre: request.payload.contactoEmergencia.nombre,
+                apellido: request.payload.contactoEmergencia.apellido,
+                relacion: request.payload.contactoEmergencia.relacion,
+                telefono: request.payload.contactoEmergencia.telefono
+            });
+            const datosSeguro: DatosSeguro = await DatosSeguro.create({
+                idObraSocial: request.payload.datosSeguro.idObraSocial,
+                emfermedades: request.payload.datosSeguro.emfermedades,
+                grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                medicaciones: request.payload.datosSeguro.medicaciones
+            });
 
-            let obraSocial: ObraSocial;
-            if (request.payload.obraSocial) {
-                   obraSocial= await ObraSocial.create({
-                    empresa: request.payload.obraSocial.empresa,
-                    plan: request.payload.obraSocial.plan,
-                });
-            }
+            const obraSocial: ObraSocial = await ObraSocial.create({
+                empresa: request.payload.obraSocial.empresa,
+                plan: request.payload.obraSocial.plan,
+            });
+
 
             return {
                 persona: persona,
@@ -98,7 +85,7 @@ export default class PersonaController {
                 contactoEmergencia: contactoEmergencia
             };
         } else {
-            return response.response().message("No se encontro request de persona").code(400);
+            return response.response(error.message).message("No se encontro request de persona").code(400);
         }
     }
 
@@ -129,6 +116,29 @@ export default class PersonaController {
                     fechaNacimiento: request.payload.persona.fechaNacimiento,
                     idOrigenContacto: request.payload.persona.idOrigenContacto,
                 }, { where: { idPersona: request.params.id } });
+
+                const [contE, contactoEmergencia] = await ContactoEmergencia.update({
+                    nombre: request.payload.contactoEmergencia.nombre,
+                    apellido: request.payload.contactoEmergencia.apellido,
+                    telefono: request.payload.contactoEmergencia.telefono,
+                    relacion: request.payload.contactoEmergencia.relacion,
+                }, { where: { idPersona: request.params.id } });
+
+                const [contD, datosSeguro] = await DatosSeguro.update({
+                    grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                    emfermedades: request.payload.datosSeguro.emfermedades,
+                    medicaciones: request.payload.datosSeguro.medicaciones,
+                    idObraSocial: request.payload.datosSeguro.idObraSocial,
+                }, { where: { idPersona: request.params.id } });
+
+                const [contO, obraSocial] = await ObraSocial.update({
+                    empresa: request.payload.obraSocial.empresa,
+                    plan: request.payload.obraSocial.plan,
+                }, { where: { idObraSocial: datosSeguro[0].idObraSocial } });
+
+                const [contC, origenContacto] = await ObraSocial.update({
+                    descripcion: request.payload.origenContacto.descripcion,
+                }, { where: { idOrigenContacto: persona[0].idOrigenContacto } });
 
 
                 return await Persona.findOne({ where: { idPersona: request.params.id } });

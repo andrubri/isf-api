@@ -29,7 +29,6 @@ class PersonaController {
     crearPersona(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
             const { error, value } = persona_validator_1.personaSchema.validate(request.payload);
-            console.log(error);
             if (!error) {
                 const persona = yield persona_1.Persona.create({
                     nombre: request.payload.persona.nombre,
@@ -53,38 +52,26 @@ class PersonaController {
                     fechaNacimiento: request.payload.persona.fechaNacimiento,
                     idOrigenContacto: request.payload.persona.idOrigenContacto,
                 });
-                let origenContacto;
-                if (request.payload.origenContacto) {
-                    origenContacto = yield origenContacto_1.OrigenContacto.create({
-                        descripcion: request.payload.origenContacto.descripcion,
-                    });
-                }
-                let contactoEmergencia;
-                if (request.payload.contactoEmergencia) {
-                    contactoEmergencia = yield contactoEmergencia_1.ContactoEmergencia.create({
-                        idPersona: persona.idPersona,
-                        nombre: request.payload.contactoEmergencia.nombre,
-                        apellido: request.payload.contactoEmergencia.apellido,
-                        relacion: request.payload.contactoEmergencia.relacion,
-                        telefono: request.payload.contactoEmergencia.telefono
-                    });
-                }
-                let datosSeguro;
-                if (request.payload.datosSeguro) {
-                    datosSeguro = yield datosSeguro_1.DatosSeguro.create({
-                        idObraSocial: request.payload.datosSeguro.idObraSocial,
-                        emfermedades: request.payload.datosSeguro.emfermedades,
-                        grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                        medicaciones: request.payload.datosSeguro.medicaciones
-                    });
-                }
-                let obraSocial;
-                if (request.payload.obraSocial) {
-                    obraSocial = yield obraSocial_1.ObraSocial.create({
-                        empresa: request.payload.obraSocial.empresa,
-                        plan: request.payload.obraSocial.plan,
-                    });
-                }
+                const origenContacto = yield origenContacto_1.OrigenContacto.create({
+                    descripcion: request.payload.origenContacto.descripcion,
+                });
+                const contactoEmergencia = yield contactoEmergencia_1.ContactoEmergencia.create({
+                    idPersona: persona.idPersona,
+                    nombre: request.payload.contactoEmergencia.nombre,
+                    apellido: request.payload.contactoEmergencia.apellido,
+                    relacion: request.payload.contactoEmergencia.relacion,
+                    telefono: request.payload.contactoEmergencia.telefono
+                });
+                const datosSeguro = yield datosSeguro_1.DatosSeguro.create({
+                    idObraSocial: request.payload.datosSeguro.idObraSocial,
+                    emfermedades: request.payload.datosSeguro.emfermedades,
+                    grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                    medicaciones: request.payload.datosSeguro.medicaciones
+                });
+                const obraSocial = yield obraSocial_1.ObraSocial.create({
+                    empresa: request.payload.obraSocial.empresa,
+                    plan: request.payload.obraSocial.plan,
+                });
                 return {
                     persona: persona,
                     datosSeguro: datosSeguro,
@@ -94,7 +81,7 @@ class PersonaController {
                 };
             }
             else {
-                return response.response().message("No se encontro request de persona").code(400);
+                return response.response(error.message).message("No se encontro request de persona").code(400);
             }
         });
     }
@@ -125,6 +112,25 @@ class PersonaController {
                         fechaNacimiento: request.payload.persona.fechaNacimiento,
                         idOrigenContacto: request.payload.persona.idOrigenContacto,
                     }, { where: { idPersona: request.params.id } });
+                    const [contE, contactoEmergencia] = yield contactoEmergencia_1.ContactoEmergencia.update({
+                        nombre: request.payload.contactoEmergencia.nombre,
+                        apellido: request.payload.contactoEmergencia.apellido,
+                        telefono: request.payload.contactoEmergencia.telefono,
+                        relacion: request.payload.contactoEmergencia.relacion,
+                    }, { where: { idPersona: request.params.id } });
+                    const [contD, datosSeguro] = yield datosSeguro_1.DatosSeguro.update({
+                        grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                        emfermedades: request.payload.datosSeguro.emfermedades,
+                        medicaciones: request.payload.datosSeguro.medicaciones,
+                        idObraSocial: request.payload.datosSeguro.idObraSocial,
+                    }, { where: { idPersona: request.params.id } });
+                    const [contO, obraSocial] = yield obraSocial_1.ObraSocial.update({
+                        empresa: request.payload.obraSocial.empresa,
+                        plan: request.payload.obraSocial.plan,
+                    }, { where: { idObraSocial: datosSeguro[0].idObraSocial } });
+                    const [contC, origenContacto] = yield obraSocial_1.ObraSocial.update({
+                        descripcion: request.payload.origenContacto.descripcion,
+                    }, { where: { idOrigenContacto: persona[0].idOrigenContacto } });
                     return yield persona_1.Persona.findOne({ where: { idPersona: request.params.id } });
                 }
                 catch (e) {
