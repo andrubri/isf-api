@@ -17,15 +17,15 @@ export function initPersonaJornada(sequelize) {
         type: DataTypes.INTEGER.UNSIGNED,
         },
         direccionOrigen: {
-            allowNull: false,
+            allowNull: true,
             type: new DataTypes.STRING(255),
         },
         asistencia: {
-            allowNull: false,
+            allowNull: true,
             type: new DataTypes.STRING(255),
         },
         confirmacion: {
-            allowNull: false,
+            allowNull: true,
             type: new DataTypes.STRING(255),
         },
         idPersona: {

@@ -11,15 +11,15 @@ function initPersonaJornada(sequelize) {
             type: sequelize_1.DataTypes.INTEGER.UNSIGNED,
         },
         direccionOrigen: {
-            allowNull: false,
+            allowNull: true,
             type: new sequelize_1.DataTypes.STRING(255),
         },
         asistencia: {
-            allowNull: false,
+            allowNull: true,
             type: new sequelize_1.DataTypes.STRING(255),
         },
         confirmacion: {
-            allowNull: false,
+            allowNull: true,
             type: new sequelize_1.DataTypes.STRING(255),
         },
         idPersona: {

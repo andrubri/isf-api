@@ -1,22 +1,22 @@
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import { IServerConfigurations } from "../../configurations";
-import JornadaController from "./persona-jornada-controller";
-import * as JornadaValidator from "./persona-jornada-validator";
+import PersonaJornadaController from "./persona-jornada-controller";
+import * as PersonaJornadaValidator from "./persona-jornada-validator";
 
 export default function(server: Hapi.Server, io: socketio.Server, serverConfigs: IServerConfigurations) {
 
-    const jornadaController = new JornadaController(serverConfigs, io);
-    server.bind(jornadaController);
+    const personaJornadaController = new PersonaJornadaController(serverConfigs, io);
+    server.bind(personaJornadaController);
 
     server.route([
-    {
+    /* {
         method: "GET",
-        path: "/jornada",
+        path: "/personaJornada",
         options: {
             auth: "firebase",
             description: "Verificar token.",
-            handler: jornadaController.obtenerJornadas,
+            handler: personaJornadaController.obtenerPersonaJornadas,
             plugins: {
                 "hapi-swagger": {
                     responses: {
@@ -32,19 +32,19 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
                     },
                 },
             },
-            tags: ["api", "jornadas"],
+            tags: ["api", "personaJornadas"],
             validate: {
 
             },
         },
-    },
-    {
+    }, */
+    /* {
         method: "GET",
-        path: "/jornada/{id}",
+        path: "/personaJornada/{id}",
         options: {
             auth: "firebase",
             description: "Verificar token.",
-            handler: jornadaController.obtenerJornadas,
+            handler: personaJornadaController.obtenerPersonaJornadas,
             plugins: {
                 "hapi-swagger": {
                     responses: {
@@ -60,19 +60,19 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
                     },
                 },
             },
-            tags: ["api", "jornadas"],
+            tags: ["api", "personaJornadas"],
             validate: {
 
             },
         },
-    },
+    } */
     {
         method: "POST",
-        path: "/jornada",
+        path: "/personaJornada",
         options: {
             auth: "firebase",
-            description: "Crear Jornada",
-            handler: jornadaController.crearJornada,
+            description: "Crear PersonaJornada",
+            handler: personaJornadaController.crearPersonaJornada,
             plugins: {
                 "hapi-swagger": {
                     responses: {
@@ -88,19 +88,19 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
                     },
                 },
             },
-            tags: ["api", "jornadas"],
+            tags: ["api", "personaJornadas"],
             validate: {
 
             },
         },
     },
-    {
+    /* {
         method: "PUT",
-        path: "/jornada/{id}",
+        path: "/personaJornada/{id}",
         options: {
             auth: "firebase",
-            description: "Actualizar Jornada",
-            handler: jornadaController.actualizarJornada,
+            description: "Actualizar PersonaJornada",
+            handler: personaJornadaController.actualizarPersonaJornada,
             plugins: {
                 "hapi-swagger": {
                     responses: {
@@ -116,19 +116,19 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
                     },
                 },
             },
-            tags: ["api", "jornadas"],
+            tags: ["api", "personaJornadas"],
             validate: {
 
             },
         },
-    },
+    }, */
     {
         method: "DELETE",
-        path: "/jornada/{id}",
+        path: "/personaJornada/{id}",
         options: {
             auth: "firebase",
-            description: "Eliminamos Jornada",
-            handler: jornadaController.eliminarJornada,
+            description: "Eliminamos PersonaJornada",
+            handler: personaJornadaController.eliminarPersonaJornada,
             plugins: {
                 "hapi-swagger": {
                     responses: {
@@ -144,7 +144,7 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
                     },
                 },
             },
-            tags: ["api", "jornadas"],
+            tags: ["api", "personaJornadas"],
             validate: {
 
             },
