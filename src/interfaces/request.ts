@@ -38,6 +38,17 @@ export interface IReqJornada extends IRequest {
         fecha: Date;
     }
 }
+export interface IReqPersonaJornada extends IRequest {
+    payload: {
+        id: number;
+        idJornada: number;
+        idPersona: number;
+        idMedioTransporte: number;
+        asistencia: string;
+        direccionOrigen: string;
+        confirmacion: string;
+    }
+}
 
 export interface IReqEquipo extends IRequest {
     payload: {
@@ -48,9 +59,9 @@ export interface IReqEquipo extends IRequest {
             categoria: string,
             estado: string,
             provincia: string,
-            ciudad:string,
+            ciudad: string,
             fechaInicio: Date,
-            fechaFin : Date
+            fechaFin: Date
         };
         coordinadores: [{
             idPersona: number;
@@ -94,14 +105,14 @@ export interface IReqPersona extends IRequest {
             telefono: string;
             relacion: string;
         };
-        datosSeguro:{
+        datosSeguro: {
             idDatosSeguro: number;
             grupoSanguineo: string;
             emfermedades: string;
             medicaciones: string;
             idObraSocial: number;
         }
-        obraSocial:{
+        obraSocial: {
             idObraSocial: number;
             empresa: string;
             plan: string;
