@@ -76,6 +76,13 @@ export interface IReqVoluntario extends IRequest {
     };
 }
 
+export interface IReqConfirmacion extends IRequest {
+    payload: {
+        idPersona: number;
+        confirmacion: boolean;
+    };
+}
+
 export interface IReqJornadas extends IRequest {
     payload: {
         fecha: Date;

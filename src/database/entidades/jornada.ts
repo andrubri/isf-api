@@ -1,7 +1,7 @@
 import {Model,DataTypes} from "sequelize";
 
 export class Jornada extends Model {
-    public idJornada: number;
+    public idJornadas: number;
     public idEquipo: number;
     public descripcion: string;
     public direccion: string;

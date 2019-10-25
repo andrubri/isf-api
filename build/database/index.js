@@ -37,25 +37,19 @@ class DBSquelize {
         personas_jornada_1.initPersonaJornada(this.sequelize);
         this.createRelations();
         // Aplicar los cambios a la db
-        this.sequelize.sync({ alter: true });
+        //this.sequelize.sync({alter: true});
     }
     createRelations() {
         usuario_1.Usuario.belongsTo(persona_1.Persona, { foreignKey: 'idPersona' });
-        equipo_1.Equipo.belongsToMany(persona_1.Persona, {
-            through: 'equipos_personas',
-            as: 'personas',
-            foreignKey: 'idEquipo',
-            otherKey: 'idPersona'
-        });
-        persona_1.Persona.belongsToMany(persona_1.Persona, {
-            through: 'equipos_personas',
-            as: 'equipos',
-            foreignKey: 'idPersona',
-            otherKey: 'idEquipo'
-        });
+        equipo_1.Equipo.hasMany(equipo_persona_1.EquipoPersona, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
+        persona_1.Persona.hasMany(equipo_persona_1.EquipoPersona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
+        persona_1.Persona.hasMany(personas_jornada_1.PersonaJornada, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
         persona_1.Persona.hasOne(usuario_1.Usuario, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        equipo_persona_1.EquipoPersona.belongsTo(persona_1.Persona, { foreignKey: 'idPersona' });
-        equipo_persona_1.EquipoPersona.belongsTo(equipo_1.Equipo, { foreignKey: 'idEquipo' });
+        equipo_persona_1.EquipoPersona.hasOne(persona_1.Persona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
+        equipo_persona_1.EquipoPersona.hasOne(equipo_1.Equipo, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
+        jornada_1.Jornada.hasMany(personas_jornada_1.PersonaJornada, { sourceKey: 'idJornadas', foreignKey: 'idJornada' });
+        personas_jornada_1.PersonaJornada.hasOne(persona_1.Persona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
+        personas_jornada_1.PersonaJornada.hasOne(jornada_1.Jornada, { sourceKey: 'idJornada', foreignKey: 'idJornadas' });
     }
 }
 exports.DBSquelize = DBSquelize;

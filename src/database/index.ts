@@ -3,7 +3,7 @@ import {IDataConfiguration} from "../configurations";
 import {initUsuario, Usuario} from "./entidades/usuario";
 import {initEquipo, Equipo} from "./entidades/equipo";
 import {EquipoPersona, initEquipoPersona} from "./entidades/equipo_persona";
-import {initJornada} from "./entidades/jornada";
+import {initJornada, Jornada} from "./entidades/jornada";
 import {initPersona, Persona} from "./entidades/persona";
 import {initContactoEmergencia} from "./entidades/contactoEmergencia";
 import {initDatosSeguro} from "./entidades/datosSeguro";
@@ -12,7 +12,7 @@ import {initPerfil} from "./entidades/perfil";
 import {initOrigenContacto} from "./entidades/origenContacto";
 import {initRol} from "./entidades/rol";
 import {initMedioTransporte} from "./entidades/medioTransporte";
-import {initPersonaJornada} from "./entidades/personas_jornada";
+import {initPersonaJornada, PersonaJornada} from "./entidades/personas_jornada";
 
 
 export class DBSquelize {
@@ -43,28 +43,24 @@ export class DBSquelize {
         this.createRelations();
 
         // Aplicar los cambios a la db
-        this.sequelize.sync({alter: true});
+        //this.sequelize.sync({alter: true});
     }
 
     createRelations(): void {
         Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
 
-        Equipo.belongsToMany(Persona, {
-            through: 'equipos_personas',
-            as: 'personas',
-            foreignKey: 'idEquipo',
-            otherKey: 'idPersona'
-        });
+        Equipo.hasMany(EquipoPersona, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
 
-        Persona.belongsToMany(Persona, {
-            through: 'equipos_personas',
-            as: 'equipos',
-            foreignKey: 'idPersona',
-            otherKey: 'idEquipo'
-        });
+        Persona.hasMany(EquipoPersona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        Persona.hasMany(PersonaJornada, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
         Persona.hasOne(Usuario, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
 
-        EquipoPersona.belongsTo(Persona, {foreignKey: 'idPersona'});
-        EquipoPersona.belongsTo(Equipo, {foreignKey: 'idEquipo'});
+        EquipoPersona.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        EquipoPersona.hasOne(Equipo, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
+
+        Jornada.hasMany(PersonaJornada, {sourceKey: 'idJornadas', foreignKey: 'idJornada'});
+
+        PersonaJornada.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        PersonaJornada.hasOne(Jornada, {sourceKey: 'idJornada', foreignKey: 'idJornadas'});
     }
 }

@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const jornada_1 = require("../../database/entidades/jornada");
 const firebase_1 = require("../../lib/firebase");
+const personas_jornada_1 = require("../../database/entidades/personas_jornada");
+const persona_1 = require("../../database/entidades/persona");
 class JornadaController {
     constructor(configs, io) {
         this.configs = configs;
@@ -21,16 +23,15 @@ class JornadaController {
             return result;
         });
     }
+    obtenerJornadasXId(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
+            return result;
+        });
+    }
     crearJornada(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
-            //const exist: Jornada = await Jornada.findOne({where: {idJornada: request.payload.id}});
             if (true) {
-                /* const jornadaFireBase: any = await this.firebaseAdmin.auth().createJornada({
-                    descripcion: request.payload.descripcion,
-                    fecha: request.payload.fecha,
-                    direccion: request.payload.direccion,
-                    idEquipo: request.payload.idEquipo,
-                }); */
                 const jornada = yield jornada_1.Jornada.create({
                     descripcion: request.payload.descripcion,
                     fecha: request.payload.fecha,
@@ -70,13 +71,66 @@ class JornadaController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
             if (exist) {
-                /*  const [cont, jornada] = await Jornada.update({
-                     fechaBaja: new Date()
-                 }, {where: {idJornada: request.params.id}});
-      */
                 yield jornada_1.Jornada.destroy({ where: { idJornadas: request.params.id } });
                 return exist;
-                //return await Jornada.findOne({where: {idJornada: request.params.id}});
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    obtenerPersonasXId(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield persona_1.Persona.findAll({
+                include: [{
+                        model: personas_jornada_1.PersonaJornada,
+                        required: true,
+                        where: { idJornada: request.params.id }
+                    }]
+            });
+            return result;
+        });
+    }
+    addPersonas(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
+            if (exist) {
+                const voluntario = new personas_jornada_1.PersonaJornada({
+                    idJornada: exist.idJornadas,
+                    idPersona: request.payload.idPersona
+                });
+                yield voluntario.save();
+                return voluntario;
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    editPersonas(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
+            if (exist) {
+                const voluntario = yield personas_jornada_1.PersonaJornada.findOne({ where: { idJornada: exist.idJornadas, idPersona: request.payload.idPersona } });
+                voluntario.confirmacion = (request.payload.confirmacion) ? 'true' : 'false';
+                yield voluntario.save();
+                return voluntario;
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    addPersonasHash(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield jornada_1.Jornada.findOne({ where: { idJornadas: request.params.id } });
+            if (exist) {
+                const voluntario = new personas_jornada_1.PersonaJornada({
+                    idJornada: exist.idJornadas,
+                    idPersona: request.payload.idPersona
+                });
+                yield voluntario.save();
+                return voluntario;
             }
             else {
                 return response.response().code(400);
