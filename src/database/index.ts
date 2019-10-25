@@ -64,5 +64,7 @@ export class DBSquelize {
         });
         Persona.hasOne(Usuario, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
 
+        EquipoPersona.belongsTo(Persona, {foreignKey: 'idPersona'});
+        EquipoPersona.belongsTo(Equipo, {foreignKey: 'idEquipo'});
     }
 }

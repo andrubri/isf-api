@@ -3,11 +3,12 @@ import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import {IServerConfigurations} from "../../configurations";
 import {Usuario} from "../../database/entidades/usuario";
-import {IReqEquipo, IRequest, IReqUser} from "../../interfaces/request";
+import {IReqEquipo, IReqJornada, IRequest, IReqUser, IReqVoluntario, IReqJornadas} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import {Equipo} from "../../database/entidades/equipo";
 import {EquipoPersona} from "../../database/entidades/equipo_persona";
 import {Jornada} from "../../database/entidades/jornada";
+import {Persona} from "../../database/entidades/persona";
 
 export default class EquipoController {
     private configs: IServerConfigurations;
@@ -37,14 +38,14 @@ export default class EquipoController {
                 nombre: request.payload.equipo.nombre,
                 descripcion: request.payload.equipo.descripcion,
                 categoria: request.payload.equipo.categoria,
-                estado : request.payload.equipo.estado,
-                provincia:request.payload.equipo.provincia,
+                estado: request.payload.equipo.estado,
+                provincia: request.payload.equipo.provincia,
                 ciudad: request.payload.equipo.ciudad,
                 fechaInicio: request.payload.equipo.fechaInicio,
-                fechaFin:request.payload.equipo.fechaFin
+                fechaFin: request.payload.equipo.fechaFin
             });
 
-            for( let item of request.payload.coordinadores){
+            for (let item of request.payload.coordinadores) {
                 EquipoPersona.create({
                     idPersona: item.idPersona,
                     idEquipo: act.idEquipo,
@@ -65,14 +66,14 @@ export default class EquipoController {
                     nombre: request.payload.equipo.nombre,
                     descripcion: request.payload.equipo.descripcion,
                     categoria: request.payload.equipo.categoria,
-                    estado : request.payload.equipo.estado,
-                    provincia:request.payload.equipo.provincia,
+                    estado: request.payload.equipo.estado,
+                    provincia: request.payload.equipo.provincia,
                     ciudad: request.payload.equipo.ciudad,
                     fechaInicio: request.payload.equipo.fechaInicio,
-                    fechaFin:request.payload.equipo.fechaFin
+                    fechaFin: request.payload.equipo.fechaFin
                 }, {where: {idEquipo: request.params.id}});
 
-                for( let item of request.payload.coordinadores){
+                for (let item of request.payload.coordinadores) {
                     await EquipoPersona.create({
                         idPersona: item.idPersona,
                         idEquipo: exist.idEquipo,
@@ -107,20 +108,12 @@ export default class EquipoController {
     public async obtenerCoordinadoresXId(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-            const coordinadores = [];
-            const asignados = await EquipoPersona.findAll({where: {idRol: 2, idEquipo: exist.idEquipo}});
-            for (const asign of asignados) {
-                const user: Usuario = await Usuario.findOne({
-                    where: {
-                        fechaBaja: null,
-                        idPersona: asign.idPersona
-                    }
-                });
-                const item: any = {};
-                item.idEquipoPersona = asign.idEquipoPersona;
-                coordinadores.push(item);
-            }
-            return await coordinadores;
+            const coordinadores = await EquipoPersona.findAll({
+                where: {idRol: 2, idEquipo: exist.idEquipo},
+                include: [{model: Persona, required: true}]
+            });
+
+            return coordinadores;
         } else {
             return response.response().code(400);
         }
@@ -129,7 +122,10 @@ export default class EquipoController {
     public async obtenerVoluntariosXId(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-            const asignados = await EquipoPersona.findAll({where: {idRol: 1, idEquipo: exist.idEquipo}});
+            const asignados = await EquipoPersona.findAll({
+                where: {idRol: 1, idEquipo: exist.idEquipo},
+                include: [{model: Persona, required: true}]
+            });
             return asignados;
         } else {
             return response.response().code(400);
@@ -145,5 +141,55 @@ export default class EquipoController {
             return response.response().code(400);
         }
     }
+
+    public async addCoordinadoresEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+        if (exist) {
+            const coordinador: EquipoPersona = new EquipoPersona({
+                idEquipo: exist.idEquipo,
+                idPersona: request.payload.idPersona,
+                idRol: 2
+            });
+            await coordinador.save();
+
+            return coordinador;
+        } else {
+            return response.response().code(400);
+        }
+    }
+
+    public async addVoluntariosEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+        if (exist) {
+            const voluntario: EquipoPersona = new EquipoPersona({
+                idEquipo: exist.idEquipo,
+                idPersona: request.payload.idPersona,
+                idRol: 1
+            });
+            await voluntario.save();
+
+            return voluntario;
+        } else {
+            return response.response().code(400);
+        }
+    }
+
+    public async addJornadasEquipo(request: IReqJornadas, response: Hapi.ResponseToolkit) {
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+        if (exist) {
+            const jornada: Jornada = new Jornada({
+                idEquipo: exist.idEquipo,
+                descripcion: '',
+                direccion: '',
+                fecha: request.payload.fecha
+            });
+            await jornada.save();
+
+            return jornada;
+        } else {
+            return response.response().code(400);
+        }
+    }
+
 
 }

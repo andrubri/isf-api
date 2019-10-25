@@ -116,6 +116,34 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             },
         },
         {
+            method: "POST",
+            path: "/equipo/{id}/coordinador",
+            options: {
+                auth: "firebase",
+                description: "Agregamos un coordinador al equipo",
+                handler: equipoController.addCoordinadoresEquipo,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Agregado",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {
+
+                },
+            },
+        },
+        {
             method: "GET",
             path: "/equipo/{id}/voluntario",
             options: {
@@ -144,6 +172,34 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             },
         },
         {
+            method: "POST",
+            path: "/equipo/{id}/voluntario",
+            options: {
+                auth: "firebase",
+                description: "Agregamos un voluntario al equipo",
+                handler: equipoController.addVoluntariosEquipo,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Agregado",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {
+
+                },
+            },
+        },
+        {
             method: "GET",
             path: "/equipo/{id}/jornada",
             options: {
@@ -155,6 +211,34 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         responses: {
                             200: {
                                 description: "Trae los datos de las jornadas",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {
+
+                },
+            },
+        },
+        {
+            method: "POST",
+            path: "/equipo/{id}/jornada",
+            options: {
+                auth: "firebase",
+                description: "Agrego una jornada al equipo",
+                handler: equipoController.addJornadasEquipo,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Agregado",
                             },
                             304: {
                                 description: "No autorizado.",

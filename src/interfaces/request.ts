@@ -38,6 +38,7 @@ export interface IReqJornada extends IRequest {
         fecha: Date;
     }
 }
+
 export interface IReqPersonaJornada extends IRequest {
     payload: {
         id: number;
@@ -68,6 +69,19 @@ export interface IReqEquipo extends IRequest {
         }];
     }
 }
+
+export interface IReqVoluntario extends IRequest {
+    payload: {
+        idPersona: number;
+    };
+}
+
+export interface IReqJornadas extends IRequest {
+    payload: {
+        fecha: Date;
+    };
+}
+
 export interface IReqPersona extends IRequest {
     payload: {
         persona: {

@@ -8,11 +8,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const usuario_1 = require("../../database/entidades/usuario");
 const firebase_1 = require("../../lib/firebase");
 const equipo_1 = require("../../database/entidades/equipo");
 const equipo_persona_1 = require("../../database/entidades/equipo_persona");
 const jornada_1 = require("../../database/entidades/jornada");
+const persona_1 = require("../../database/entidades/persona");
 class EquipoController {
     constructor(configs, io) {
         this.configs = configs;
@@ -111,20 +111,11 @@ class EquipoController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
             if (exist) {
-                const coordinadores = [];
-                const asignados = yield equipo_persona_1.EquipoPersona.findAll({ where: { idRol: 2, idEquipo: exist.idEquipo } });
-                for (const asign of asignados) {
-                    const user = yield usuario_1.Usuario.findOne({
-                        where: {
-                            fechaBaja: null,
-                            idPersona: asign.idPersona
-                        }
-                    });
-                    const item = {};
-                    item.idEquipoPersona = asign.idEquipoPersona;
-                    coordinadores.push(item);
-                }
-                return yield coordinadores;
+                const coordinadores = yield equipo_persona_1.EquipoPersona.findAll({
+                    where: { idRol: 2, idEquipo: exist.idEquipo },
+                    include: [{ model: persona_1.Persona, required: true }]
+                });
+                return coordinadores;
             }
             else {
                 return response.response().code(400);
@@ -135,7 +126,10 @@ class EquipoController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
             if (exist) {
-                const asignados = yield equipo_persona_1.EquipoPersona.findAll({ where: { idRol: 1, idEquipo: exist.idEquipo } });
+                const asignados = yield equipo_persona_1.EquipoPersona.findAll({
+                    where: { idRol: 1, idEquipo: exist.idEquipo },
+                    include: [{ model: persona_1.Persona, required: true }]
+                });
                 return asignados;
             }
             else {
@@ -149,6 +143,58 @@ class EquipoController {
             if (exist) {
                 const jornadas = yield jornada_1.Jornada.findAll({ where: { idEquipo: exist.idEquipo } });
                 return jornadas;
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    addCoordinadoresEquipo(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+            if (exist) {
+                const coordinador = new equipo_persona_1.EquipoPersona({
+                    idEquipo: exist.idEquipo,
+                    idPersona: request.payload.idPersona,
+                    idRol: 2
+                });
+                yield coordinador.save();
+                return coordinador;
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    addVoluntariosEquipo(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+            if (exist) {
+                const voluntario = new equipo_persona_1.EquipoPersona({
+                    idEquipo: exist.idEquipo,
+                    idPersona: request.payload.idPersona,
+                    idRol: 1
+                });
+                yield voluntario.save();
+                return voluntario;
+            }
+            else {
+                return response.response().code(400);
+            }
+        });
+    }
+    addJornadasEquipo(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+            if (exist) {
+                const jornada = new jornada_1.Jornada({
+                    idEquipo: exist.idEquipo,
+                    descripcion: '',
+                    direccion: '',
+                    fecha: request.payload.fecha
+                });
+                yield jornada.save();
+                return jornada;
             }
             else {
                 return response.response().code(400);
