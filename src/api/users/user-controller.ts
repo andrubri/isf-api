@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import {IServerConfigurations} from "../../configurations";
-import {Usuario} from "../../database/usuario";
+import {Usuario} from "../../database/entidades/usuario";
 import {IRequest, IReqUser} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;

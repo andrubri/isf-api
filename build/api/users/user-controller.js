@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const usuario_1 = require("../../database/usuario");
+const usuario_1 = require("../../database/entidades/usuario");
 const firebase_1 = require("../../lib/firebase");
 class UserController {
     constructor(configs, io) {

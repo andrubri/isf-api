@@ -109,6 +109,58 @@ function default_1(server, io, serverConfigs) {
             },
         },
         {
+            method: "GET",
+            path: "/equipo/{id}/voluntario",
+            options: {
+                auth: "firebase",
+                description: "Trae los voluntarios de una equipo",
+                handler: equipoController.obtenerVoluntariosXId,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Trae los datos de los voluntarios",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {},
+            },
+        },
+        {
+            method: "GET",
+            path: "/equipo/{id}/jornada",
+            options: {
+                auth: "firebase",
+                description: "Trae las jornadas de una equipo",
+                handler: equipoController.obtenerJornadasXId,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Trae los datos de las jornadas",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {},
+            },
+        },
+        {
             method: "PUT",
             path: "/equipo/{id}",
             options: {

@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const jornada_1 = require("../../database/jornada");
+const jornada_1 = require("../../database/entidades/jornada");
 const firebase_1 = require("../../lib/firebase");
 class JornadaController {
     constructor(configs, io) {

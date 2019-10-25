@@ -8,13 +8,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const persona_1 = require("../../database/persona");
-const origenContacto_1 = require("../../database/origenContacto");
-const contactoEmergencia_1 = require("../../database/contactoEmergencia");
-const datosSeguro_1 = require("../../database/datosSeguro");
-const obraSocial_1 = require("../../database/obraSocial");
+const persona_1 = require("../../database/entidades/persona");
+const origenContacto_1 = require("../../database/entidades/origenContacto");
+const contactoEmergencia_1 = require("../../database/entidades/contactoEmergencia");
+const datosSeguro_1 = require("../../database/entidades/datosSeguro");
+const obraSocial_1 = require("../../database/entidades/obraSocial");
 const firebase_1 = require("../../lib/firebase");
 const persona_validator_1 = require("./persona-validator");
+const usuario_1 = require("../../database/entidades/usuario");
 class PersonaController {
     constructor(configs, io) {
         this.configs = configs;
@@ -152,6 +153,14 @@ class PersonaController {
             else {
                 return response.response().code(400);
             }
+        });
+    }
+    obtenerCoordinador(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const result = yield persona_1.Persona.findAll({
+                include: [{ model: usuario_1.Usuario, required: true }]
+            });
+            return result;
         });
     }
 }

@@ -2,7 +2,7 @@ import * as admin from "firebase-admin";
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import {IServerConfigurations} from "../../configurations";
-import {Jornada} from "../../database/jornada";
+import {Jornada} from "../../database/entidades/jornada";
 import {IRequest, IReqJornada} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;

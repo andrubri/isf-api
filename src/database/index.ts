@@ -1,18 +1,18 @@
 import {DataType, DataTypes, Sequelize} from "sequelize";
 import {IDataConfiguration} from "../configurations";
-import {initUsuario} from "./usuario";
-import {initEquipo} from "./equipo";
-import {initEquipoPersona} from "./equipo_persona";
-import { initJornada } from "./jornada";
-import { initPersona } from "./persona";
-import { initContactoEmergencia } from "./contactoEmergencia";
-import { initDatosSeguro } from "./datosSeguro"
-import { initObraSocial } from "./obraSocial";
-import { initPerfil } from "./perfil";
-import { initOrigenContacto } from "./origenContacto";
-import { initRol } from "./rol";
-import { initMedioTransporte } from "./medioTransporte";
-import { initPersonaJornada } from "./personas_jornada";
+import {initUsuario, Usuario} from "./entidades/usuario";
+import {initEquipo, Equipo} from "./entidades/equipo";
+import {EquipoPersona, initEquipoPersona} from "./entidades/equipo_persona";
+import {initJornada} from "./entidades/jornada";
+import {initPersona, Persona} from "./entidades/persona";
+import {initContactoEmergencia} from "./entidades/contactoEmergencia";
+import {initDatosSeguro} from "./entidades/datosSeguro";
+import {initObraSocial} from "./entidades/obraSocial";
+import {initPerfil} from "./entidades/perfil";
+import {initOrigenContacto} from "./entidades/origenContacto";
+import {initRol} from "./entidades/rol";
+import {initMedioTransporte} from "./entidades/medioTransporte";
+import {initPersonaJornada} from "./entidades/personas_jornada";
 
 
 export class DBSquelize {
@@ -22,7 +22,7 @@ export class DBSquelize {
         this.sequelize = new Sequelize(config.connection.database, config.connection.user, config.connection.password, {
             dialect: config.connection.dialect,
             host: config.connection.host,
-            logging: false,
+            logging: true,
         });
 
         // Iinicio las entidades
@@ -40,8 +40,29 @@ export class DBSquelize {
         initRol(this.sequelize);
         initPersonaJornada(this.sequelize);
 
+        this.createRelations();
+
         // Aplicar los cambios a la db
-        this.sequelize.sync({alter : true});
+        this.sequelize.sync({alter: true});
     }
 
+    createRelations(): void {
+        Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
+
+        Equipo.belongsToMany(Persona, {
+            through: 'equipos_personas',
+            as: 'personas',
+            foreignKey: 'idEquipo',
+            otherKey: 'idPersona'
+        });
+
+        Persona.belongsToMany(Persona, {
+            through: 'equipos_personas',
+            as: 'equipos',
+            foreignKey: 'idPersona',
+            otherKey: 'idEquipo'
+        });
+        Persona.hasOne(Usuario, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+
+    }
 }

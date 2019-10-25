@@ -8,10 +8,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const personas_jornada_1 = require("../../database/personas_jornada");
+const personas_jornada_1 = require("../../database/entidades/personas_jornada");
 const firebase_1 = require("../../lib/firebase");
-const jornada_1 = require("../../database/jornada");
-const persona_1 = require("../../database/persona");
+const jornada_1 = require("../../database/entidades/jornada");
+const persona_1 = require("../../database/entidades/persona");
 class PersonaJornadaController {
     constructor(configs, io) {
         this.configs = configs;

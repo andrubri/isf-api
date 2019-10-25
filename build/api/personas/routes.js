@@ -134,6 +134,32 @@ function default_1(server, io, serverConfigs) {
                 tags: ["api", "jornadas"],
                 validate: {},
             },
+        },
+        {
+            method: "GET",
+            path: "/persona/coordinador",
+            options: {
+                auth: "firebase",
+                description: "Trae los coordinadores",
+                handler: jornadaController.obtenerCoordinador,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Token Verificado.",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "jornadas"],
+                validate: {},
+            },
         }
     ]);
 }

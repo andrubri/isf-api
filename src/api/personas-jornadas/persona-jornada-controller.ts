@@ -2,12 +2,12 @@ import * as admin from "firebase-admin";
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import { IServerConfigurations } from "../../configurations";
-import { PersonaJornada } from "../../database/personas_jornada";
+import { PersonaJornada } from "../../database/entidades/personas_jornada";
 import { IRequest, IReqPersonaJornada } from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
-import { Jornada } from "../../database/jornada";
-import { Persona } from "../../database/persona";
+import { Jornada } from "../../database/entidades/jornada";
+import { Persona } from "../../database/entidades/persona";
 
 export default class PersonaJornadaController {
     private configs: IServerConfigurations;

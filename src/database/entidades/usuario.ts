@@ -25,7 +25,7 @@ export function initUsuario(sequelize) {
             allowNull: true,
             type: new DataTypes.DATE(),
         },
-        idperfil: {
+        idPerfil: {
             type: DataTypes.INTEGER.UNSIGNED,
         },
         idPersona: {
