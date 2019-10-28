@@ -1,8 +1,10 @@
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
-import {IServerConfigurations} from "../../configurations";
+import { IServerConfigurations } from "../../configurations";
 import PersonaController from "./persona-controller";
 import * as PersonaValidator from "./persona-validator";
+import * as Joi from "joi";
+
 
 export default function (server: Hapi.Server, io: socketio.Server, serverConfigs: IServerConfigurations) {
 
@@ -22,6 +24,10 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         responses: {
                             200: {
                                 description: "Token Verificado.",
+                                schema: Joi.array().items(Joi.object({
+                                    nombre: "Pepe",
+                                    apellido: Joi.string(),
+                                }))
                             },
                             304: {
                                 description: "No autorizado.",
@@ -30,6 +36,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                                 description: "Error",
                             },
                         },
+
                     },
                 },
                 tags: ["api", "jornadas"],

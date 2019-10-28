@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const persona_controller_1 = require("./persona-controller");
+const Joi = require("joi");
 function default_1(server, io, serverConfigs) {
     const jornadaController = new persona_controller_1.default(serverConfigs, io);
     server.bind(jornadaController);
@@ -17,6 +18,10 @@ function default_1(server, io, serverConfigs) {
                         responses: {
                             200: {
                                 description: "Token Verificado.",
+                                schema: Joi.array().items(Joi.object({
+                                    nombre: "Pepe",
+                                    apellido: Joi.string(),
+                                }))
                             },
                             304: {
                                 description: "No autorizado.",
