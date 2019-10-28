@@ -80,12 +80,13 @@ export default class JornadaController {
     }
 
     public async obtenerPersonasXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Persona[]> {
-        const result: Persona[] = await Persona.findAll({
+       
+        const result = await Persona.findAll({
             include: [{
-                model: PersonaJornada,
-                required: true,
-                where: {idJornada: request.params.id}
-            }]
+                model: Jornada,
+                through: { where: { idJornada: request.params.id } },
+                required: true
+            }],
         });
         return result;
     }

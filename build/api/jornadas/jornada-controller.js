@@ -83,10 +83,10 @@ class JornadaController {
         return __awaiter(this, void 0, void 0, function* () {
             const result = yield persona_1.Persona.findAll({
                 include: [{
-                        model: personas_jornada_1.PersonaJornada,
-                        required: true,
-                        where: { idJornada: request.params.id }
-                    }]
+                        model: jornada_1.Jornada,
+                        through: { where: { idJornada: request.params.id } },
+                        required: true
+                    }],
             });
             return result;
         });

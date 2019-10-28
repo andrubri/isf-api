@@ -108,10 +108,7 @@ export default class EquipoController {
     public async obtenerCoordinadoresXId(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
         if (exist) {
-            /* const coordinadores = await EquipoPersona.findAll({
-                where: {idRol: 2, idEquipo: exist.idEquipo},
-                include: [{model: Persona, required: true}]
-            }); */
+        
             const coordinadores = await Persona.findAll({
                 include: [{
                     model: Equipo,
@@ -130,11 +127,7 @@ export default class EquipoController {
     public async obtenerVoluntariosXId(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
         if (exist) {
-            /* const asignados = await EquipoPersona.findAll({
-                where: { idRol: 1, idEquipo: exist.idEquipo },
-                include: [{ model: Persona, required: true }]
-            });
- */
+
             const asignados = await Persona.findAll({
                 include: [{
                     model: Equipo,

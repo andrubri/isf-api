@@ -111,10 +111,6 @@ class EquipoController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
             if (exist) {
-                /* const coordinadores = await EquipoPersona.findAll({
-                    where: {idRol: 2, idEquipo: exist.idEquipo},
-                    include: [{model: Persona, required: true}]
-                }); */
                 const coordinadores = yield persona_1.Persona.findAll({
                     include: [{
                             model: equipo_1.Equipo,
@@ -133,11 +129,6 @@ class EquipoController {
         return __awaiter(this, void 0, void 0, function* () {
             const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
             if (exist) {
-                /* const asignados = await EquipoPersona.findAll({
-                    where: { idRol: 1, idEquipo: exist.idEquipo },
-                    include: [{ model: Persona, required: true }]
-                });
-     */
                 const asignados = yield persona_1.Persona.findAll({
                     include: [{
                             model: equipo_1.Equipo,
