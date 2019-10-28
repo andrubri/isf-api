@@ -37,19 +37,33 @@ class DBSquelize {
         personas_jornada_1.initPersonaJornada(this.sequelize);
         this.createRelations();
         // Aplicar los cambios a la db
-        //this.sequelize.sync({alter: true});
+        this.sequelize.sync({ alter: true });
     }
+    /* createRelations(): void {
+        Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
+
+        Equipo.hasMany(EquipoPersona, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
+
+        Persona.hasMany(EquipoPersona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        Persona.hasMany(PersonaJornada, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        Persona.hasOne(Usuario, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+
+        EquipoPersona.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        EquipoPersona.hasOne(Equipo, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
+
+        Jornada.hasMany(PersonaJornada, {sourceKey: 'idJornadas', foreignKey: 'idJornada'});
+
+        PersonaJornada.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
+        PersonaJornada.hasOne(Jornada, {sourceKey: 'idJornada', foreignKey: 'idJornadas'});
+    } */
     createRelations() {
         usuario_1.Usuario.belongsTo(persona_1.Persona, { foreignKey: 'idPersona' });
-        equipo_1.Equipo.hasMany(equipo_persona_1.EquipoPersona, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
-        persona_1.Persona.hasMany(equipo_persona_1.EquipoPersona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        persona_1.Persona.hasMany(personas_jornada_1.PersonaJornada, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        persona_1.Persona.hasOne(usuario_1.Usuario, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        equipo_persona_1.EquipoPersona.hasOne(persona_1.Persona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        equipo_persona_1.EquipoPersona.hasOne(equipo_1.Equipo, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
-        jornada_1.Jornada.hasMany(personas_jornada_1.PersonaJornada, { sourceKey: 'idJornadas', foreignKey: 'idJornada' });
-        personas_jornada_1.PersonaJornada.hasOne(persona_1.Persona, { sourceKey: 'idPersona', foreignKey: 'idPersona' });
-        personas_jornada_1.PersonaJornada.hasOne(jornada_1.Jornada, { sourceKey: 'idJornada', foreignKey: 'idJornadas' });
+        usuario_1.Usuario.belongsTo(perfil_1.Perfil, { foreignKey: 'idPerfil' });
+        equipo_1.Equipo.belongsToMany(persona_1.Persona, { through: equipo_persona_1.EquipoPersona, foreignKey: 'idEquipo', otherKey: 'idPersona' });
+        persona_1.Persona.belongsToMany(equipo_1.Equipo, { through: equipo_persona_1.EquipoPersona, foreignKey: 'idPersona', otherKey: 'idEquipo' });
+        persona_1.Persona.belongsToMany(jornada_1.Jornada, { through: personas_jornada_1.PersonaJornada, foreignKey: 'idPersona' });
+        jornada_1.Jornada.belongsToMany(persona_1.Persona, { through: personas_jornada_1.PersonaJornada, foreignKey: 'idJornada' });
+        equipo_1.Equipo.hasMany(jornada_1.Jornada, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
     }
 }
 exports.DBSquelize = DBSquelize;

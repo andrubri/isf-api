@@ -5,6 +5,7 @@ export class EquipoPersona extends Model {
     public idEquipo: number;
     public idPersona: number;
     public idRol: number;
+    
 }
 
 

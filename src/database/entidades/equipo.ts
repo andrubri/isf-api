@@ -1,5 +1,6 @@
 import {Model} from "sequelize";
-import {DataTypes} from "sequelize";
+import {DataTypes,HasManyGetAssociationsMixin} from "sequelize";
+import { Persona } from "./persona";
 
 export class Equipo extends Model {
     public idEquipo: number;
@@ -11,6 +12,8 @@ export class Equipo extends Model {
     public categoria: string;
     public fechaInicio: Date;
     public fechaFin: Date;
+
+    public getPersonas!: HasManyGetAssociationsMixin<Persona>
 }
 
 export function initEquipo(sequelize) {

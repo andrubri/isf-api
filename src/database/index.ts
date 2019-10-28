@@ -8,7 +8,7 @@ import {initPersona, Persona} from "./entidades/persona";
 import {initContactoEmergencia} from "./entidades/contactoEmergencia";
 import {initDatosSeguro} from "./entidades/datosSeguro";
 import {initObraSocial} from "./entidades/obraSocial";
-import {initPerfil} from "./entidades/perfil";
+import {initPerfil, Perfil} from "./entidades/perfil";
 import {initOrigenContacto} from "./entidades/origenContacto";
 import {initRol} from "./entidades/rol";
 import {initMedioTransporte} from "./entidades/medioTransporte";
@@ -43,10 +43,10 @@ export class DBSquelize {
         this.createRelations();
 
         // Aplicar los cambios a la db
-        //this.sequelize.sync({alter: true});
+        this.sequelize.sync({alter: true});
     }
 
-    createRelations(): void {
+    /* createRelations(): void {
         Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
 
         Equipo.hasMany(EquipoPersona, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
@@ -62,5 +62,19 @@ export class DBSquelize {
 
         PersonaJornada.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
         PersonaJornada.hasOne(Jornada, {sourceKey: 'idJornada', foreignKey: 'idJornadas'});
+    } */
+
+    createRelations(): void {
+        Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
+        Usuario.belongsTo(Perfil,{foreignKey:'idPerfil'})
+
+        Equipo.belongsToMany(Persona,{through:EquipoPersona,foreignKey:'idEquipo',otherKey: 'idPersona'})
+        Persona.belongsToMany(Equipo,{through:EquipoPersona,foreignKey:'idPersona',otherKey:'idEquipo'})
+        
+        Persona.belongsToMany(Jornada,{through:PersonaJornada,foreignKey:'idPersona'})
+        Jornada.belongsToMany(Persona,{through:PersonaJornada,foreignKey:'idJornada'})
+
+        Equipo.hasMany(Jornada,{sourceKey: 'idEquipo', foreignKey: 'idEquipo'})
+        
     }
 }

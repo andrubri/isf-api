@@ -31,7 +31,7 @@ export function initUsuario(sequelize) {
         idPersona: {
             type: DataTypes.INTEGER.UNSIGNED,
         },
-        idusuario: {
+        idUsuario: {
             autoIncrement: true,
             primaryKey: true,
             type: DataTypes.INTEGER.UNSIGNED,
