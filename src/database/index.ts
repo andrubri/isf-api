@@ -46,24 +46,6 @@ export class DBSquelize {
         this.sequelize.sync({alter: true});
     }
 
-    /* createRelations(): void {
-        Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
-
-        Equipo.hasMany(EquipoPersona, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
-
-        Persona.hasMany(EquipoPersona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
-        Persona.hasMany(PersonaJornada, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
-        Persona.hasOne(Usuario, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
-
-        EquipoPersona.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
-        EquipoPersona.hasOne(Equipo, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
-
-        Jornada.hasMany(PersonaJornada, {sourceKey: 'idJornadas', foreignKey: 'idJornada'});
-
-        PersonaJornada.hasOne(Persona, {sourceKey: 'idPersona', foreignKey: 'idPersona'});
-        PersonaJornada.hasOne(Jornada, {sourceKey: 'idJornada', foreignKey: 'idJornadas'});
-    } */
-
     createRelations(): void {
         Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
         Usuario.belongsTo(Perfil,{foreignKey:'idPerfil'})
