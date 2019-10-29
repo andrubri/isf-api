@@ -15,6 +15,7 @@ const Users = require("./api/users");
 const Equipos = require("./api/equipos");
 const Jornadas = require("./api/jornadas");
 const Personas = require("./api/personas");
+const Emails = require("./api/emails");
 const socketio = require("socket.io");
 const PersonasJornadas = require("./api/personas-jornadas");
 function init(configs) {
@@ -58,6 +59,7 @@ function init(configs) {
             Equipos.init(server, io, configs);
             Jornadas.init(server, io, configs);
             Personas.init(server, io, configs);
+            Emails.init(server, io, configs);
             PersonasJornadas.init(server, io, configs);
             console.log('Routes registered sucessfully.');
             return server;

@@ -19,6 +19,10 @@ function getDatabaseConfig() {
     return configs.get("database");
 }
 exports.getDatabaseConfig = getDatabaseConfig;
+function getEmailConfig() {
+    return configs.get("email");
+}
+exports.getEmailConfig = getEmailConfig;
 function getServerConfigs() {
     return configs.get("server");
 }

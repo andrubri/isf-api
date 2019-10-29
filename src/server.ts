@@ -8,6 +8,7 @@ import * as Users from './api/users';
 import * as Equipos from './api/equipos';
 import * as Jornadas from './api/jornadas';
 import * as Personas from './api/personas';
+import * as Emails from './api/emails';
 import * as socketio from 'socket.io';
 import * as PersonasJornadas from './api/personas-jornadas';
 
@@ -65,6 +66,7 @@ export async function init(
         Equipos.init(server, io, configs);
         Jornadas.init(server, io, configs);
         Personas.init(server, io, configs);
+        Emails.init(server, io, configs);
         PersonasJornadas.init(server,io,configs);
         console.log('Routes registered sucessfully.');
         return server;

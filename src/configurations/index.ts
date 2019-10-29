@@ -50,8 +50,17 @@ export interface IDataConfiguration {
     };
 }
 
+export interface IEmailConfiguration{
+    sender: string;
+    api_key: string;
+}
+
 export function getDatabaseConfig(): IDataConfiguration {
     return configs.get("database");
+}
+
+export function getEmailConfig(): IEmailConfiguration {
+    return configs.get("email");
 }
 
 export function getServerConfigs(): IServerConfigurations {
