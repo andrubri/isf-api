@@ -18,6 +18,7 @@ const Personas = require("./api/personas");
 const Emails = require("./api/emails");
 const socketio = require("socket.io");
 const PersonasJornadas = require("./api/personas-jornadas");
+const email_service_1 = require("./services/email-service");
 function init(configs) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -62,6 +63,7 @@ function init(configs) {
             Emails.init(server, io, configs);
             PersonasJornadas.init(server, io, configs);
             console.log('Routes registered sucessfully.');
+            email_service_1.EmailService.sendEmailEveryDay();
             return server;
         }
         catch (err) {

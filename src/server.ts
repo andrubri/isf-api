@@ -11,6 +11,7 @@ import * as Personas from './api/personas';
 import * as Emails from './api/emails';
 import * as socketio from 'socket.io';
 import * as PersonasJornadas from './api/personas-jornadas';
+import { EmailService } from './services/email-service';
 
 export async function init(
     configs: IServerConfigurations
@@ -69,6 +70,7 @@ export async function init(
         Emails.init(server, io, configs);
         PersonasJornadas.init(server,io,configs);
         console.log('Routes registered sucessfully.');
+        EmailService.sendEmailEveryDay();
         return server;
     } catch (err) {
         console.log('Error starting server: ', err);
