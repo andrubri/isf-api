@@ -120,12 +120,12 @@ export default class JornadaController {
         }
     }
 
-    public async addPersonasHash(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
+    public async addPersonasHash(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Jornada = await Jornada.findOne({where: {idJornadas: request.params.id}});
         if (exist) {
             const voluntario: PersonaJornada = new PersonaJornada({
                 idJornada: exist.idJornadas,
-                idPersona: request.payload.idPersona
+                idPersona: request.params.hash,
             });
             await voluntario.save();
 
