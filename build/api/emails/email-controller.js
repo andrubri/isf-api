@@ -10,6 +10,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const firebase_1 = require("../../lib/firebase");
 const configurations_1 = require("../../configurations");
+const equipo_1 = require("../../database/entidades/equipo");
+const persona_1 = require("../../database/entidades/persona");
 const sgMail = require('@sendgrid/mail');
 class EmailController {
     constructor(configs, io) {
@@ -20,15 +22,40 @@ class EmailController {
     }
     enviarEmail(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
+            this.prepareEmail('tom.manrey@gmail.com', 'Hola ISF', 'Cyber');
+            return response.response("Mail enviado").code(200);
+        });
+    }
+    sendMailToEquipoMembers(request, response) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const exist = yield equipo_1.Equipo.findOne({ where: { idEquipo: request.params.id } });
+            if (exist) {
+                const voluntariosFound = yield persona_1.Persona.findAll({
+                    include: [{
+                            model: equipo_1.Equipo,
+                            through: { where: { idEquipo: exist.idEquipo } },
+                            required: true
+                        }],
+                });
+                voluntariosFound.forEach(voluntario => this.prepareEmail(voluntario.email, request.payload.mensaje, exist.nombre));
+                return voluntariosFound;
+            }
+            else {
+                return response.response("Equipo no encontrado").code(400);
+            }
+        });
+    }
+    prepareEmail(email, mensaje, equipo) {
+        return __awaiter(this, void 0, void 0, function* () {
             const msg = {
-                to: 'tom.manrey@gmail.com',
+                to: email,
                 from: this.configurations.sender,
-                subject: 'First email with SendGrid',
-                text: 'and easy to do anywhere, even with Node.js',
-                html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+                subject: 'ISF llamdado',
+                text: mensaje,
+                html: `<strong>${mensaje}</strong><br><strong>Recibis este mail
+            por estar en el equipo ${equipo}</strong> `,
             };
             sgMail.send(msg);
-            return response.response("Mail enviado").code(200);
         });
     }
 }

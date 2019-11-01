@@ -39,6 +39,13 @@ export interface IReqJornada extends IRequest {
     }
 }
 
+export interface IReqEmail extends IRequest {
+    payload: {
+        mensaje: string;
+        
+    }
+}
+
 export interface IReqPersonaJornada extends IRequest {
     payload: {
         id: number;
