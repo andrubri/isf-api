@@ -48,7 +48,10 @@ export class DBSquelize {
 
     createRelations(): void {
         Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
+        Persona.hasOne(Usuario,{ foreignKey: 'idPersona' });
+        
         Usuario.belongsTo(Perfil,{foreignKey:'idPerfil'})
+        Perfil.hasOne(Usuario,{ foreignKey: 'idPerfil' });
 
         Equipo.belongsToMany(Persona,{through:EquipoPersona,foreignKey:'idEquipo',otherKey: 'idPersona'})
         Persona.belongsToMany(Equipo,{through:EquipoPersona,foreignKey:'idPersona',otherKey:'idEquipo'})
@@ -57,6 +60,7 @@ export class DBSquelize {
         Jornada.belongsToMany(Persona,{through:PersonaJornada,foreignKey:'idJornada'})
 
         Equipo.hasMany(Jornada,{sourceKey: 'idEquipo', foreignKey: 'idEquipo'})
+        Jornada.belongsTo(Equipo, {foreignKey: 'idEquipo'});
         
     }
 }

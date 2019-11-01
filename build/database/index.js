@@ -41,12 +41,15 @@ class DBSquelize {
     }
     createRelations() {
         usuario_1.Usuario.belongsTo(persona_1.Persona, { foreignKey: 'idPersona' });
+        persona_1.Persona.hasOne(usuario_1.Usuario, { foreignKey: 'idPersona' });
         usuario_1.Usuario.belongsTo(perfil_1.Perfil, { foreignKey: 'idPerfil' });
+        perfil_1.Perfil.hasOne(usuario_1.Usuario, { foreignKey: 'idPerfil' });
         equipo_1.Equipo.belongsToMany(persona_1.Persona, { through: equipo_persona_1.EquipoPersona, foreignKey: 'idEquipo', otherKey: 'idPersona' });
         persona_1.Persona.belongsToMany(equipo_1.Equipo, { through: equipo_persona_1.EquipoPersona, foreignKey: 'idPersona', otherKey: 'idEquipo' });
         persona_1.Persona.belongsToMany(jornada_1.Jornada, { through: personas_jornada_1.PersonaJornada, foreignKey: 'idPersona' });
         jornada_1.Jornada.belongsToMany(persona_1.Persona, { through: personas_jornada_1.PersonaJornada, foreignKey: 'idJornada' });
         equipo_1.Equipo.hasMany(jornada_1.Jornada, { sourceKey: 'idEquipo', foreignKey: 'idEquipo' });
+        jornada_1.Jornada.belongsTo(equipo_1.Equipo, { foreignKey: 'idEquipo' });
     }
 }
 exports.DBSquelize = DBSquelize;
