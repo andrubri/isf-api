@@ -127,7 +127,7 @@ class JornadaController {
             if (exist) {
                 const voluntario = new personas_jornada_1.PersonaJornada({
                     idJornada: exist.idJornadas,
-                    idPersona: request.payload.idPersona
+                    idPersona: request.params.hash,
                 });
                 yield voluntario.save();
                 return voluntario;

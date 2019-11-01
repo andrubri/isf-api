@@ -2,10 +2,10 @@
   "database": {
     "mode": "prod",
     "connection": {
-      "host" : "localhost",
-      "user" : "root",
-      "password" : "root",
-      "database" : "projectof",
+      "host" : "us-cdbr-iron-east-05.cleardb.net",
+      "user" : "b649a31ac3d0a0",
+      "password" : "8e061173eb1d508",
+      "database" : "heroku_78d1f2f1d2e3c9d",
       "dialect": "mysql"
     }
   },
