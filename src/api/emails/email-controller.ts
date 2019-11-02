@@ -64,7 +64,7 @@ export class EmailController {
             from: this.configurations.sender,
             subject: 'ISF llamdado',
             text: mensaje,
-            html: `<strong>${mensaje}</strong><br><strong>Recibis este mail
+            html: `${mensaje}<br><br><strong>Recibis este mail
             por estar en el equipo ${equipo}</strong> `,
         };
         sgMail.send(msg);
