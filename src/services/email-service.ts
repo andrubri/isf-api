@@ -8,7 +8,7 @@ export class EmailService {
 
     public static sendEmailEveryDay(): void {
 
-        const emailSchedule = schedule.scheduleJob('*/20 * * * * *', function () {
+        const emailSchedule = schedule.scheduleJob('*/50 * * * * *', function () {
             console.log('Test email cron function!');
         });
 
