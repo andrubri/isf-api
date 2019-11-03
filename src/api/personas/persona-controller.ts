@@ -32,6 +32,11 @@ export default class PersonaController {
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
+
+            const origenContacto: OrigenContacto = await OrigenContacto.create({
+                descripcion: request.payload.origenContacto.descripcion,
+            });
+
             const persona: Persona = await Persona.create({
                 nombre: request.payload.persona.nombre,
                 apellido: request.payload.persona.apellido,
@@ -52,12 +57,10 @@ export default class PersonaController {
                 estado: request.payload.persona.estado,
                 dieta: request.payload.persona.dieta,
                 fechaNacimiento: request.payload.persona.fechaNacimiento,
-                idOrigenContacto: request.payload.persona.idOrigenContacto,
+                idOrigenContacto: origenContacto.idOrigenContacto,
             });
 
-            const origenContacto: OrigenContacto = await OrigenContacto.create({
-                descripcion: request.payload.origenContacto.descripcion,
-            });
+            
             const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.create({
                 idPersona: persona.idPersona,
                 nombre: request.payload.contactoEmergencia.nombre,
@@ -65,17 +68,20 @@ export default class PersonaController {
                 relacion: request.payload.contactoEmergencia.relacion,
                 telefono: request.payload.contactoEmergencia.telefono
             });
-            const datosSeguro: DatosSeguro = await DatosSeguro.create({
-                idObraSocial: request.payload.datosSeguro.idObraSocial,
-                emfermedades: request.payload.datosSeguro.emfermedades,
-                grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                medicaciones: request.payload.datosSeguro.medicaciones
-            });
 
             const obraSocial: ObraSocial = await ObraSocial.create({
                 empresa: request.payload.obraSocial.empresa,
                 plan: request.payload.obraSocial.plan,
             });
+
+            const datosSeguro: DatosSeguro = await DatosSeguro.create({
+                idObraSocial: obraSocial.idObraSocial,
+                emfermedades: request.payload.datosSeguro.emfermedades,
+                grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
+                medicaciones: request.payload.datosSeguro.medicaciones
+            });
+
+            
 
 
             return {
