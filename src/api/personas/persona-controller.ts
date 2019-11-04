@@ -28,6 +28,11 @@ export default class PersonaController {
         return result;
     }
 
+    public async obtenerPersonaXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Persona> {
+        const result: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
+        return result;
+    }
+
 
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const {error, value} = personaSchema.validate(request.payload);
@@ -150,7 +155,7 @@ export default class PersonaController {
 
                 return await Persona.findOne({where: {idPersona: request.params.id}});
             } catch (e) {
-                return e;
+                return await Persona.findOne({where: {idPersona: request.params.id}});
             }
         } else {
             return response.response().code(400);

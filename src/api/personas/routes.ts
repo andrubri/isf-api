@@ -8,8 +8,8 @@ import * as Joi from "joi";
 
 export default function (server: Hapi.Server, io: socketio.Server, serverConfigs: IServerConfigurations) {
 
-    const jornadaController = new PersonaController(serverConfigs, io);
-    server.bind(jornadaController);
+    const personaController = new PersonaController(serverConfigs, io);
+    server.bind(personaController);
 
     server.route([
         {
@@ -18,7 +18,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Verificar token.",
-                handler: jornadaController.obtenerPersonas,
+                handler: personaController.obtenerPersonas,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -39,7 +39,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
 
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         },
@@ -49,7 +49,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Verificar token.",
-                handler: jornadaController.obtenerPersonas,
+                handler: personaController.obtenerPersonaXId,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -65,7 +65,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         },
@@ -75,7 +75,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Crear Persona",
-                handler: jornadaController.crearPersona,
+                handler: personaController.crearPersona,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -91,7 +91,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         },
@@ -101,7 +101,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Actualizar Persona",
-                handler: jornadaController.actualizarPersona,
+                handler: personaController.actualizarPersona,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -117,7 +117,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         },
@@ -127,7 +127,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Eliminamos Persona",
-                handler: jornadaController.eliminarPersona,
+                handler: personaController.eliminarPersona,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -143,7 +143,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         },
@@ -153,7 +153,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             options: {
                 auth: "firebase",
                 description: "Trae los coordinadores",
-                handler: jornadaController.obtenerCoordinador,
+                handler: personaController.obtenerCoordinador,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
@@ -169,7 +169,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                         },
                     },
                 },
-                tags: ["api", "jornadas"],
+                tags: ["api", "personas"],
                 validate: {},
             },
         }]);
