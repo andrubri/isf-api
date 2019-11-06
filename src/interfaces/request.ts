@@ -25,6 +25,7 @@ export interface IReqUser extends IRequest {
         email: string;
         clave: string;
         idPerfil: number;
+        idPersona: number;
         apellido: string;
     }
 }

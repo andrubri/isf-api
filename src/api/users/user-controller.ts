@@ -44,6 +44,7 @@ export default class UserController {
                 email: request.payload.email,
                 idPerfil: request.payload.idPerfil,
                 nombre: request.payload.nombre,
+                idPersona:request.payload.idPersona,
                 token: userFireBase.uid,
             });
 
