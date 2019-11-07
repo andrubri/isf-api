@@ -47,8 +47,8 @@ export class DBSquelize {
     }
 
     createRelations(): void {
-        Usuario.belongsTo(Persona, {foreignKey: 'idPersona'});
-        Persona.hasOne(Usuario,{ foreignKey: 'idPersona' });
+        Usuario.belongsTo(Persona, {foreignKey: 'idPersona',constraints:false});
+        Persona.hasOne(Usuario,{ foreignKey: 'idPersona'}); 
         
         Usuario.belongsTo(Perfil,{foreignKey:'idPerfil'})
         Perfil.hasOne(Usuario,{ foreignKey: 'idPerfil' });
