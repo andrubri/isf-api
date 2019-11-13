@@ -70,7 +70,8 @@ export async function init(
         Emails.init(server, io, configs);
         PersonasJornadas.init(server,io,configs);
         console.log('Routes registered sucessfully.');
-        EmailService.sendEmailEveryDay();
+        //EmailService.sendEmailEveryDay();
+        //await EmailService.prepareDBforInscriptions(1);
         return server;
     } catch (err) {
         console.log('Error starting server: ', err);

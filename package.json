@@ -17,6 +17,7 @@
   "dependencies": {
     "@sendgrid/mail": "^6.4.0",
     "@types/socket.io": "^2.1.2",
+    "@types/uuid": "^3.4.6",
     "dotenv": "^8.0.0",
     "file-type": "^12.2.0",
     "firebase": "^6.1.0",
