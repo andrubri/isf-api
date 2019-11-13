@@ -25,7 +25,7 @@ export class EmailController {
 
     public async enviarEmail(request: IRequest, response: Hapi.ResponseToolkit) {
 
-        this.emailService.prepareEmail('tom.manrey@gmail.com', 'Hola ISF',this.configurations.sender,'');
+        this.emailService.prepareEmail(this.configurations.sender, 'Hola ISF','tom.manrey@gmail.com','');
 
         return response.response("Mail enviado").code(200);
 
@@ -46,9 +46,9 @@ export class EmailController {
             });
 
             voluntariosFound.forEach(voluntario =>
-                this.emailService.prepareEmail(voluntario.email,
+                this.emailService.prepareEmail(this.configurations.sender,
                     request.payload.mensaje,
-                    this.configurations.sender,
+                    voluntario.email,
                     `<br><br><strong>Recibis este mail
             por estar en el equipo ${exist.nombre}</strong> `))
 

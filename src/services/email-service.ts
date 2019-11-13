@@ -53,14 +53,37 @@ export class EmailService {
     public async prepareEmail(from: string,mensaje:string, to:string,mensajeExtra:string) {
 
         const msg = {
-            to: from,
-            from: to,
+            to: to,
+            from: from,
             subject: 'ISF llamdado',
             text: mensaje,
             html: mensajeExtra,
         };
         sgMail.send(msg);
 
+    }
+
+    public  async sendEmailWithLink(idJornada: number): Promise<any> {
+       
+        const personas: any[] = await Persona.findAll({
+            limit:1,
+            include: [{
+                model: Jornada,
+                through: { where: { idJornada: idJornada } },
+                required: true,
+            
+            }]
+        });
+
+        for (const persona of personas) {
+            
+            this.prepareEmail("isf.voluntarios@gmail.com",
+            "anotate",
+            persona.email,
+            `your path is isf/${persona.Jornadas[0].PersonaJornada.path}`)
+
+        }
+        return personas;
     }
 
     
