@@ -5,11 +5,12 @@ import { PersonaJornada } from "../database/entidades/personas_jornada";
 import {  v4 as uuid } from 'uuid'
 
 const schedule = require('node-schedule');
+const sgMail = require('@sendgrid/mail');
 
 export class EmailService {
 
-    constructor() {
-
+    constructor(apiKey: string) {
+        sgMail.setApiKey(apiKey);
     };
 
     public static sendEmailEveryDay(): void {
@@ -49,6 +50,20 @@ export class EmailService {
         } else {
             throw new Error(`No se encontro la jornada de id: ${idJornada}`)
         }
+
+    }
+
+    public async prepareEmail(from: string,mensaje:string,equipo: string, to:string) {
+
+        const msg = {
+            to: from,
+            from: to,
+            subject: 'ISF llamdado',
+            text: mensaje,
+            html: `${mensaje}<br><br><strong>Recibis este mail
+            por estar en el equipo ${equipo}</strong> `,
+        };
+        sgMail.send(msg);
 
     }
 

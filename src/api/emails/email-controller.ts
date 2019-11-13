@@ -5,26 +5,27 @@ import FirebaseAdmin from "../../lib/firebase";
 import { IEmailConfiguration, IServerConfigurations, getEmailConfig } from "../../configurations";
 import { Equipo } from "../../database/entidades/equipo";
 import { Persona } from "../../database/entidades/persona";
+import { EmailService } from "../../services/email-service";
 
-const sgMail = require('@sendgrid/mail');
 
 export class EmailController {
 
     private configs: IServerConfigurations;
     private firebaseAdmin: any;
     private configurations: IEmailConfiguration;
+    private emailService: EmailService;
 
     constructor(configs: IServerConfigurations, io: socketio.Server) {
         this.configs = configs;
         this.firebaseAdmin = FirebaseAdmin.get();
         this.configurations = getEmailConfig();
-        sgMail.setApiKey(this.configurations.api_key);
+        this.emailService = new EmailService(this.configurations.api_key);
 
     }
 
     public async enviarEmail(request: IRequest, response: Hapi.ResponseToolkit) {
 
-        this.prepareEmail('tom.manrey@gmail.com','Hola ISF','Cyber');
+        this.emailService.prepareEmail('tom.manrey@gmail.com','Hola ISF','Cyber',this.configurations.sender);
 
         return response.response("Mail enviado").code(200);
 
@@ -45,8 +46,8 @@ export class EmailController {
             });
 
             voluntariosFound.forEach(voluntario => 
-                this.prepareEmail(voluntario.email,
-                    request.payload.mensaje,exist.nombre))
+                this.emailService.prepareEmail(voluntario.email,
+                    request.payload.mensaje,exist.nombre,this.configurations.sender))
 
             return voluntariosFound;
 
@@ -57,17 +58,4 @@ export class EmailController {
 
     }
 
-    private async prepareEmail(email: string,mensaje:string,equipo: string) {
-
-        const msg = {
-            to: email,
-            from: this.configurations.sender,
-            subject: 'ISF llamdado',
-            text: mensaje,
-            html: `${mensaje}<br><br><strong>Recibis este mail
-            por estar en el equipo ${equipo}</strong> `,
-        };
-        sgMail.send(msg);
-
-    }
 }
