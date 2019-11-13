@@ -23,9 +23,6 @@ export class EmailService {
 
     public static async prepareDBforInscriptions(idJornada: number) {
 
-        //Get all personas from equipo
-        //Create personasJornadas with ids
-        //save in db
         const foundJornada: Jornada = await Jornada.findOne({ where: { idJornadas: idJornada } });
 
         if (foundJornada) {
@@ -53,15 +50,14 @@ export class EmailService {
 
     }
 
-    public async prepareEmail(from: string,mensaje:string,equipo: string, to:string) {
+    public async prepareEmail(from: string,mensaje:string, to:string,mensajeExtra:string) {
 
         const msg = {
             to: from,
             from: to,
             subject: 'ISF llamdado',
             text: mensaje,
-            html: `${mensaje}<br><br><strong>Recibis este mail
-            por estar en el equipo ${equipo}</strong> `,
+            html: mensajeExtra,
         };
         sgMail.send(msg);
 
