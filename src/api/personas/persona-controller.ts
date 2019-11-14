@@ -12,6 +12,7 @@ import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
 import { personaSchema } from "./persona-validator";
 import { Usuario } from "../../database/entidades/usuario";
+import { where } from "sequelize/types";
 
 export default class PersonaController {
     private configs: IServerConfigurations;
@@ -80,6 +81,7 @@ export default class PersonaController {
             });
 
             const datosSeguro: DatosSeguro = await DatosSeguro.create({
+                idPersona: persona.idPersona,
                 idObraSocial: obraSocial.idObraSocial,
                 emfermedades: request.payload.datosSeguro.emfermedades,
                 grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
@@ -106,6 +108,11 @@ export default class PersonaController {
         const exist: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
         if (exist) {
             try {
+
+                const [contC, origenContacto] = await OrigenContacto.update({
+                    descripcion: request.payload.origenContacto.descripcion,
+                }, { where: { idOrigenContacto: exist.idOrigenContacto } });
+
                 const [cont, persona] = await Persona.update({
                     nombre: request.payload.persona.nombre,
                     apellido: request.payload.persona.apellido,
@@ -145,16 +152,15 @@ export default class PersonaController {
                     idObraSocial: request.payload.datosSeguro.idObraSocial,
                 }, { where: { idPersona: request.params.id } });
 
+
+                const changedDatoSeguro = await DatosSeguro.findOne({
+                    where: { idPersona: request.params.id }
+                })
+
                 const [contO, obraSocial] = await ObraSocial.update({
                     empresa: request.payload.obraSocial.empresa,
                     plan: request.payload.obraSocial.plan,
-                }, { where: { idObraSocial: datosSeguro[0].idObraSocial } });
-
-                const [contC, origenContacto] = await ObraSocial.update({
-                    descripcion: request.payload.origenContacto.descripcion,
-                }, { where: { idOrigenContacto: persona[0].idOrigenContacto } });
-
-                
+                }, { where: { idObraSocial: changedDatoSeguro.idObraSocial } });
 
                 return await Persona.findOne({ where: { idPersona: request.params.id } });
             } catch (e) {

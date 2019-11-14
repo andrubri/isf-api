@@ -21,6 +21,9 @@ export function initDatosSeguro(sequelize) {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
+        idPersona: {
+            type: DataTypes.INTEGER.UNSIGNED,
+        },
         emfermedades: {
             allowNull: true,
             type: new DataTypes.STRING(255),
