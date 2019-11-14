@@ -40,7 +40,7 @@ export default class PersonaController {
         if (!error) {
 
             const origenContacto: OrigenContacto = await OrigenContacto.create({
-                descripcion: request.payload.origenContacto.descripcion,
+                descripcion: request.payload.persona.descripcion,
             });
 
             const persona: Persona = await Persona.create({
@@ -69,23 +69,23 @@ export default class PersonaController {
 
             const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.create({
                 idPersona: persona.idPersona,
-                nombre: request.payload.contactoEmergencia.nombre,
-                apellido: request.payload.contactoEmergencia.apellido,
-                relacion: request.payload.contactoEmergencia.relacion,
-                telefono: request.payload.contactoEmergencia.telefono
+                nombre: request.payload.persona.nombreContacto,
+                apellido: request.payload.persona.apellidoContacto,
+                relacion: request.payload.persona.relacion,
+                telefono: request.payload.persona.telefonoContacto
             });
 
             const obraSocial: ObraSocial = await ObraSocial.create({
-                empresa: request.payload.obraSocial.empresa,
-                plan: request.payload.obraSocial.plan,
+                empresa: request.payload.persona.empresa,
+                plan: request.payload.persona.plan,
             });
 
             const datosSeguro: DatosSeguro = await DatosSeguro.create({
                 idPersona: persona.idPersona,
                 idObraSocial: obraSocial.idObraSocial,
-                emfermedades: request.payload.datosSeguro.emfermedades,
-                grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                medicaciones: request.payload.datosSeguro.medicaciones
+                emfermedades: request.payload.persona.emfermedades,
+                grupoSanguineo: request.payload.persona.grupoSanguineo,
+                medicaciones: request.payload.persona.medicaciones
             });
 
 
@@ -110,7 +110,7 @@ export default class PersonaController {
             try {
 
                 const [contC, origenContacto] = await OrigenContacto.update({
-                    descripcion: request.payload.origenContacto.descripcion,
+                    descripcion: request.payload.persona.descripcion,
                 }, { where: { idOrigenContacto: exist.idOrigenContacto } });
 
                 const [cont, persona] = await Persona.update({
@@ -139,17 +139,17 @@ export default class PersonaController {
                 await this.actualizarUsuario(request);
 
                 const [contE, contactoEmergencia] = await ContactoEmergencia.update({
-                    nombre: request.payload.contactoEmergencia.nombre,
-                    apellido: request.payload.contactoEmergencia.apellido,
-                    telefono: request.payload.contactoEmergencia.telefono,
-                    relacion: request.payload.contactoEmergencia.relacion,
+                    nombre: request.payload.persona.nombreContacto,
+                    apellido: request.payload.persona.apellidoContacto,
+                    telefono: request.payload.persona.telefonoContacto,
+                    relacion: request.payload.persona.relacion,
                 }, { where: { idPersona: request.params.id } });
 
                 const [contD, datosSeguro] = await DatosSeguro.update({
-                    grupoSanguineo: request.payload.datosSeguro.grupoSanguineo,
-                    emfermedades: request.payload.datosSeguro.emfermedades,
-                    medicaciones: request.payload.datosSeguro.medicaciones,
-                    idObraSocial: request.payload.datosSeguro.idObraSocial,
+                    grupoSanguineo: request.payload.persona.grupoSanguineo,
+                    emfermedades: request.payload.persona.emfermedades,
+                    medicaciones: request.payload.persona.medicaciones,
+                    idObraSocial: request.payload.persona.idObraSocial,
                 }, { where: { idPersona: request.params.id } });
 
 
@@ -158,8 +158,8 @@ export default class PersonaController {
                 })
 
                 const [contO, obraSocial] = await ObraSocial.update({
-                    empresa: request.payload.obraSocial.empresa,
-                    plan: request.payload.obraSocial.plan,
+                    empresa: request.payload.persona.empresa,
+                    plan: request.payload.persona.plan,
                 }, { where: { idObraSocial: changedDatoSeguro.idObraSocial } });
 
                 return await Persona.findOne({ where: { idPersona: request.params.id } });

@@ -121,27 +121,17 @@ export interface IReqPersona extends IRequest {
             dieta: string;
             fechaNacimiento: Date;
             idOrigenContacto: number;
-        };
-        origenContacto: {
-            idOrigenContacto: number;
             descripcion: string;
-        };
-        contactoEmergencia: {
             idContactoEmergencia: number;
             idPersona: number;
-            nombre: string;
-            apellido: string;
-            telefono: string;
+            nombreContacto: string;
+            apellidoContacto: string;
+            telefonoContacto: string;
             relacion: string;
-        };
-        datosSeguro: {
             idDatosSeguro: number;
             grupoSanguineo: string;
             emfermedades: string;
             medicaciones: string;
-            idObraSocial: number;
-        }
-        obraSocial: {
             idObraSocial: number;
             empresa: string;
             plan: string;
