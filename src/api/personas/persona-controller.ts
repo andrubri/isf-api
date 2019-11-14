@@ -48,7 +48,7 @@ export default class PersonaController {
             where:{idPersona: persona.idPersona}
         });
 
-        let answer = {
+        let value = {
             idPersona: persona.idPersona,
             nombre : persona.nombre,
             apellido: persona.apellido,
@@ -80,9 +80,7 @@ export default class PersonaController {
             telefonoContacto: contactoEmergencia.telefono,
             relacion:contactoEmergencia.relacion
         }
-        
-     
-        return answer;
+        return value;
     }
 
 
