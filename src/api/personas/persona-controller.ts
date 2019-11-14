@@ -29,9 +29,60 @@ export default class PersonaController {
         return result;
     }
 
-    public async obtenerPersonaXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Persona> {
-        const result: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
-        return result;
+    public async obtenerPersonaXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<any> {
+        const persona: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
+        
+        const origenContacto: OrigenContacto = await OrigenContacto.findOne({
+            where:{idOrigenContacto: persona.idOrigenContacto}
+        })
+
+        const datosSeguro: DatosSeguro = await DatosSeguro.findOne({
+            where:{idPersona: persona.idPersona}
+        })
+
+        const obraSocial: ObraSocial = await ObraSocial.findOne({
+            where:{idObraSocial: datosSeguro.idObraSocial}
+        })
+
+        const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.findOne({
+            where:{idPersona: persona.idPersona}
+        });
+
+        let answer = {
+            idPersona: persona.idPersona,
+            nombre : persona.nombre,
+            apellido: persona.apellido,
+            idExterno: persona.idExterno,
+            tipoDocumento: persona.tipoDocumento,
+            idDocumento: persona.idDocumento,
+            paisOrigen: persona.paisOrigen,
+            paisResidencia: persona.paisResidencia,
+            provinciaResidencia: persona.provinciaResidencia,
+            ciudadResidencia: persona.ciudadResidencia,
+            telefono: persona.telefono,
+            email: persona.email,
+            nivelEstudios: persona.nivelEstudios,
+            carrera: persona.carrera,
+            universidad: persona.universidad,
+            ocupacion: persona.ocupacion,
+            comentarios: persona.comentarios,
+            estado: persona.estado,
+            dieta: persona.dieta,
+            fechaNacimiento: persona.fechaNacimiento,
+    	    descripcion: origenContacto.descripcion,
+    	    empresa: obraSocial.empresa,
+		    plan: obraSocial.plan,
+    	    grupoSanguineo: datosSeguro.grupoSanguineo,
+		    emfermedades: datosSeguro.emfermedades,
+		    medicaciones: datosSeguro.medicaciones,
+    	    nombreContacto: contactoEmergencia.nombre,
+            apellidoContacto: contactoEmergencia.apellido,
+            telefonoContacto: contactoEmergencia.telefono,
+            relacion:contactoEmergencia.relacion
+        }
+        
+     
+        return answer;
     }
 
 
