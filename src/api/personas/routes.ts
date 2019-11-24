@@ -96,6 +96,32 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             },
         },
         {
+            method: "POST",
+            path: "/persona/externo",
+            options: {
+                auth: false,
+                description: "Crear Persona sin Auth",
+                handler: personaController.crearPersonaExterno,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Token Verificado.",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "personas"],
+                validate: {},
+            },
+        },
+        {
             method: "PUT",
             path: "/persona/{id}",
             options: {

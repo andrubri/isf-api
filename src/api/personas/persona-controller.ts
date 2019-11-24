@@ -152,6 +152,36 @@ export default class PersonaController {
         }
     }
 
+    public async crearPersonaExterno(request: IReqPersona, response: Hapi.ResponseToolkit) {
+        const { error, value } = personaSchema.validate(request.payload);
+        if (!error) {
+            const persona: Persona = await Persona.create({
+                nombre: request.payload.persona.nombre,
+                apellido: request.payload.persona.apellido,
+                idExterno: request.payload.persona.idExterno,
+                tipoDocumento: request.payload.persona.tipoDocumento,
+                idDocumento: request.payload.persona.idDocumento,
+                paisOrigen: request.payload.persona.paisOrigen,
+                paisResidencia: request.payload.persona.paisResidencia,
+                provinciaResidencia: request.payload.persona.provinciaResidencia,
+                ciudadResidencia: request.payload.persona.ciudadResidencia,
+                telefono: request.payload.persona.telefono,
+                email: request.payload.persona.email,
+                nivelEstudios: request.payload.persona.nivelEstudios,
+                carrera: request.payload.persona.carrera,
+                universidad: request.payload.persona.universidad,
+                ocupacion: request.payload.persona.ocupacion,
+                estado: "Inscripto",
+                fechaNacimiento: request.payload.persona.fechaNacimiento,
+            });
+
+            return {
+                persona: persona,
+            };
+        } else {
+            return response.response(error.message).message("No se encontro request de persona").code(400);
+        }
+    }
 
     public async actualizarPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const exist: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
