@@ -1,6 +1,6 @@
 import * as Hapi from 'hapi';
 import {IPlugin, IPluginOptions} from './plugins/interfaces';
-import { IServerConfigurations} from './configurations';
+import {IServerConfigurations} from './configurations';
 import FirebaseAdmin from "./lib/firebase";
 
 //apis
@@ -11,7 +11,7 @@ import * as Personas from './api/personas';
 import * as Emails from './api/emails';
 import * as socketio from 'socket.io';
 import * as PersonasJornadas from './api/personas-jornadas';
-import { EmailService } from './services/email-service';
+import {CronService} from './services/cronService';
 
 export async function init(
     configs: IServerConfigurations
@@ -21,11 +21,11 @@ export async function init(
         const server = new Hapi.Server({
             port: port,
             routes: {
-            cors: {
-              origin: ['*'],
-              additionalHeaders: ['x-token-token']
+                cors: {
+                    origin: ['*'],
+                    additionalHeaders: ['x-token-token']
+                }
             }
-          }
         });
 
         //Socket.IO
@@ -68,9 +68,13 @@ export async function init(
         Jornadas.init(server, io, configs);
         Personas.init(server, io, configs);
         Emails.init(server, io, configs);
-        PersonasJornadas.init(server,io,configs);
+        PersonasJornadas.init(server, io, configs);
         console.log('Routes registered sucessfully.');
-        EmailService.sendEmailEveryDay();
+
+        CronService.sendEmailEveryDay(server, io, configs);
+        CronService.checkVoluntariosActivos(server, io, configs);
+        console.log('Crons registered sucessfully.');
+
         return server;
     } catch (err) {
         console.log('Error starting server: ', err);
