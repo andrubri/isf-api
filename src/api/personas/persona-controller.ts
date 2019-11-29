@@ -40,9 +40,9 @@ export default class PersonaController {
             where:{idPersona: persona.idPersona}
         })
 
-        const obraSocial: ObraSocial = await ObraSocial.findOne({
+        const obraSocial: ObraSocial = (datosSeguro) ? await ObraSocial.findOne({
             where:{idObraSocial: datosSeguro.idObraSocial}
-        })
+        }) : null;
 
         const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.findOne({
             where:{idPersona: persona.idPersona}
@@ -69,16 +69,16 @@ export default class PersonaController {
             estado: persona.estado,
             dieta: persona.dieta,
             fechaNacimiento: persona.fechaNacimiento,
-    	    descripcion: origenContacto.descripcion,
-    	    empresa: obraSocial.empresa,
-		    plan: obraSocial.plan,
-    	    grupoSanguineo: datosSeguro.grupoSanguineo,
-		    emfermedades: datosSeguro.emfermedades,
-		    medicaciones: datosSeguro.medicaciones,
-    	    nombreContacto: contactoEmergencia.nombre,
-            apellidoContacto: contactoEmergencia.apellido,
-            telefonoContacto: contactoEmergencia.telefono,
-            relacion:contactoEmergencia.relacion
+    	    descripcion: (origenContacto) ? origenContacto.descripcion : null,
+    	    empresa: (obraSocial) ? obraSocial.empresa : null,
+		    plan: (obraSocial) ? obraSocial.plan : null,
+    	    grupoSanguineo: (datosSeguro) ? datosSeguro.grupoSanguineo : null,
+		    emfermedades: (datosSeguro) ? datosSeguro.emfermedades : null,
+		    medicaciones: (datosSeguro) ? datosSeguro.medicaciones : null,
+    	    nombreContacto: (contactoEmergencia) ? contactoEmergencia.nombre : null,
+            apellidoContacto: (contactoEmergencia) ? contactoEmergencia.apellido : null,
+            telefonoContacto: (contactoEmergencia) ? contactoEmergencia.telefono : null,
+            relacion: (contactoEmergencia) ? contactoEmergencia.relacion : null
         }
         return value;
     }
