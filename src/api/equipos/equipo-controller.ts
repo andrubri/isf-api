@@ -1,14 +1,16 @@
 import * as admin from "firebase-admin";
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
-import { IServerConfigurations } from "../../configurations";
-import { Usuario } from "../../database/entidades/usuario";
-import { IReqEquipo, IReqJornada, IRequest, IReqUser, IReqVoluntario, IReqJornadas } from "../../interfaces/request";
+import {IServerConfigurations} from "../../configurations";
+import {Usuario} from "../../database/entidades/usuario";
+import {IReqEquipo, IReqJornada, IRequest, IReqUser, IReqVoluntario, IReqJornadas} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
-import { Equipo } from "../../database/entidades/equipo";
-import { EquipoPersona } from "../../database/entidades/equipo_persona";
-import { Jornada } from "../../database/entidades/jornada";
-import { Persona } from "../../database/entidades/persona";
+import {Equipo} from "../../database/entidades/equipo";
+import {EquipoPersona} from "../../database/entidades/equipo_persona";
+import {Jornada} from "../../database/entidades/jornada";
+import {Persona} from "../../database/entidades/persona";
+import {PersonaJornada} from "../../database/entidades/personas_jornada";
+import {DBSquelize} from "../../database";
 
 export default class EquipoController {
     private configs: IServerConfigurations;
@@ -27,12 +29,12 @@ export default class EquipoController {
     }
 
     public async obtenerEquipoXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Equipo> {
-        const result: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const result: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         return result;
     }
 
     public async crearEquipo(request: IReqEquipo, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { nombre: request.payload.equipo.nombre } });
+        const exist: Equipo = await Equipo.findOne({where: {nombre: request.payload.equipo.nombre}});
         if (!exist) {
             const act: Equipo = await Equipo.create({
                 nombre: request.payload.equipo.nombre,
@@ -59,7 +61,7 @@ export default class EquipoController {
     }
 
     public async actualizarEquipo(request: IReqEquipo, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             try {
                 const [cont, act] = await Equipo.update({
@@ -71,7 +73,7 @@ export default class EquipoController {
                     ciudad: request.payload.equipo.ciudad,
                     fechaInicio: request.payload.equipo.fechaInicio,
                     fechaFin: request.payload.equipo.fechaFin
-                }, { where: { idEquipo: request.params.id } });
+                }, {where: {idEquipo: request.params.id}});
 
                 for (let item of request.payload.coordinadores) {
                     await EquipoPersona.create({
@@ -81,7 +83,7 @@ export default class EquipoController {
                     });
                 }
 
-                const changedRow: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+                const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
                 return changedRow;
             } catch (e) {
                 return e;
@@ -92,13 +94,13 @@ export default class EquipoController {
     }
 
     public async eliminarEquipo(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             const [cont, act] = await Equipo.update({
                 fechaFin: new Date(),
-            }, { where: { idEquipo: request.params.id } });
+            }, {where: {idEquipo: request.params.id}});
 
-            const changedRow: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+            const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
             return changedRow;
         } else {
             return response.response().code(400);
@@ -106,13 +108,13 @@ export default class EquipoController {
     }
 
     public async obtenerCoordinadoresXId(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-        
+
             const coordinadores = await Persona.findAll({
                 include: [{
                     model: Equipo,
-                    through: { where: { idRol: '2', idEquipo: exist.idEquipo } },
+                    through: {where: {idRol: '2', idEquipo: exist.idEquipo}},
                     required: true
                 }],
             });
@@ -125,13 +127,13 @@ export default class EquipoController {
     }
 
     public async obtenerVoluntariosXId(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
 
             const asignados = await Persona.findAll({
                 include: [{
                     model: Equipo,
-                    through: { where: { idRol: '1', idEquipo: exist.idEquipo } },
+                    through: {where: {idRol: '1', idEquipo: exist.idEquipo}},
                     required: true
                 }],
             });
@@ -142,9 +144,9 @@ export default class EquipoController {
     }
 
     public async obtenerJornadasXId(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-            const jornadas = await Jornada.findAll({ where: { idEquipo: exist.idEquipo } });
+            const jornadas = await Jornada.findAll({where: {idEquipo: exist.idEquipo}});
             return jornadas;
         } else {
             return response.response().code(400);
@@ -152,7 +154,7 @@ export default class EquipoController {
     }
 
     public async addCoordinadoresEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             const coordinador: EquipoPersona = new EquipoPersona({
                 idEquipo: exist.idEquipo,
@@ -168,7 +170,7 @@ export default class EquipoController {
     }
 
     public async addVoluntariosEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             const voluntario: EquipoPersona = new EquipoPersona({
                 idEquipo: exist.idEquipo,
@@ -184,7 +186,7 @@ export default class EquipoController {
     }
 
     public async addJornadasEquipo(request: IReqJornadas, response: Hapi.ResponseToolkit) {
-        const exist: Equipo = await Equipo.findOne({ where: { idEquipo: request.params.id } });
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             const jornada: Jornada = new Jornada({
                 idEquipo: exist.idEquipo,
@@ -200,5 +202,21 @@ export default class EquipoController {
         }
     }
 
+    public async obtenerEstadisticas(request: IReqJornadas, response: Hapi.ResponseToolkit) {
+        const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
+        if (exist) {
+            const DB = new DBSquelize(null);
+            const estadistica: any = await DB.execute(`
+            SELECT j.idJornadas, j.fecha, count(pj.idJornada) as confirmados, count(pj.confirmacion) as asistencia FROM jornadas j
+            INNER JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
+            WHERE j.idEquipo = :equipo
+            GROUP BY j.idJornadas, j.fecha
+            `, {replacements: {equipo: request.params.id}});
+
+            return estadistica[0];
+        } else {
+            return response.response().code(400);
+        }
+    }
 
 }

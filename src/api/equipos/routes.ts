@@ -306,5 +306,33 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                 tags: ["api", "equipo"],
                 validate: {},
             },
+        },
+        {
+            method: "GET",
+            path: "/equipo/{id}/estadistica",
+            options: {
+                auth: "firebase",
+                description: "Trae las estadisticas de una equipo",
+                handler: equipoController.obtenerEstadisticas,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Trae los datos de las estadisticas",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {
+
+                },
+            },
         }]);
 }
