@@ -86,7 +86,7 @@ export default class EquipoController {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
             const [cont, act] = await Equipo.update({
-                fechaFin: new Date(),
+                fechaBaja: new Date(),
             }, {where: {idEquipo: request.params.id}});
 
             const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
