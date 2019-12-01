@@ -42,7 +42,6 @@ export class CronService {
                     activPersonas.push(pers.idPersona);
                 }
             }
-            console.log("step1: ", activPersonas.length);
 
             data = await DB.execute(`
                 select p.idPersona, count(j.idJornadas) as cantidad
@@ -60,13 +59,15 @@ export class CronService {
                     activPersonas.push(pers.idPersona);
                 }
             }
-            console.log("step2: ", activPersonas.length);
 
             const QueryUpdate = `UPDATE Personas SET estado = :estado
                                  WHERE idPersona IN (:personas)`;
 
-            DB.execute(QueryUpdate, {replacements: {estado: 'Inactivo', personas: inactPersonas}});
-            DB.execute(QueryUpdate, {replacements: {estado: 'Activo', personas: activPersonas}});
+            if (inactPersonas.length > 0)
+                DB.execute(QueryUpdate, {replacements: {estado: 'Inactivo', personas: inactPersonas}});
+
+            if (activPersonas.length > 0)
+                DB.execute(QueryUpdate, {replacements: {estado: 'Activo', personas: activPersonas}});
 
         });
 

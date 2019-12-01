@@ -219,4 +219,23 @@ export default class EquipoController {
         }
     }
 
+    public async obtenerEstadisticasGeneral(request: IReqJornadas, response: Hapi.ResponseToolkit) {
+        const DB = new DBSquelize(null);
+        const estadistica: any = await DB.execute(`
+            SELECT e.idEquipo,
+                   e.nombre,
+                   CONCAT(MONTH(j.fecha), '/', YEAR(j.fecha)) as fecha,
+                   count(pj.idJornada)                        as confirmados,
+                   count(pj.confirmacion)                     as asistencia
+            FROM equipos e
+                     INNER JOIN jornadas j on e.idEquipo = j.idEquipo
+                     LEFT JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
+            GROUP BY e.idEquipo, e.nombre, CONCAT(MONTH(j.fecha), '/', YEAR(j.fecha))
+        `);
+
+        return estadistica[0];
+    }
+
+
+
 }
