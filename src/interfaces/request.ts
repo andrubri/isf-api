@@ -96,6 +96,7 @@ export interface IReqConfirmacion extends IRequest {
 export interface IReqJornadas extends IRequest {
     payload: {
         fecha: Date;
+        descripcion: string;
     };
 }
 

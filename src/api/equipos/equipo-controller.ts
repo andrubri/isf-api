@@ -12,6 +12,7 @@ import {Persona} from "../../database/entidades/persona";
 import {PersonaJornada} from "../../database/entidades/personas_jornada";
 import {DBSquelize} from "../../database";
 import {Rol} from "../../database/entidades/rol";
+import {Op} from "sequelize";
 
 export default class EquipoController {
     private configs: IServerConfigurations;
@@ -210,15 +211,27 @@ export default class EquipoController {
     public async addJornadasEquipo(request: IReqJornadas, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-            const jornada: Jornada = new Jornada({
-                idEquipo: exist.idEquipo,
-                descripcion: '',
-                direccion: '',
-                fecha: request.payload.fecha
+            const existFecha: Jornada = await Jornada.findOne({
+                where: {
+                    fecha: {
+                        [Op.eq]: request.payload.fecha
+                    },
+                    idEquipo: exist.idEquipo
+                }
             });
-            await jornada.save();
+            if (!existFecha) {
+                const jornada: Jornada = new Jornada({
+                    descripcion: request.payload.descripcion,
+                    fecha: request.payload.fecha,
+                    direccion: exist.direccion,
+                    idEquipo: exist.idEquipo
+                });
+                await jornada.save();
 
-            return jornada;
+                return jornada;
+            } else {
+                return response.response('La fecha ingresada ya existe en el equipo').code(400);
+            }
         } else {
             return response.response().code(400);
         }

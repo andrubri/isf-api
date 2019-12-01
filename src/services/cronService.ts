@@ -43,7 +43,8 @@ export class CronService {
                 }
             }
 
-            data = await DB.execute(`
+            if (checkPersonas.length > 0) {
+                data = await DB.execute(`
                 select p.idPersona, count(j.idJornadas) as cantidad
                 from personas p
                 LEFT JOIN personas_jornadas pj ON (pj.idPersona = p.idPersona)
@@ -52,11 +53,12 @@ export class CronService {
                 WHERE p.idPersona IN (:inactivas)
                 GROUP BY p.idPersona`, {replacements: {inactivas: checkPersonas}});
 
-            for (const pers of data[0]) {
-                if (pers.cantidad < 3) {
-                    inactPersonas.push(pers.idPersona);
-                } else {
-                    activPersonas.push(pers.idPersona);
+                for (const pers of data[0]) {
+                    if (pers.cantidad < 3) {
+                        inactPersonas.push(pers.idPersona);
+                    } else {
+                        activPersonas.push(pers.idPersona);
+                    }
                 }
             }
 
