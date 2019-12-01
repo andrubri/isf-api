@@ -67,6 +67,8 @@ export interface IReqEquipo extends IRequest {
             descripcion: string,
             categoria: string,
             estado: string,
+            direccion: string;
+            coordenadas: string;
             provincia: string,
             ciudad: string,
             fechaInicio: Date,

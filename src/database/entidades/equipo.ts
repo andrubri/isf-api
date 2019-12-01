@@ -7,11 +7,14 @@ export class Equipo extends Model {
     public nombre: string;
     public descripcion: string;
     public estado: string;
+    public direccion: string;
+    public coordenadas: string;
     public ciudad: string;
     public provincia: string;
     public categoria: string;
     public fechaInicio: Date;
     public fechaFin: Date;
+    public fechaBaja: Date;
 
     public getPersonas!: HasManyGetAssociationsMixin<Persona>
 }
@@ -35,6 +38,14 @@ export function initEquipo(sequelize) {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
+        direccion: {
+            allowNull: true,
+            type: new DataTypes.STRING(500),
+        },
+        coordenadas: {
+            allowNull: true,
+            type: new DataTypes.STRING(255),
+        },
         ciudad: {
             allowNull: true,
             type: new DataTypes.STRING(255),
@@ -52,6 +63,10 @@ export function initEquipo(sequelize) {
             type: new DataTypes.DATE(),
         },
         fechaFin: {
+            allowNull: true,
+            type: new DataTypes.DATE(),
+        },
+        fechaBaja: {
             allowNull: true,
             type: new DataTypes.DATE(),
         },

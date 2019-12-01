@@ -23,7 +23,7 @@ export default class EquipoController {
     }
 
     public async obtenerEquipo(request: IRequest, response: Hapi.ResponseToolkit): Promise<Equipo[]> {
-        const result: Equipo[] = await Equipo.findAll();
+        const result: Equipo[] = await Equipo.findAll({where: {fechaBaja: null}});
 
         return result || [];
     }
@@ -41,19 +41,14 @@ export default class EquipoController {
                 descripcion: request.payload.equipo.descripcion,
                 categoria: request.payload.equipo.categoria,
                 estado: request.payload.equipo.estado,
+                direccion: request.payload.equipo.direccion,
+                coordenadas: request.payload.equipo.coordenadas,
                 provincia: request.payload.equipo.provincia,
                 ciudad: request.payload.equipo.ciudad,
                 fechaInicio: request.payload.equipo.fechaInicio,
                 fechaFin: request.payload.equipo.fechaFin
             });
 
-            for (let item of request.payload.coordinadores) {
-                EquipoPersona.create({
-                    idPersona: item.idPersona,
-                    idEquipo: act.idEquipo,
-                    idRol: 2
-                });
-            }
             return act;
         } else {
             return response.response("Ya existe una activdad con ese nombre").code(400);
@@ -69,19 +64,13 @@ export default class EquipoController {
                     descripcion: request.payload.equipo.descripcion,
                     categoria: request.payload.equipo.categoria,
                     estado: request.payload.equipo.estado,
+                    direccion: request.payload.equipo.direccion,
+                    coordenadas: request.payload.equipo.coordenadas,
                     provincia: request.payload.equipo.provincia,
                     ciudad: request.payload.equipo.ciudad,
                     fechaInicio: request.payload.equipo.fechaInicio,
                     fechaFin: request.payload.equipo.fechaFin
                 }, {where: {idEquipo: request.params.id}});
-
-                for (let item of request.payload.coordinadores) {
-                    await EquipoPersona.create({
-                        idPersona: item.idPersona,
-                        idEquipo: exist.idEquipo,
-                        idRol: 2
-                    });
-                }
 
                 const changedRow: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
                 return changedRow;
