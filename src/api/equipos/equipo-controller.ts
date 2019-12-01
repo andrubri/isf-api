@@ -11,6 +11,7 @@ import {Jornada} from "../../database/entidades/jornada";
 import {Persona} from "../../database/entidades/persona";
 import {PersonaJornada} from "../../database/entidades/personas_jornada";
 import {DBSquelize} from "../../database";
+import {Rol} from "../../database/entidades/rol";
 
 export default class EquipoController {
     private configs: IServerConfigurations;
@@ -99,11 +100,16 @@ export default class EquipoController {
     public async obtenerCoordinadoresXId(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
         if (exist) {
-
+            const rol: Rol = await Rol.findOne({where: {descripcion: 'Coordinador'}});
             const coordinadores = await Persona.findAll({
                 include: [{
                     model: Equipo,
-                    through: {where: {idRol: '2', idEquipo: exist.idEquipo}},
+                    through: {
+                        where: {
+                            idRol: rol.idRol,
+                            idEquipo: exist.idEquipo
+                        }
+                    },
                     required: true
                 }],
             });
@@ -122,7 +128,12 @@ export default class EquipoController {
             const asignados = await Persona.findAll({
                 include: [{
                     model: Equipo,
-                    through: {where: {idRol: '1', idEquipo: exist.idEquipo}},
+                    through: {
+                        where: {
+                            idRol: (await Rol.findOne({where: {descripcion: 'Voluntario'}})).idRol,
+                            idEquipo: exist.idEquipo
+                        }
+                    },
                     required: true
                 }],
             });
@@ -144,15 +155,26 @@ export default class EquipoController {
 
     public async addCoordinadoresEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
-        if (exist) {
-            const coordinador: EquipoPersona = new EquipoPersona({
-                idEquipo: exist.idEquipo,
-                idPersona: request.payload.idPersona,
-                idRol: 2
+        const existPer: Persona = await Persona.findOne({where: {idPersona: request.payload.idPersona}});
+        if (exist && existPer) {
+            const existRel: EquipoPersona = await EquipoPersona.findOne({
+                where: {
+                    idEquipo: exist.idEquipo,
+                    idPersona: existPer.idPersona
+                }
             });
-            await coordinador.save();
+            if (!existRel) {
+                const coordinador: EquipoPersona = new EquipoPersona({
+                    idEquipo: exist.idEquipo,
+                    idPersona: existPer.idPersona,
+                    idRol: (await Rol.findOne({where: {descripcion: 'Coordinador'}})).idRol
+                });
+                await coordinador.save();
 
-            return coordinador;
+                return coordinador;
+            } else {
+                return response.response("Ya existe una relacion entre el equipo y esta persona").code(400);
+            }
         } else {
             return response.response().code(400);
         }
@@ -160,15 +182,26 @@ export default class EquipoController {
 
     public async addVoluntariosEquipo(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
         const exist: Equipo = await Equipo.findOne({where: {idEquipo: request.params.id}});
-        if (exist) {
-            const voluntario: EquipoPersona = new EquipoPersona({
-                idEquipo: exist.idEquipo,
-                idPersona: request.payload.idPersona,
-                idRol: 1
+        const existPer: Persona = await Persona.findOne({where: {idPersona: request.payload.idPersona}});
+        if (exist && existPer) {
+            const existRel: EquipoPersona = await EquipoPersona.findOne({
+                where: {
+                    idEquipo: exist.idEquipo,
+                    idPersona: existPer.idPersona
+                }
             });
-            await voluntario.save();
+            if (!existRel) {
+                const voluntario: EquipoPersona = new EquipoPersona({
+                    idEquipo: exist.idEquipo,
+                    idPersona: request.payload.idPersona,
+                    idRol: (await Rol.findOne({where: {descripcion: 'Voluntario'}})).idRol
+                });
+                await voluntario.save();
 
-            return voluntario;
+                return voluntario;
+            } else {
+                return response.response("Ya existe una relacion entre el equipo y esta persona").code(400);
+            }
         } else {
             return response.response().code(400);
         }
@@ -224,7 +257,6 @@ export default class EquipoController {
 
         return estadistica[0];
     }
-
 
 
 }

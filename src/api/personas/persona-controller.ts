@@ -1,18 +1,18 @@
 import * as admin from "firebase-admin";
 import * as Hapi from "hapi";
 import * as socketio from "socket.io";
-import { IServerConfigurations } from "../../configurations";
-import { Persona } from "../../database/entidades/persona";
-import { OrigenContacto } from "../../database/entidades/origenContacto";
-import { ContactoEmergencia } from "../../database/entidades/contactoEmergencia";
-import { DatosSeguro } from "../../database/entidades/datosSeguro";
-import { ObraSocial } from "../../database/entidades/obraSocial";
-import { IRequest, IReqPersona } from "../../interfaces/request";
+import {IServerConfigurations} from "../../configurations";
+import {Persona} from "../../database/entidades/persona";
+import {OrigenContacto} from "../../database/entidades/origenContacto";
+import {ContactoEmergencia} from "../../database/entidades/contactoEmergencia";
+import {DatosSeguro} from "../../database/entidades/datosSeguro";
+import {ObraSocial} from "../../database/entidades/obraSocial";
+import {IRequest, IReqPersona} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
-import { personaSchema } from "./persona-validator";
-import { Usuario } from "../../database/entidades/usuario";
-import { where } from "sequelize/types";
+import {personaSchema} from "./persona-validator";
+import {Usuario} from "../../database/entidades/usuario";
+import {where} from "sequelize/types";
 
 export default class PersonaController {
     private configs: IServerConfigurations;
@@ -30,27 +30,27 @@ export default class PersonaController {
     }
 
     public async obtenerPersonaXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<any> {
-        const persona: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
-        
+        const persona: Persona = await Persona.findOne({where: {idPersona: request.params.id}});
+
         const origenContacto: OrigenContacto = await OrigenContacto.findOne({
-            where:{idOrigenContacto: persona.idOrigenContacto}
-        })
+            where: {idOrigenContacto: persona.idOrigenContacto}
+        });
 
         const datosSeguro: DatosSeguro = await DatosSeguro.findOne({
-            where:{idPersona: persona.idPersona}
-        })
+            where: {idPersona: persona.idPersona}
+        });
 
         const obraSocial: ObraSocial = (datosSeguro) ? await ObraSocial.findOne({
-            where:{idObraSocial: datosSeguro.idObraSocial}
+            where: {idObraSocial: datosSeguro.idObraSocial}
         }) : null;
 
         const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.findOne({
-            where:{idPersona: persona.idPersona}
+            where: {idPersona: persona.idPersona}
         });
 
         let value = {
             idPersona: persona.idPersona,
-            nombre : persona.nombre,
+            nombre: persona.nombre,
             apellido: persona.apellido,
             idExterno: persona.idExterno,
             tipoDocumento: persona.tipoDocumento,
@@ -69,23 +69,23 @@ export default class PersonaController {
             estado: persona.estado,
             dieta: persona.dieta,
             fechaNacimiento: persona.fechaNacimiento,
-    	    descripcion: (origenContacto) ? origenContacto.descripcion : null,
-    	    empresa: (obraSocial) ? obraSocial.empresa : null,
-		    plan: (obraSocial) ? obraSocial.plan : null,
-    	    grupoSanguineo: (datosSeguro) ? datosSeguro.grupoSanguineo : null,
-		    emfermedades: (datosSeguro) ? datosSeguro.emfermedades : null,
-		    medicaciones: (datosSeguro) ? datosSeguro.medicaciones : null,
-    	    nombreContacto: (contactoEmergencia) ? contactoEmergencia.nombre : null,
+            descripcion: (origenContacto) ? origenContacto.descripcion : null,
+            empresa: (obraSocial) ? obraSocial.empresa : null,
+            plan: (obraSocial) ? obraSocial.plan : null,
+            grupoSanguineo: (datosSeguro) ? datosSeguro.grupoSanguineo : null,
+            emfermedades: (datosSeguro) ? datosSeguro.emfermedades : null,
+            medicaciones: (datosSeguro) ? datosSeguro.medicaciones : null,
+            nombreContacto: (contactoEmergencia) ? contactoEmergencia.nombre : null,
             apellidoContacto: (contactoEmergencia) ? contactoEmergencia.apellido : null,
             telefonoContacto: (contactoEmergencia) ? contactoEmergencia.telefono : null,
             relacion: (contactoEmergencia) ? contactoEmergencia.relacion : null
-        }
+        };
         return value;
     }
 
 
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
-        const { error, value } = personaSchema.validate(request.payload);
+        const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
 
             const origenContacto: OrigenContacto = await OrigenContacto.create({
@@ -138,8 +138,6 @@ export default class PersonaController {
             });
 
 
-
-
             return {
                 persona: persona,
                 datosSeguro: datosSeguro,
@@ -153,7 +151,7 @@ export default class PersonaController {
     }
 
     public async crearPersonaExterno(request: IReqPersona, response: Hapi.ResponseToolkit) {
-        const { error, value } = personaSchema.validate(request.payload);
+        const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
             const persona: Persona = await Persona.create({
                 nombre: request.payload.persona.nombre,
@@ -184,13 +182,13 @@ export default class PersonaController {
     }
 
     public async actualizarPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
-        const exist: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
+        const exist: Persona = await Persona.findOne({where: {idPersona: request.params.id}});
         if (exist) {
             try {
 
                 const [contC, origenContacto] = await OrigenContacto.update({
                     descripcion: request.payload.persona.descripcion,
-                }, { where: { idOrigenContacto: exist.idOrigenContacto } });
+                }, {where: {idOrigenContacto: exist.idOrigenContacto}});
 
                 const [cont, persona] = await Persona.update({
                     nombre: request.payload.persona.nombre,
@@ -213,7 +211,7 @@ export default class PersonaController {
                     dieta: request.payload.persona.dieta,
                     fechaNacimiento: request.payload.persona.fechaNacimiento,
                     idOrigenContacto: request.payload.persona.idOrigenContacto,
-                }, { where: { idPersona: request.params.id } });
+                }, {where: {idPersona: request.params.id}});
 
                 await this.actualizarUsuario(request);
 
@@ -222,28 +220,28 @@ export default class PersonaController {
                     apellido: request.payload.persona.apellidoContacto,
                     telefono: request.payload.persona.telefonoContacto,
                     relacion: request.payload.persona.relacion,
-                }, { where: { idPersona: request.params.id } });
+                }, {where: {idPersona: request.params.id}});
 
                 const [contD, datosSeguro] = await DatosSeguro.update({
                     grupoSanguineo: request.payload.persona.grupoSanguineo,
                     emfermedades: request.payload.persona.emfermedades,
                     medicaciones: request.payload.persona.medicaciones,
                     idObraSocial: request.payload.persona.idObraSocial,
-                }, { where: { idPersona: request.params.id } });
+                }, {where: {idPersona: request.params.id}});
 
 
                 const changedDatoSeguro = await DatosSeguro.findOne({
-                    where: { idPersona: request.params.id }
-                })
+                    where: {idPersona: request.params.id}
+                });
 
                 const [contO, obraSocial] = await ObraSocial.update({
                     empresa: request.payload.persona.empresa,
                     plan: request.payload.persona.plan,
-                }, { where: { idObraSocial: changedDatoSeguro.idObraSocial } });
+                }, {where: {idObraSocial: changedDatoSeguro.idObraSocial}});
 
-                return await Persona.findOne({ where: { idPersona: request.params.id } });
+                return await Persona.findOne({where: {idPersona: request.params.id}});
             } catch (e) {
-                return await Persona.findOne({ where: { idPersona: request.params.id } });
+                return await Persona.findOne({where: {idPersona: request.params.id}});
             }
         } else {
             return response.response().code(400);
@@ -251,10 +249,10 @@ export default class PersonaController {
     }
 
     public async eliminarPersona(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Persona = await Persona.findOne({ where: { idPersona: request.params.id } });
+        const exist: Persona = await Persona.findOne({where: {idPersona: request.params.id}});
         if (exist) {
             await this.eliminarUsuario(request);
-            await Persona.destroy({ where: { idPersona: request.params.id } });
+            await Persona.destroy({where: {idPersona: request.params.id}});
             return exist;
         } else {
             return response.response().code(400);
@@ -263,8 +261,8 @@ export default class PersonaController {
 
     public async obtenerCoordinador(request: IRequest, response: Hapi.ResponseToolkit) {
         const result: Persona[] = await Persona.findAll({
-            include: [{ model: Usuario, required: true }]
-        }
+                include: [{model: Usuario, required: true}]
+            }
         );
 
         return result;
@@ -272,7 +270,7 @@ export default class PersonaController {
 
 
     private async actualizarUsuario(request) {
-        const exist: Usuario = await Usuario.findOne({ where: { idPersona: request.params.id } });
+        const exist: Usuario = await Usuario.findOne({where: {idPersona: request.params.id}});
         if (exist) {
             try {
                 const [cont, User] = await Usuario.update({
@@ -280,7 +278,7 @@ export default class PersonaController {
                     email: request.payload.persona.email,
                     idPerfil: request.payload.persona.idPerfil,
                     nombre: request.payload.persona.nombre,
-                }, { where: { idPersona: request.params.id } });
+                }, {where: {idPersona: request.params.id}});
 
                 const fireData: UpdateRequest = {
                     displayName: request.payload.persona.nombre,
@@ -289,7 +287,7 @@ export default class PersonaController {
                 };
                 await this.firebaseAdmin.auth().updateUser(request.params.id, fireData);
 
-                return await Usuario.findOne({ where: { fechaBaja: null, token: request.params.id } });
+                return await Usuario.findOne({where: {fechaBaja: null, token: request.params.id}});
             } catch (e) {
                 return e;
             }
@@ -298,11 +296,11 @@ export default class PersonaController {
     }
 
     public async eliminarUsuario(request) {
-        const exist: Usuario = await Usuario.findOne({ where: { idPersona: request.params.id } });
+        const exist: Usuario = await Usuario.findOne({where: {idPersona: request.params.id}});
         if (exist) {
             const [cont, user] = await Usuario.update({
                 fechaBaja: new Date()
-            }, { where: { idPersona: request.params.id } });
+            }, {where: {idPersona: request.params.id}});
 
             const fireData: UpdateRequest = {
                 disabled: true,
@@ -312,7 +310,7 @@ export default class PersonaController {
 
             return await Usuario.findOne({where: {token: request.params.id}});
         } else {
-            
+
         }
     }
 
