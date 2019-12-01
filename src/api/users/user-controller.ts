@@ -6,6 +6,8 @@ import {Usuario} from "../../database/entidades/usuario";
 import {IRequest, IReqUser} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
+import {Perfil} from "../../database/entidades/perfil";
+import {Persona} from "../../database/entidades/persona";
 
 export default class UserController {
     private configs: IServerConfigurations;
@@ -20,7 +22,14 @@ export default class UserController {
     public async obtenerUsuarios(request: IRequest, response: Hapi.ResponseToolkit): Promise<Usuario[]> {
         const result: Usuario[] = await Usuario.findAll({
             where: {fechaBAja: null},
+            include: [{model: Perfil, required: true}]
         });
+        return result;
+    }
+
+    public async obtenerPerfiles(request: IRequest, response: Hapi.ResponseToolkit): Promise<Perfil[]> {
+        const result: Perfil[] = await Perfil.findAll();
+
         return result;
     }
 
@@ -31,28 +40,38 @@ export default class UserController {
 
     public async crearUsuario(request: IReqUser, response: Hapi.ResponseToolkit) {
         const exist: Usuario = await Usuario.findOne({where: {email: request.payload.email}});
+        const persona: Persona = await Persona.findOne({where: {email: request.payload.email}});
         if (!exist) {
-            const userFireBase: any = await this.firebaseAdmin.auth().createUser({
-                displayName: request.payload.nombre,
-                email: request.payload.email,
-                emailVerified: false,
-                password: request.payload.clave,
-            });
+            if (!persona) {
+                const userFireBase: any = await this.firebaseAdmin.auth().createUser({
+                    displayName: request.payload.nombre,
+                    email: request.payload.email,
+                    emailVerified: false,
+                    password: request.payload.clave,
+                });
 
-            const User: Usuario = await Usuario.create({
-                apellido: request.payload.apellido,
-                email: request.payload.email,
-                idPerfil: request.payload.idPerfil,
-                nombre: request.payload.nombre,
-                idPersona:request.payload.idPersona,
-                token: userFireBase.uid,
-            });
+                const PerfilAD = await Perfil.findOne({where: {codigo: 'AD'}});
+                const User: Usuario = await Usuario.create({
+                    apellido: request.payload.apellido,
+                    email: request.payload.email,
+                    idPerfil: PerfilAD.idPerfil,
+                    nombre: request.payload.nombre,
+                    idPersona: request.payload.idPersona,
+                    token: userFireBase.uid,
+                });
 
-            return User;
+                return User;
+            } else {
+                return response.response("Ya existe una Persona con este email").code(400);
+            }
         } else {
             if (exist.fechaBaja != null) {
-                request.params.id = exist.token;
-                return await this.reactivarUsuario(request, response);
+                if (!persona) {
+                    request.params.id = exist.token;
+                    return await this.reactivarUsuario(request, response);
+                } else {
+                    return response.response("Ya existe una Persona con este mail").code(400);
+                }
             } else {
                 return response.response("El usuario ya existe").code(400);
             }
