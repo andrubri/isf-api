@@ -40,7 +40,7 @@ export default class UserController {
 
     public async crearUsuario(request: IReqUser, response: Hapi.ResponseToolkit) {
         const exist: Usuario = await Usuario.findOne({where: {email: request.payload.email}});
-        const persona: Persona = await Persona.findOne({where: {email: request.payload.email}});
+        const persona: Persona = (request.payload.idPersona) ? null : await Persona.findOne({where: {email: request.payload.email}});
         if (!exist) {
             if (!persona) {
                 const userFireBase: any = await this.firebaseAdmin.auth().createUser({
@@ -50,11 +50,11 @@ export default class UserController {
                     password: request.payload.clave,
                 });
 
-                const PerfilAD = await Perfil.findOne({where: {codigo: 'AD'}});
+                const perfil = await Perfil.findOne({where: {codigo: (request.payload.idPersona) ? 'CO' : 'AD'}});
                 const User: Usuario = await Usuario.create({
                     apellido: request.payload.apellido,
                     email: request.payload.email,
-                    idPerfil: PerfilAD.idPerfil,
+                    idPerfil: perfil.idPerfil,
                     nombre: request.payload.nombre,
                     idPersona: request.payload.idPersona,
                     token: userFireBase.uid,
@@ -131,12 +131,14 @@ export default class UserController {
     public async reactivarUsuario(request: IReqUser, response: Hapi.ResponseToolkit) {
         const exist: Usuario = await Usuario.findOne({where: {token: request.params.id}});
         if (exist && exist.fechaBaja !== null) {
-            const [cont, User] = await Usuario.update({
+            const perfil = await Perfil.findOne({where: {codigo: (request.payload.idPersona) ? 'CO' : 'AD'}});
+            await Usuario.update({
                 apellido: request.payload.apellido,
                 email: request.payload.email,
                 fechaBaja: null,
-                idPerfil: request.payload.idPerfil,
+                idPerfil: perfil.idPerfil,
                 nombre: request.payload.nombre,
+                idPersona: request.payload.idPersona
             }, {where: {token: request.params.id}});
 
             const fireData: UpdateRequest = {

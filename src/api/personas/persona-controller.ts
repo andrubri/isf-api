@@ -12,7 +12,6 @@ import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
 import {personaSchema} from "./persona-validator";
 import {Usuario} from "../../database/entidades/usuario";
-import {where} from "sequelize/types";
 
 export default class PersonaController {
     private configs: IServerConfigurations;
@@ -29,68 +28,28 @@ export default class PersonaController {
         return result;
     }
 
+
+    public async obtenerOrigenContacto(request: IRequest, response: Hapi.ResponseToolkit): Promise<any> {
+        return await OrigenContacto.findAll();
+    }
+
+    public async obtenerObraSocial(request: IRequest, response: Hapi.ResponseToolkit): Promise<any> {
+        return await ObraSocial.findAll();
+    }
+
     public async obtenerPersonaXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<any> {
-        const persona: Persona = await Persona.findOne({where: {idPersona: request.params.id}});
-
-        const origenContacto: OrigenContacto = await OrigenContacto.findOne({
-            where: {idOrigenContacto: persona.idOrigenContacto}
+        const persona: Persona = await Persona.findOne({
+            where: {idPersona: request.params.id},
+            include: [{model: ContactoEmergencia, required: false}, {model: DatosSeguro, required: false}]
         });
 
-        const datosSeguro: DatosSeguro = await DatosSeguro.findOne({
-            where: {idPersona: persona.idPersona}
-        });
-
-        const obraSocial: ObraSocial = (datosSeguro) ? await ObraSocial.findOne({
-            where: {idObraSocial: datosSeguro.idObraSocial}
-        }) : null;
-
-        const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.findOne({
-            where: {idPersona: persona.idPersona}
-        });
-
-        let value = {
-            idPersona: persona.idPersona,
-            nombre: persona.nombre,
-            apellido: persona.apellido,
-            idExterno: persona.idExterno,
-            tipoDocumento: persona.tipoDocumento,
-            idDocumento: persona.idDocumento,
-            paisOrigen: persona.paisOrigen,
-            paisResidencia: persona.paisResidencia,
-            provinciaResidencia: persona.provinciaResidencia,
-            ciudadResidencia: persona.ciudadResidencia,
-            telefono: persona.telefono,
-            email: persona.email,
-            nivelEstudios: persona.nivelEstudios,
-            carrera: persona.carrera,
-            universidad: persona.universidad,
-            ocupacion: persona.ocupacion,
-            comentarios: persona.comentarios,
-            estado: persona.estado,
-            dieta: persona.dieta,
-            fechaNacimiento: persona.fechaNacimiento,
-            descripcion: (origenContacto) ? origenContacto.descripcion : null,
-            empresa: (obraSocial) ? obraSocial.empresa : null,
-            plan: (obraSocial) ? obraSocial.plan : null,
-            grupoSanguineo: (datosSeguro) ? datosSeguro.grupoSanguineo : null,
-            emfermedades: (datosSeguro) ? datosSeguro.emfermedades : null,
-            medicaciones: (datosSeguro) ? datosSeguro.medicaciones : null,
-            nombreContacto: (contactoEmergencia) ? contactoEmergencia.nombre : null,
-            apellidoContacto: (contactoEmergencia) ? contactoEmergencia.apellido : null,
-            telefonoContacto: (contactoEmergencia) ? contactoEmergencia.telefono : null,
-            relacion: (contactoEmergencia) ? contactoEmergencia.relacion : null
-        };
-        return value;
+        return persona;
     }
 
 
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
-
-            const origenContacto: OrigenContacto = await OrigenContacto.create({
-                descripcion: request.payload.persona.descripcion,
-            });
 
             const persona: Persona = await Persona.create({
                 nombre: request.payload.persona.nombre,
@@ -100,6 +59,8 @@ export default class PersonaController {
                 idDocumento: request.payload.persona.idDocumento,
                 paisOrigen: request.payload.persona.paisOrigen,
                 paisResidencia: request.payload.persona.paisResidencia,
+                coordenadasResidencia: request.payload.persona.coordenadasResidencia,
+                direccionResidencia: request.payload.persona.direccionResidencia,
                 provinciaResidencia: request.payload.persona.provinciaResidencia,
                 ciudadResidencia: request.payload.persona.ciudadResidencia,
                 telefono: request.payload.persona.telefono,
@@ -112,11 +73,11 @@ export default class PersonaController {
                 estado: request.payload.persona.estado,
                 dieta: request.payload.persona.dieta,
                 fechaNacimiento: request.payload.persona.fechaNacimiento,
-                idOrigenContacto: origenContacto.idOrigenContacto,
+                idOrigenContacto: request.payload.persona.idOrigenContacto,
             });
 
 
-            const contactoEmergencia: ContactoEmergencia = await ContactoEmergencia.create({
+            await ContactoEmergencia.create({
                 idPersona: persona.idPersona,
                 nombre: request.payload.persona.nombreContacto,
                 apellido: request.payload.persona.apellidoContacto,
@@ -124,27 +85,15 @@ export default class PersonaController {
                 telefono: request.payload.persona.telefonoContacto
             });
 
-            const obraSocial: ObraSocial = await ObraSocial.create({
-                empresa: request.payload.persona.empresa,
-                plan: request.payload.persona.plan,
-            });
-
-            const datosSeguro: DatosSeguro = await DatosSeguro.create({
+            await DatosSeguro.create({
                 idPersona: persona.idPersona,
-                idObraSocial: obraSocial.idObraSocial,
+                idObraSocial: request.payload.persona.idObraSocial,
                 emfermedades: request.payload.persona.emfermedades,
                 grupoSanguineo: request.payload.persona.grupoSanguineo,
                 medicaciones: request.payload.persona.medicaciones
             });
 
-
-            return {
-                persona: persona,
-                datosSeguro: datosSeguro,
-                obraSocial: obraSocial,
-                origenContacto: origenContacto,
-                contactoEmergencia: contactoEmergencia
-            };
+            return {persona};
         } else {
             return response.response(error.message).message("No se encontro request de persona").code(400);
         }
@@ -186,11 +135,7 @@ export default class PersonaController {
         if (exist) {
             try {
 
-                const [contC, origenContacto] = await OrigenContacto.update({
-                    descripcion: request.payload.persona.descripcion,
-                }, {where: {idOrigenContacto: exist.idOrigenContacto}});
-
-                const [cont, persona] = await Persona.update({
+                await Persona.update({
                     nombre: request.payload.persona.nombre,
                     apellido: request.payload.persona.apellido,
                     idExterno: request.payload.persona.idExterno,
@@ -198,6 +143,8 @@ export default class PersonaController {
                     idDocumento: request.payload.persona.idDocumento,
                     paisOrigen: request.payload.persona.paisOrigen,
                     paisResidencia: request.payload.persona.paisResidencia,
+                    coordenadasResidencia: request.payload.persona.coordenadasResidencia,
+                    direccionResidencia: request.payload.persona.direccionResidencia,
                     provinciaResidencia: request.payload.persona.provinciaResidencia,
                     ciudadResidencia: request.payload.persona.ciudadResidencia,
                     telefono: request.payload.persona.telefono,
@@ -215,29 +162,19 @@ export default class PersonaController {
 
                 await this.actualizarUsuario(request);
 
-                const [contE, contactoEmergencia] = await ContactoEmergencia.update({
+                await ContactoEmergencia.update({
                     nombre: request.payload.persona.nombreContacto,
                     apellido: request.payload.persona.apellidoContacto,
                     telefono: request.payload.persona.telefonoContacto,
                     relacion: request.payload.persona.relacion,
                 }, {where: {idPersona: request.params.id}});
 
-                const [contD, datosSeguro] = await DatosSeguro.update({
+                await DatosSeguro.update({
                     grupoSanguineo: request.payload.persona.grupoSanguineo,
                     emfermedades: request.payload.persona.emfermedades,
                     medicaciones: request.payload.persona.medicaciones,
                     idObraSocial: request.payload.persona.idObraSocial,
                 }, {where: {idPersona: request.params.id}});
-
-
-                const changedDatoSeguro = await DatosSeguro.findOne({
-                    where: {idPersona: request.params.id}
-                });
-
-                const [contO, obraSocial] = await ObraSocial.update({
-                    empresa: request.payload.persona.empresa,
-                    plan: request.payload.persona.plan,
-                }, {where: {idObraSocial: changedDatoSeguro.idObraSocial}});
 
                 return await Persona.findOne({where: {idPersona: request.params.id}});
             } catch (e) {
@@ -276,7 +213,6 @@ export default class PersonaController {
                 const [cont, User] = await Usuario.update({
                     apellido: request.payload.persona.apellido,
                     email: request.payload.persona.email,
-                    idPerfil: request.payload.persona.idPerfil,
                     nombre: request.payload.persona.nombre,
                 }, {where: {idPersona: request.params.id}});
 
@@ -313,5 +249,6 @@ export default class PersonaController {
 
         }
     }
+
 
 }

@@ -111,6 +111,8 @@ export interface IReqPersona extends IRequest {
             idDocumento: number;
             paisOrigen: string;
             paisResidencia: string;
+            coordenadasResidencia: string;
+            direccionResidencia: string;
             provinciaResidencia: string;
             ciudadResidencia: string;
             telefono: string;
@@ -124,7 +126,6 @@ export interface IReqPersona extends IRequest {
             dieta: string;
             fechaNacimiento: Date;
             idOrigenContacto: number;
-            descripcion: string;
             idContactoEmergencia: number;
             idPersona: number;
             nombreContacto: string;
@@ -136,8 +137,6 @@ export interface IReqPersona extends IRequest {
             emfermedades: string;
             medicaciones: string;
             idObraSocial: number;
-            empresa: string;
-            plan: string;
         }
     }
 }

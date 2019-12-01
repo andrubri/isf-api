@@ -198,5 +198,57 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
                 tags: ["api", "personas"],
                 validate: {},
             },
+        },
+        {
+            method: "GET",
+            path: "/personas/origencontacto",
+            options: {
+                auth: "firebase",
+                description: "Trae los Origenes de contacto",
+                handler: personaController.obtenerOrigenContacto,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Trae los Origenes de contacto",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "personas"],
+                validate: {},
+            },
+        },
+        {
+            method: "GET",
+            path: "/personas/obrasocial",
+            options: {
+                auth: "firebase",
+                description: "Trae las obras sociales",
+                handler: personaController.obtenerObraSocial,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Trae las obras sociales",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "personas"],
+                validate: {},
+            },
         }]);
 }

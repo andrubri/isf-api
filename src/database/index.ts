@@ -5,8 +5,8 @@ import {initEquipo, Equipo} from "./entidades/equipo";
 import {EquipoPersona, initEquipoPersona} from "./entidades/equipo_persona";
 import {initJornada, Jornada} from "./entidades/jornada";
 import {initPersona, Persona} from "./entidades/persona";
-import {initContactoEmergencia} from "./entidades/contactoEmergencia";
-import {initDatosSeguro} from "./entidades/datosSeguro";
+import {ContactoEmergencia, initContactoEmergencia} from "./entidades/contactoEmergencia";
+import {DatosSeguro, initDatosSeguro} from "./entidades/datosSeguro";
 import {initObraSocial} from "./entidades/obraSocial";
 import {initPerfil, Perfil} from "./entidades/perfil";
 import {initOrigenContacto} from "./entidades/origenContacto";
@@ -22,7 +22,7 @@ export class DBSquelize {
             DBSquelize.sequelize = new Sequelize(config.connection.database, config.connection.user, config.connection.password, {
                 dialect: config.connection.dialect,
                 host: config.connection.host,
-                logging: false                                                       ,
+                logging: false,
             });
 
             // Iinicio las entidades
@@ -43,7 +43,7 @@ export class DBSquelize {
             this.createRelations();
 
             // Aplicar los cambios a la db
-            // DBSquelize.sequelize.sync({alter: true});
+            //DBSquelize.sequelize.sync({alter: true});
         }
     }
 
@@ -73,6 +73,12 @@ export class DBSquelize {
 
         Equipo.hasMany(Jornada, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
         Jornada.belongsTo(Equipo, {foreignKey: 'idEquipo'});
+
+        Persona.hasOne(ContactoEmergencia, {foreignKey: 'idPersona'});
+        ContactoEmergencia.belongsTo(Persona, {foreignKey: 'idPersona'});
+
+        Persona.hasOne(DatosSeguro, {foreignKey: 'idPersona'});
+        DatosSeguro.belongsTo(Persona, {foreignKey: 'idPersona'});
 
     }
 

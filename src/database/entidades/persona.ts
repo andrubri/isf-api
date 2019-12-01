@@ -12,6 +12,8 @@ export class Persona extends Model {
     public paisResidencia: string;
     public provinciaResidencia: string;
     public ciudadResidencia: string;
+    public direccionResidencia: string;
+    public coordenadasResidencia: string;
     public telefono: string;
     public email: string;
     public nivelEstudios: string;
@@ -66,6 +68,14 @@ export function initPersona(sequelize) {
             type: new DataTypes.STRING(255),
         },
         ciudadResidencia: {
+            allowNull: true,
+            type: new DataTypes.STRING(255),
+        },
+        direccionResidencia: {
+            allowNull: true,
+            type: new DataTypes.STRING(500),
+        },
+        coordenadasResidencia: {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
