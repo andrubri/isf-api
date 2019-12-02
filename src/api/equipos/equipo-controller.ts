@@ -246,6 +246,7 @@ export default class EquipoController {
             INNER JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
             WHERE j.idEquipo = :equipo
             GROUP BY j.idJornadas, j.fecha
+            ORDER BY j.fecha ASC
             `, {replacements: {equipo: request.params.id}});
 
             return estadistica[0];
@@ -266,6 +267,7 @@ export default class EquipoController {
                      INNER JOIN jornadas j on e.idEquipo = j.idEquipo
                      LEFT JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
             GROUP BY e.idEquipo, e.nombre, CONCAT(MONTH(j.fecha), '/', YEAR(j.fecha))
+            ORDER BY j.fecha ASC
         `);
 
         return estadistica[0];

@@ -9,6 +9,7 @@ import * as fs from 'fs';
 import * as path from "path";
 import mail = require("@sendgrid/mail/src/mail");
 import {Jornada} from "../../database/entidades/jornada";
+import {escapeRegExp} from "tslint/lib/utils";
 
 const sgMail = require('@sendgrid/mail');
 
@@ -83,11 +84,11 @@ export class EmailController {
     private async prepareEmail(email: string, asunto: string, mensaje: string, template: string, replace: any) {
 
         let mailHTML = fs.readFileSync(path.join(__dirname, '../../template/' + template)).toString()
-            .replace('{{MENSAJE}}', mensaje)
-            .replace('{{SRC}}', this.configurations.dirIMG);
+            .replace(/{{MENSAJE}}/g, mensaje)
+            .replace(/{{SRC}}/g, this.configurations.dirIMG);
 
         for (let key in replace) {
-            mailHTML = mailHTML.replace(key, replace[key]);
+            mailHTML = mailHTML.replace(new RegExp(key, "g"), replace[key]);
         }
 
         const msg = {
@@ -97,6 +98,7 @@ export class EmailController {
             text: mensaje,
             html: mailHTML,
         };
+
         sgMail.send(msg);
 
     }
