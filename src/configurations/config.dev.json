@@ -12,7 +12,7 @@
   "email":{
     "sender":"isf.voluntarios@gmail.com",
     "api_key":"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",
-    "dirIMG": "https://isf-api-desa.herokuapp.com/"
+    "dirIMG": "http://isf-voluntario-desa.herokuapp.com/assets/"
   },
   "server": {
     "port": 5000,
@@ -20,7 +20,8 @@
     "plugins": [
       "logger",
       "firebase-auth",
-      "swagger"
+      "swagger",
+      "inert"
     ],
     "firebase": {
       "type": "service_account",
