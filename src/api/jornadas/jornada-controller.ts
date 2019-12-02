@@ -80,11 +80,11 @@ export default class JornadaController {
     }
 
     public async obtenerPersonasXId(request: IRequest, response: Hapi.ResponseToolkit): Promise<Persona[]> {
-       
+
         const result = await Persona.findAll({
             include: [{
                 model: Jornada,
-                through: { where: { idJornada: request.params.id } },
+                through: {where: {idJornada: request.params.id}},
                 required: true
             }],
         });
@@ -93,14 +93,25 @@ export default class JornadaController {
 
     public async addPersonas(request: IReqVoluntario, response: Hapi.ResponseToolkit) {
         const exist: Jornada = await Jornada.findOne({where: {idJornadas: request.params.id}});
-        if (exist) {
-            const voluntario: PersonaJornada = new PersonaJornada({
-                idJornada: exist.idJornadas,
-                idPersona: request.payload.idPersona
+        const existPer: Persona = await Persona.findOne({where: {idPersona: request.payload.idPersona}});
+        if (exist && existPer) {
+            const existRel: PersonaJornada = await PersonaJornada.findOne({
+                where: {
+                    idPersona: existPer.idPersona,
+                    idJornada: exist.idJornadas
+                }
             });
-            await voluntario.save();
+            if (!existRel) {
+                const voluntario: PersonaJornada = new PersonaJornada({
+                    idJornada: exist.idJornadas,
+                    idPersona: request.payload.idPersona
+                });
+                await voluntario.save();
 
-            return voluntario;
+                return voluntario;
+            } else {
+                return response.response("Ya se encuentra confirmado el voluntario").code(400);
+            }
         } else {
             return response.response().code(400);
         }
@@ -109,7 +120,12 @@ export default class JornadaController {
     public async editPersonas(request: IReqConfirmacion, response: Hapi.ResponseToolkit) {
         const exist: Jornada = await Jornada.findOne({where: {idJornadas: request.params.id}});
         if (exist) {
-            const voluntario: PersonaJornada = await PersonaJornada.findOne({where: {idJornada: exist.idJornadas, idPersona: request.payload.idPersona}});
+            const voluntario: PersonaJornada = await PersonaJornada.findOne({
+                where: {
+                    idJornada: exist.idJornadas,
+                    idPersona: request.payload.idPersona
+                }
+            });
 
             voluntario.confirmacion = (request.payload.confirmacion) ? 'true' : 'false';
 
