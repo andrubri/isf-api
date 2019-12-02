@@ -25,7 +25,7 @@ export class Persona extends Model {
     public dieta: string;
     public fechaNacimiento: Date;
     public idOrigenContacto: number;
-    
+    public fechaBaja: Date;
 }
 
 export function initPersona(sequelize) {
@@ -120,6 +120,10 @@ export function initPersona(sequelize) {
             type: DataTypes.INTEGER.UNSIGNED,
         },
         fechaNacimiento: {
+            allowNull: true,
+            type:  new DataTypes.DATE(),
+        },
+        fechaBaja: {
             allowNull: true,
             type:  new DataTypes.DATE(),
         },

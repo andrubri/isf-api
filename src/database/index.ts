@@ -43,7 +43,7 @@ export class DBSquelize {
             this.createRelations();
 
             // Aplicar los cambios a la db
-            //DBSquelize.sequelize.sync({alter: true});
+            // DBSquelize.sequelize.sync({alter: true});
         }
     }
 

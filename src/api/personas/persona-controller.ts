@@ -24,7 +24,10 @@ export default class PersonaController {
     }
 
     public async obtenerPersonas(request: IRequest, response: Hapi.ResponseToolkit): Promise<Persona[]> {
-        const result: Persona[] = await Persona.findAll();
+        const result: Persona[] = await Persona.findAll({
+            where: {fechaBaja: null},
+            include: [{model: Usuario, where: {fechaBaja: null}, required: false}]
+        });
         return result;
     }
 
@@ -188,8 +191,11 @@ export default class PersonaController {
     public async eliminarPersona(request: IRequest, response: Hapi.ResponseToolkit) {
         const exist: Persona = await Persona.findOne({where: {idPersona: request.params.id}});
         if (exist) {
+            await Persona.update({
+                fechaBaja: new Date()
+            }, {where: {idPersona: request.params.id}});
             await this.eliminarUsuario(request);
-            await Persona.destroy({where: {idPersona: request.params.id}});
+
             return exist;
         } else {
             return response.response().code(400);
