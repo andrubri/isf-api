@@ -53,6 +53,7 @@ export interface IDataConfiguration {
 export interface IEmailConfiguration{
     sender: string;
     api_key: string;
+    dirIMG: string;
 }
 
 export function getDatabaseConfig(): IDataConfiguration {

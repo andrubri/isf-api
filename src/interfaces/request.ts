@@ -43,7 +43,7 @@ export interface IReqJornada extends IRequest {
 export interface IReqEmail extends IRequest {
     payload: {
         mensaje: string;
-        
+        asunto: string;
     }
 }
 

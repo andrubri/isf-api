@@ -17,6 +17,7 @@ export class Equipo extends Model {
     public fechaBaja: Date;
 
     public getPersonas!: HasManyGetAssociationsMixin<Persona>
+    public Personas: Persona[];
 }
 
 export function initEquipo(sequelize) {

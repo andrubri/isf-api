@@ -9,10 +9,16 @@ const compile = (cb) =>{
   cb();
 };
 
-const configs = (cb) => {
+const configs = async (cb) => {
   console.log('Set Configuration .... ');
-  return gulp.src("src/configurations/*.json")
+  await gulp.src("src/configurations/*.json")
       .pipe(gulp.dest('./build/configurations'));
+  console.log('Set Templates .... ');
+  await gulp.src("src/template/*.html")
+      .pipe(gulp.dest('./build/template'));
+  console.log('Set Images .... ');
+  await gulp.src("src/images/*.jpg")
+      .pipe(gulp.dest('./build/images'));
   cb();
 };
 
