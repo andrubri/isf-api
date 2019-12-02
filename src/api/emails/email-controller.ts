@@ -8,6 +8,7 @@ import {Persona} from "../../database/entidades/persona";
 import * as fs from 'fs';
 import * as path from "path";
 import mail = require("@sendgrid/mail/src/mail");
+import {Jornada} from "../../database/entidades/jornada";
 
 const sgMail = require('@sendgrid/mail');
 
@@ -16,6 +17,8 @@ export class EmailController {
     private configs: IServerConfigurations;
     private firebaseAdmin: any;
     private configurations: IEmailConfiguration;
+    private meses: string[] = ['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'];
+
 
     constructor(configs: IServerConfigurations, io: socketio.Server) {
         this.configs = configs;
@@ -39,7 +42,7 @@ export class EmailController {
         if (exist) {
             if (exist.Personas.length > 0) {
                 exist.Personas.forEach(voluntario => {
-                    this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, {
+                    this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, 'mail_equipo.html', {
                         '{{EQUIPO}}': exist.nombre,
                         '{{NOMBRE}}': voluntario.nombre
                     });
@@ -53,9 +56,33 @@ export class EmailController {
 
     }
 
-    private async prepareEmail(email: string, mensaje: string, asunto: string, replace: any) {
+    public async sendMailToEquipoJornada(request: IReqEmail, response: Hapi.ResponseToolkit) {
+        const exist: Jornada = await Jornada.findOne({
+            where: {idJornadas: request.params.id},
+            include: [{model: Equipo, required: true, include: [{model: Persona, required: false}]}]
+        });
+        if (exist) {
+            if (exist.Equipo.Personas.length > 0) {
+                exist.Equipo.Personas.forEach(voluntario => {
+                    this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, 'mail_jornada.html', {
+                        '{{EQUIPO}}': exist.Equipo.nombre,
+                        '{{DAY}}': exist.fecha.getDate(),
+                        '{{MONTH}}': this.meses[exist.fecha.getMonth()],
+                        '{{LINK}}': 'https://www.google.com.ar/'
+                    });
+                });
+            }
 
-        let mailHTML = fs.readFileSync(path.join(__dirname, '../../template/mail_equipo.html')).toString()
+            return response.response().code(200);
+        } else {
+            return response.response("Equipo no encontrado").code(400);
+        }
+
+    }
+
+    private async prepareEmail(email: string, asunto: string, mensaje: string, template: string, replace: any) {
+
+        let mailHTML = fs.readFileSync(path.join(__dirname, '../../template/' + template)).toString()
             .replace('{{MENSAJE}}', mensaje)
             .replace('{{SRC}}', this.configurations.dirIMG);
 

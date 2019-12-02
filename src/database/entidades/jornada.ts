@@ -1,4 +1,5 @@
 import {Model,DataTypes} from "sequelize";
+import { Equipo } from "./equipo";
 
 export class Jornada extends Model {
     public idJornadas: number;
@@ -6,6 +7,8 @@ export class Jornada extends Model {
     public descripcion: string;
     public direccion: string;
     public fecha: Date;
+
+    public Equipo: Equipo;
 }
 
 export function initJornada(sequelize) {
