@@ -10,6 +10,7 @@ import * as path from "path";
 import mail = require("@sendgrid/mail/src/mail");
 import {Jornada} from "../../database/entidades/jornada";
 import {escapeRegExp} from "tslint/lib/utils";
+import {encodeBase64} from "bcryptjs";
 
 const sgMail = require('@sendgrid/mail');
 
@@ -65,11 +66,13 @@ export class EmailController {
         if (exist) {
             if (exist.Equipo.Personas.length > 0) {
                 exist.Equipo.Personas.forEach(voluntario => {
+                    const hash: Buffer = new Buffer(exist.idJornadas + ":" + voluntario.idPersona + ":" + voluntario.nombre);
+
                     this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, 'mail_jornada.html', {
                         '{{EQUIPO}}': exist.Equipo.nombre,
                         '{{DAY}}': exist.fecha.getDate(),
                         '{{MONTH}}': this.meses[exist.fecha.getMonth()],
-                        '{{LINK}}': 'https://www.google.com.ar/'
+                        '{{LINK}}': this.configurations.urlConfirmar + encodeURI(hash.toString('base64').replace(/=/g, '%3D'))
                     });
                 });
             }

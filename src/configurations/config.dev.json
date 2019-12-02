@@ -12,7 +12,8 @@
   "email":{
     "sender":"isf.voluntarios@gmail.com",
     "api_key":"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",
-    "dirIMG": "http://isf-voluntario-desa.herokuapp.com/assets/"
+    "dirIMG": "http://isf-voluntario-desa.herokuapp.com/assets/",
+    "urlConfirmar": "http://localhost:4200/confirmar/"
   },
   "server": {
     "port": 5000,

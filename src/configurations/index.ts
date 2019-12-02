@@ -54,6 +54,7 @@ export interface IEmailConfiguration{
     sender: string;
     api_key: string;
     dirIMG: string;
+    urlConfirmar: string;
 }
 
 export function getDatabaseConfig(): IDataConfiguration {
