@@ -13,6 +13,7 @@ import {initOrigenContacto} from "./entidades/origenContacto";
 import {initRol} from "./entidades/rol";
 import {initMedioTransporte} from "./entidades/medioTransporte";
 import {initPersonaJornada, PersonaJornada} from "./entidades/personas_jornada";
+import {initHashConfirmacion} from "./entidades/hashConfirmacion";
 
 export class DBSquelize {
     private static sequelize: Sequelize = null;
@@ -39,6 +40,7 @@ export class DBSquelize {
             initOrigenContacto(DBSquelize.sequelize);
             initRol(DBSquelize.sequelize);
             initPersonaJornada(DBSquelize.sequelize);
+            initHashConfirmacion(DBSquelize.sequelize);
 
             this.createRelations();
 

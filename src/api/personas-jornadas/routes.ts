@@ -10,62 +10,6 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
     server.bind(personaJornadaController);
 
     server.route([
-    /* {
-        method: "GET",
-        path: "/personaJornada",
-        options: {
-            auth: "firebase",
-            description: "Verificar token.",
-            handler: personaJornadaController.obtenerPersonaJornadas,
-            plugins: {
-                "hapi-swagger": {
-                    responses: {
-                        200: {
-                            description: "Token Verificado.",
-                        },
-                        304: {
-                            description: "No autorizado.",
-                        },
-                        500: {
-                            description: "Error",
-                        },
-                    },
-                },
-            },
-            tags: ["api", "personaJornadas"],
-            validate: {
-
-            },
-        },
-    }, */
-    /* {
-        method: "GET",
-        path: "/personaJornada/{id}",
-        options: {
-            auth: "firebase",
-            description: "Verificar token.",
-            handler: personaJornadaController.obtenerPersonaJornadas,
-            plugins: {
-                "hapi-swagger": {
-                    responses: {
-                        200: {
-                            description: "Token Verificado.",
-                        },
-                        304: {
-                            description: "No autorizado.",
-                        },
-                        500: {
-                            description: "Error",
-                        },
-                    },
-                },
-            },
-            tags: ["api", "personaJornadas"],
-            validate: {
-
-            },
-        },
-    } */
     {
         method: "POST",
         path: "/personaJornada",
@@ -94,34 +38,6 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
             },
         },
     },
-    /* {
-        method: "PUT",
-        path: "/personaJornada/{id}",
-        options: {
-            auth: "firebase",
-            description: "Actualizar PersonaJornada",
-            handler: personaJornadaController.actualizarPersonaJornada,
-            plugins: {
-                "hapi-swagger": {
-                    responses: {
-                        200: {
-                            description: "Token Verificado.",
-                        },
-                        304: {
-                            description: "No autorizado.",
-                        },
-                        500: {
-                            description: "Error",
-                        },
-                    },
-                },
-            },
-            tags: ["api", "personaJornadas"],
-            validate: {
-
-            },
-        },
-    }, */
     {
         method: "DELETE",
         path: "/personaJornada/{id}",

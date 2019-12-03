@@ -10,6 +10,9 @@ import {PersonaJornada} from "../../database/entidades/personas_jornada";
 import {Persona} from "../../database/entidades/persona";
 import {Equipo} from "../../database/entidades/equipo";
 import {EquipoPersona} from "../../database/entidades/equipo_persona";
+import {HashConfirmacion} from "../../database/entidades/hashConfirmacion";
+import {DatosSeguro} from "../../database/entidades/datosSeguro";
+import {ContactoEmergencia} from "../../database/entidades/contactoEmergencia";
 
 export default class JornadaController {
     private configs: IServerConfigurations;
@@ -137,18 +140,17 @@ export default class JornadaController {
         }
     }
 
-    public async addPersonasHash(request: IRequest, response: Hapi.ResponseToolkit) {
-        const exist: Jornada = await Jornada.findOne({where: {idJornadas: request.params.id}});
+    public async getPersonasHash(request: IRequest, response: Hapi.ResponseToolkit) {
+        const exist: HashConfirmacion = await HashConfirmacion.findOne({where: {idHashConfirmacion: request.params.id}});
         if (exist) {
-            const voluntario: PersonaJornada = new PersonaJornada({
-                idJornada: exist.idJornadas,
-                idPersona: request.params.hash,
+            const voluntario: Persona = await Persona.findOne({
+                where: {idPersona: exist.idPersona},
+                include: [{model: DatosSeguro, required: false}, {model: ContactoEmergencia, required: false}]
             });
-            await voluntario.save();
-
-            return voluntario;
+            const jornada: Jornada = await Jornada.findOne({where: {idJornadas: exist.idJornada}});
+            return {voluntario, jornada};
         } else {
-            return response.response().code(400);
+            return response.response("No es valido el hash").code(400);
         }
     }
 }

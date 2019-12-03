@@ -236,11 +236,11 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
         },
         {
             method: "GET",
-            path: "/jornada/{id}/persona/{hash}",
+            path: "/jornada/persona/{id}",
             options: {
                 auth: false,
-                description: "URL libre para ok de usuario",
-                handler: jornadaController.addPersonasHash,
+                description: "Trae informacion de confirmacion para un hash",
+                handler: jornadaController.getPersonasHash,
                 plugins: {
                     "hapi-swagger": {
                         responses: {
