@@ -12,6 +12,7 @@ import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
 import {personaSchema} from "./persona-validator";
 import {Usuario} from "../../database/entidades/usuario";
+import {Op} from "sequelize/types";
 
 export default class PersonaController {
     private configs: IServerConfigurations;
@@ -53,50 +54,63 @@ export default class PersonaController {
     public async crearPersona(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
-
-            const persona: Persona = await Persona.create({
-                nombre: request.payload.persona.nombre,
-                apellido: request.payload.persona.apellido,
-                idExterno: request.payload.persona.idExterno,
-                tipoDocumento: request.payload.persona.tipoDocumento,
-                idDocumento: request.payload.persona.idDocumento,
-                paisOrigen: request.payload.persona.paisOrigen,
-                paisResidencia: request.payload.persona.paisResidencia,
-                coordenadasResidencia: request.payload.persona.coordenadasResidencia,
-                direccionResidencia: request.payload.persona.direccionResidencia,
-                provinciaResidencia: request.payload.persona.provinciaResidencia,
-                ciudadResidencia: request.payload.persona.ciudadResidencia,
-                telefono: request.payload.persona.telefono,
-                email: request.payload.persona.email,
-                nivelEstudios: request.payload.persona.nivelEstudios,
-                carrera: request.payload.persona.carrera,
-                universidad: request.payload.persona.universidad,
-                ocupacion: request.payload.persona.ocupacion,
-                comentarios: request.payload.persona.comentarios,
-                estado: request.payload.persona.estado,
-                dieta: request.payload.persona.dieta,
-                fechaNacimiento: request.payload.persona.fechaNacimiento,
-                idOrigenContacto: request.payload.persona.idOrigenContacto,
+            const exist = Persona.findOne({
+                where: {
+                    [Op.or]: [
+                        {email: request.payload.persona.email},
+                        {
+                            idDocumento: request.payload.persona.idDocumento,
+                            tipoDocumento: request.payload.persona.tipoDocumento
+                        }]
+                }
             });
+            if (exist) {
+                const persona: Persona = await Persona.create({
+                    nombre: request.payload.persona.nombre,
+                    apellido: request.payload.persona.apellido,
+                    idExterno: request.payload.persona.idExterno,
+                    tipoDocumento: request.payload.persona.tipoDocumento,
+                    idDocumento: request.payload.persona.idDocumento,
+                    paisOrigen: request.payload.persona.paisOrigen,
+                    paisResidencia: request.payload.persona.paisResidencia,
+                    coordenadasResidencia: request.payload.persona.coordenadasResidencia,
+                    direccionResidencia: request.payload.persona.direccionResidencia,
+                    provinciaResidencia: request.payload.persona.provinciaResidencia,
+                    ciudadResidencia: request.payload.persona.ciudadResidencia,
+                    telefono: request.payload.persona.telefono,
+                    email: request.payload.persona.email,
+                    nivelEstudios: request.payload.persona.nivelEstudios,
+                    carrera: request.payload.persona.carrera,
+                    universidad: request.payload.persona.universidad,
+                    ocupacion: request.payload.persona.ocupacion,
+                    comentarios: request.payload.persona.comentarios,
+                    estado: request.payload.persona.estado,
+                    dieta: request.payload.persona.dieta,
+                    fechaNacimiento: request.payload.persona.fechaNacimiento,
+                    idOrigenContacto: request.payload.persona.idOrigenContacto,
+                });
 
 
-            await ContactoEmergencia.create({
-                idPersona: persona.idPersona,
-                nombre: request.payload.persona.nombreContacto,
-                apellido: request.payload.persona.apellidoContacto,
-                relacion: request.payload.persona.relacion,
-                telefono: request.payload.persona.telefonoContacto
-            });
+                await ContactoEmergencia.create({
+                    idPersona: persona.idPersona,
+                    nombre: request.payload.persona.nombreContacto,
+                    apellido: request.payload.persona.apellidoContacto,
+                    relacion: request.payload.persona.relacion,
+                    telefono: request.payload.persona.telefonoContacto
+                });
 
-            await DatosSeguro.create({
-                idPersona: persona.idPersona,
-                idObraSocial: request.payload.persona.idObraSocial,
-                emfermedades: request.payload.persona.emfermedades,
-                grupoSanguineo: request.payload.persona.grupoSanguineo,
-                medicaciones: request.payload.persona.medicaciones
-            });
+                await DatosSeguro.create({
+                    idPersona: persona.idPersona,
+                    idObraSocial: request.payload.persona.idObraSocial,
+                    emfermedades: request.payload.persona.emfermedades,
+                    grupoSanguineo: request.payload.persona.grupoSanguineo,
+                    medicaciones: request.payload.persona.medicaciones
+                });
 
-            return {persona};
+                return {persona};
+            } else {
+                return response.response(error.message).message("Ya existe una persona con los datos ingresados").code(400);
+            }
         } else {
             return response.response(error.message).message("No se encontro request de persona").code(400);
         }
@@ -105,31 +119,45 @@ export default class PersonaController {
     public async crearPersonaExterno(request: IReqPersona, response: Hapi.ResponseToolkit) {
         const {error, value} = personaSchema.validate(request.payload);
         if (!error) {
-            const persona: Persona = await Persona.create({
-                nombre: request.payload.persona.nombre,
-                apellido: request.payload.persona.apellido,
-                tipoDocumento: request.payload.persona.tipoDocumento,
-                idDocumento: request.payload.persona.idDocumento,
-                paisOrigen: request.payload.persona.paisOrigen,
-                paisResidencia: request.payload.persona.paisResidencia,
-                coordenadasResidencia: request.payload.persona.coordenadasResidencia,
-                direccionResidencia: request.payload.persona.direccionResidencia,
-                provinciaResidencia: request.payload.persona.provinciaResidencia,
-                ciudadResidencia: request.payload.persona.ciudadResidencia,
-                telefono: request.payload.persona.telefono,
-                email: request.payload.persona.email,
-                nivelEstudios: request.payload.persona.nivelEstudios,
-                carrera: request.payload.persona.carrera,
-                universidad: request.payload.persona.universidad,
-                ocupacion: request.payload.persona.ocupacion,
-                estado: request.payload.persona.estado,
-                fechaNacimiento: request.payload.persona.fechaNacimiento,
-                idOrigenContacto: request.payload.persona.idOrigenContacto
+            const exist = Persona.findOne({
+                where: {
+                    [Op.or]: [
+                        {email: request.payload.persona.email},
+                        {
+                            idDocumento: request.payload.persona.idDocumento,
+                            tipoDocumento: request.payload.persona.tipoDocumento
+                        }]
+                }
             });
+            if (exist) {
+                const persona: Persona = await Persona.create({
+                    nombre: request.payload.persona.nombre,
+                    apellido: request.payload.persona.apellido,
+                    tipoDocumento: request.payload.persona.tipoDocumento,
+                    idDocumento: request.payload.persona.idDocumento,
+                    paisOrigen: request.payload.persona.paisOrigen,
+                    paisResidencia: request.payload.persona.paisResidencia,
+                    coordenadasResidencia: request.payload.persona.coordenadasResidencia,
+                    direccionResidencia: request.payload.persona.direccionResidencia,
+                    provinciaResidencia: request.payload.persona.provinciaResidencia,
+                    ciudadResidencia: request.payload.persona.ciudadResidencia,
+                    telefono: request.payload.persona.telefono,
+                    email: request.payload.persona.email,
+                    nivelEstudios: request.payload.persona.nivelEstudios,
+                    carrera: request.payload.persona.carrera,
+                    universidad: request.payload.persona.universidad,
+                    ocupacion: request.payload.persona.ocupacion,
+                    estado: request.payload.persona.estado,
+                    fechaNacimiento: request.payload.persona.fechaNacimiento,
+                    idOrigenContacto: request.payload.persona.idOrigenContacto
+                });
 
-            return {
-                persona: persona,
-            };
+                return {
+                    persona: persona,
+                };
+            } else {
+                return response.response(error.message).message("Ya existe una persona con los datos ingresados").code(400);
+            }
         } else {
             return response.response(error.message).message("No se encontro request de persona").code(400);
         }
