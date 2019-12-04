@@ -23,7 +23,7 @@ export class DBSquelize {
             DBSquelize.sequelize = new Sequelize(config.connection.database, config.connection.user, config.connection.password, {
                 dialect: config.connection.dialect,
                 host: config.connection.host,
-                logging: true,
+                logging: false,
             });
 
             // Iinicio las entidades

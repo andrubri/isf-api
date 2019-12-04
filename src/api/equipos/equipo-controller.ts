@@ -242,9 +242,10 @@ export default class EquipoController {
         if (exist) {
             const DB = new DBSquelize(null);
             const estadistica: any = await DB.execute(`
-            SELECT j.idJornadas, j.fecha, count(pj.idJornada) as confirmados, count(pj.confirmacion) as asistencia FROM jornadas j
+            SELECT j.idJornadas, j.fecha, count(pj.idJornada) as confirmados, count(CASE pj.confirmacion WHEN 'true' THEN 1 END) as asistencia
+            FROM jornadas j
             INNER JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
-            WHERE j.idEquipo = :equipo
+            WHERE j.idEquipo = 1
             GROUP BY j.idJornadas, j.fecha
             ORDER BY j.fecha ASC
             `, {replacements: {equipo: request.params.id}});
@@ -262,7 +263,7 @@ export default class EquipoController {
                    e.nombre,
                    CONCAT(MONTH(j.fecha), '/', YEAR(j.fecha)) as fecha,
                    count(pj.idJornada)                        as confirmados,
-                   count(pj.confirmacion)                     as asistencia
+                   count(CASE pj.confirmacion WHEN 'true' THEN 1 END) as asistencia
             FROM equipos e
                      INNER JOIN jornadas j on e.idEquipo = j.idEquipo
                      LEFT JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
