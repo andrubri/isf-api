@@ -93,6 +93,20 @@ export interface IReqConfirmacion extends IRequest {
     };
 }
 
+export interface IReqConfirExt extends IRequest {
+    payload: {
+        direccion: string;
+        coordenadas: string;
+        idMedioTransporte: number;
+        espacioLibre: string;
+        idContactoEmergencia: number | null;
+        nombreEmergencia: string;
+        apellidoEmergencia: string;
+        telefonoEmergencia: string;
+        relacionEmergencia: string;
+    };
+}
+
 export interface IReqJornadas extends IRequest {
     payload: {
         fecha: Date;

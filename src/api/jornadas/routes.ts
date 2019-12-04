@@ -261,5 +261,33 @@ export default function(server: Hapi.Server, io: socketio.Server, serverConfigs:
 
                 },
             },
+        },
+        {
+            method: "PUT",
+            path: "/jornada/persona/{id}",
+            options: {
+                auth: false,
+                description: "Guarda informacion de confirmacion para un hash",
+                handler: jornadaController.setPersonasHash,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Token Verificado.",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "jornadas"],
+                validate: {
+
+                },
+            },
         }]);
 }

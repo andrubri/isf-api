@@ -5,8 +5,10 @@ export class PersonaJornada extends Model {
     public idJornada: number;
     public idPersona: number;
     public idMedioTransporte: number;
+    public lugaresLibres: string;
     public asistencia: string;
     public direccionOrigen: string;
+    public coordenadasOrigen: string;
     public confirmacion: string;
 }
 
@@ -17,6 +19,10 @@ export function initPersonaJornada(sequelize) {
         type: DataTypes.INTEGER.UNSIGNED,
         },
         direccionOrigen: {
+            allowNull: true,
+            type: new DataTypes.STRING(500),
+        },
+        coordenadasOrigen: {
             allowNull: true,
             type: new DataTypes.STRING(255),
         },
@@ -33,6 +39,10 @@ export function initPersonaJornada(sequelize) {
         },
         idMedioTransporte: {
             type: DataTypes.INTEGER.UNSIGNED,
+        },
+        lugaresLibres: {
+            allowNull: true,
+            type: new DataTypes.STRING(255),
         },
         idJornada: {
             type: DataTypes.INTEGER.UNSIGNED,

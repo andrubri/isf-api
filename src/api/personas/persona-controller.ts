@@ -108,11 +108,12 @@ export default class PersonaController {
             const persona: Persona = await Persona.create({
                 nombre: request.payload.persona.nombre,
                 apellido: request.payload.persona.apellido,
-                idExterno: request.payload.persona.idExterno,
                 tipoDocumento: request.payload.persona.tipoDocumento,
                 idDocumento: request.payload.persona.idDocumento,
                 paisOrigen: request.payload.persona.paisOrigen,
                 paisResidencia: request.payload.persona.paisResidencia,
+                coordenadasResidencia: request.payload.persona.coordenadasResidencia,
+                direccionResidencia: request.payload.persona.direccionResidencia,
                 provinciaResidencia: request.payload.persona.provinciaResidencia,
                 ciudadResidencia: request.payload.persona.ciudadResidencia,
                 telefono: request.payload.persona.telefono,
@@ -121,8 +122,9 @@ export default class PersonaController {
                 carrera: request.payload.persona.carrera,
                 universidad: request.payload.persona.universidad,
                 ocupacion: request.payload.persona.ocupacion,
-                estado: "Inscripto",
+                estado: request.payload.persona.estado,
                 fechaNacimiento: request.payload.persona.fechaNacimiento,
+                idOrigenContacto: request.payload.persona.idOrigenContacto
             });
 
             return {

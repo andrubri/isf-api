@@ -203,7 +203,7 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
             method: "GET",
             path: "/personas/origencontacto",
             options: {
-                auth: "firebase",
+                auth: false,
                 description: "Trae los Origenes de contacto",
                 handler: personaController.obtenerOrigenContacto,
                 plugins: {

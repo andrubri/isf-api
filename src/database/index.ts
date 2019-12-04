@@ -10,8 +10,8 @@ import {DatosSeguro, initDatosSeguro} from "./entidades/datosSeguro";
 import {initObraSocial} from "./entidades/obraSocial";
 import {initPerfil, Perfil} from "./entidades/perfil";
 import {initOrigenContacto} from "./entidades/origenContacto";
-import {initRol} from "./entidades/rol";
-import {initMedioTransporte} from "./entidades/medioTransporte";
+import {initRol, Rol} from "./entidades/rol";
+import {initMedioTransporte, MedioTransporte} from "./entidades/medioTransporte";
 import {initPersonaJornada, PersonaJornada} from "./entidades/personas_jornada";
 import {initHashConfirmacion} from "./entidades/hashConfirmacion";
 
@@ -23,7 +23,7 @@ export class DBSquelize {
             DBSquelize.sequelize = new Sequelize(config.connection.database, config.connection.user, config.connection.password, {
                 dialect: config.connection.dialect,
                 host: config.connection.host,
-                logging: false,
+                logging: true,
             });
 
             // Iinicio las entidades
@@ -72,6 +72,12 @@ export class DBSquelize {
 
         Persona.belongsToMany(Jornada, {through: PersonaJornada, foreignKey: 'idPersona'});
         Jornada.belongsToMany(Persona, {through: PersonaJornada, foreignKey: 'idJornada'});
+
+        PersonaJornada.hasOne(Jornada, {foreignKey: 'idJornadas', sourceKey: 'idJornada'});
+
+        PersonaJornada.hasOne(Persona, {foreignKey: 'idPersona', sourceKey: 'idPersona'});
+
+        PersonaJornada.hasOne(MedioTransporte, {foreignKey: 'idMedioTransporte', sourceKey: 'idMedioTransporte'});
 
         Equipo.hasMany(Jornada, {sourceKey: 'idEquipo', foreignKey: 'idEquipo'});
         Jornada.belongsTo(Equipo, {foreignKey: 'idEquipo'});
