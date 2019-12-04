@@ -362,5 +362,33 @@ export default function (server: Hapi.Server, io: socketio.Server, serverConfigs
 
                 },
             },
+        },
+        {
+            method: "POST",
+            path: "/equipo/{id}/seguro",
+            options: {
+                auth: "firebase",
+                description: "Devuelve los datos del seguro",
+                handler: equipoController.obtenerDatosSeguro,
+                plugins: {
+                    "hapi-swagger": {
+                        responses: {
+                            200: {
+                                description: "Devuelve los datos del seguro",
+                            },
+                            304: {
+                                description: "No autorizado.",
+                            },
+                            500: {
+                                description: "Error",
+                            },
+                        },
+                    },
+                },
+                tags: ["api", "equipo", "coordinador"],
+                validate: {
+
+                },
+            },
         }]);
 }

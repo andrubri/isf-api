@@ -3,7 +3,15 @@ import * as Hapi from "hapi";
 import * as socketio from "socket.io";
 import {IServerConfigurations} from "../../configurations";
 import {Usuario} from "../../database/entidades/usuario";
-import {IReqEquipo, IReqJornada, IRequest, IReqUser, IReqVoluntario, IReqJornadas} from "../../interfaces/request";
+import {
+    IReqEquipo,
+    IReqJornada,
+    IRequest,
+    IReqUser,
+    IReqVoluntario,
+    IReqJornadas,
+    IReqDatosSeguro
+} from "../../interfaces/request";
 import FirebaseAdmin from "../../lib/firebase";
 import {Equipo} from "../../database/entidades/equipo";
 import {EquipoPersona} from "../../database/entidades/equipo_persona";
@@ -274,5 +282,34 @@ export default class EquipoController {
         return estadistica[0];
     }
 
+    public async obtenerDatosSeguro(request: IReqDatosSeguro, response: Hapi.ResponseToolkit) {
+        const DB = new DBSquelize(null);
+        const datos: any = await DB.execute(`
+            SELECT DISTINCT p.nombre          AS 'Nombre',
+                            p.apellido        AS 'Apellido',
+                            p.tipoDocumento   AS 'Tipo Documento',
+                            p.idDocumento     AS 'Num. Documento',
+                            ds.emfermedades   AS 'Enfermedades',
+                            ds.grupoSanguineo AS 'Grupo Sanguineo',
+                            ds.medicaciones   AS 'Medicamentos',
+                            os.empresa        AS 'Obra Social',
+                            os.plan           AS 'Plan'
+            FROM jornadas j
+                     INNER JOIN personas_jornadas pj on j.idJornadas = pj.idJornada AND confirmacion = 'true'
+                     INNER JOIN personas p on pj.idPersona = p.idPersona
+                     INNER JOIN datos_seguro ds on p.idPersona = ds.idPersona
+                     INNER JOIN obras_sociales os on ds.idObraSocial = os.idObraSocial
+            WHERE fecha BETWEEN :desde AND :hasta
+              AND idEquipo = :idEquipo
+        `, {
+            replacements: {
+                idEquipo: request.params.id,
+                desde: request.payload.fechaDesde,
+                hasta: request.payload.fechaHasta
+            }
+        });
+
+        return datos[0];
+    }
 
 }

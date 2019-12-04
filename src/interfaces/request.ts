@@ -114,6 +114,13 @@ export interface IReqJornadas extends IRequest {
     };
 }
 
+export interface IReqDatosSeguro extends IRequest{
+    payload:{
+        fechaDesde: Date;
+        fechaHasta: Date;
+    }
+}
+
 export interface IReqPersona extends IRequest {
     payload: {
         persona: {
