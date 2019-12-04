@@ -12,7 +12,7 @@ import FirebaseAdmin from "../../lib/firebase";
 import UpdateRequest = admin.auth.UpdateRequest;
 import {personaSchema} from "./persona-validator";
 import {Usuario} from "../../database/entidades/usuario";
-import {Op} from "sequelize/types";
+import {Op} from "sequelize";
 
 export default class PersonaController {
     private configs: IServerConfigurations;
