@@ -253,7 +253,7 @@ export default class EquipoController {
             SELECT j.idJornadas, j.fecha, count(pj.idJornada) as confirmados, count(CASE pj.confirmacion WHEN 'true' THEN 1 END) as asistencia
             FROM jornadas j
             INNER JOIN personas_jornadas pj on j.idJornadas = pj.idJornada
-            WHERE j.idEquipo = 1
+            WHERE j.idEquipo = :equipo
             GROUP BY j.idJornadas, j.fecha
             ORDER BY j.fecha ASC
             `, {replacements: {equipo: request.params.id}});
