@@ -67,18 +67,28 @@ export class EmailController {
         if (exist) {
             if (exist.Equipo.Personas.length > 0) {
                 exist.Equipo.Personas.forEach(async voluntario => {
-                    const hash: HashConfirmacion = await HashConfirmacion.create({
-                        idJornada: exist.idJornadas,
-                        idPersona: voluntario.idPersona,
-                        fechaEnvio: new Date()
+                    let hash: HashConfirmacion = await HashConfirmacion.findOne({
+                        where: {
+                            idJornada: exist.idJornadas,
+                            idPersona: voluntario.idPersona
+                        }
                     });
+                    if (!hash) {
+                        hash = await HashConfirmacion.create({
+                            idJornada: exist.idJornadas,
+                            idPersona: voluntario.idPersona,
+                            fechaEnvio: new Date()
+                        });
+                    }
 
-                    this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, 'mail_jornada.html', {
-                        '{{EQUIPO}}': exist.Equipo.nombre,
-                        '{{DAY}}': exist.fecha.getDate(),
-                        '{{MONTH}}': this.meses[exist.fecha.getMonth()],
-                        '{{LINK}}': this.configurations.urlConfirmar + hash.idHashConfirmacion
-                    });
+                    if (!hash.fechaConfirmacion) {
+                        this.prepareEmail(voluntario.email, request.payload.asunto, request.payload.mensaje, 'mail_jornada.html', {
+                            '{{EQUIPO}}': exist.Equipo.nombre,
+                            '{{DAY}}': exist.fecha.getDate(),
+                            '{{MONTH}}': this.meses[exist.fecha.getMonth()],
+                            '{{LINK}}': this.configurations.urlConfirmar + hash.idHashConfirmacion
+                        });
+                    }
                 });
             }
 
