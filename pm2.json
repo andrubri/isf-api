@@ -1,0 +1,10 @@
+{
+    "apps": [{
+        "script": "./build/src/index.js",
+        "name": "isf-api",
+        "interpreter": "node",
+        "env": {
+            "NODE_ENV": "production"
+        }
+    }]
+}
