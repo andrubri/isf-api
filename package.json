@@ -19,7 +19,7 @@
     "@sendgrid/mail": "^6.4.0",
     "@types/socket.io": "^2.1.2",
     "dotenv": "^8.0.0",
-    "file-type": "^12.2.0",
+    "file-type": "^16.5.4",
     "firebase": "^6.1.0",
     "firebase-admin": "^8.0.0",
     "good": "^8.1.2",
